@@ -1,0 +1,9 @@
+RewriteEngine On
+
+RewriteRule ^([a-zA-Z0-9/_-]*)$ /index.php/$1
+
+ErrorDocument 403 /index.php/error
+ErrorDocument 404 /index.php/error
+
+#  Uncomment if you want to use .php's
+#RewriteRule ^(.*)\.php$ $1
