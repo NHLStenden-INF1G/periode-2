@@ -6,14 +6,17 @@ class Config {
 
 	## MySQL Connect Settings
 	static $DB = Array(
-		'persistent'	=> true,
 		'hostname'		=> '127.0.0.1',
-		'loginname'		=> 'root',
+		'username'		=> 'root',
 		'password'		=> '',
 		'database'		=> 'ictportal',
 	);
 
 	static $errorfile		= 'error';
+
+	static $error_DB 		= true;
+
+	static $debug_DB 		= true;
 
 	static $cookie_time		= 216000;
 
