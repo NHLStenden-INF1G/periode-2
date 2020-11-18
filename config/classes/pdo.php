@@ -100,7 +100,7 @@ class Database
 				return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
 			else {
-				return false;
+				$this->error .= "No rows were found, check your database or your query";
 			}
 		}
 

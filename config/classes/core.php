@@ -5,12 +5,13 @@ class Core
 	{
 
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
-		define('WebStyle', styleFolder);
+		define('WebStyle', styleFolder.'assets/');
 
 		session_start();
 	}
 
-	function __destruct(){
+	function __destruct()
+	{
 		global $DB;
 		
 		echo (Config::$error_DB == true) ? $DB->error : false;
@@ -27,6 +28,10 @@ class Core
 	function Hash($input)
 	{
 		return eval('return '.Config::$hash_function.';');
+	}
+
+	function listArray($input){
+		return array_map('trim', explode(',', $input));
 	}
 
 	function CleanCookies()

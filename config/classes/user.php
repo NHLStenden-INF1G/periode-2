@@ -118,6 +118,30 @@ class User
 		return intval($row['id']);
 	}
 
+	function Redirect($if_logged_in)
+	{
+		global $user, $core;
+
+		if ($user->logged_in == $if_logged_in)
+		{
+			$core->Redirect($if_logged_in ? Config::$loginStartpage : '/');
+		}
+	}
+
+	function Output()
+	{
+		$k = array_keys($this->vars);
+		$v = Array();
+
+		foreach ($this->vars as $value)
+		{
+			$v[] = str_ireplace($k, '', $value);
+		}
+
+		echo str_ireplace($k, $v, $this->content),
+			'<!--TPL Loaded in '.(microtime(true) - Start).' seconds-->';
+	}
+	
 	function Logout()
 	{
 		global $site;
