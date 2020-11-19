@@ -16,7 +16,7 @@ class Config {
 
 	static $error_DB 		= true;
 
-	static $debug_DB 		= true;
+	static $debug_DB 		= false;
 
 	static $loginStartpage 	= '';
 
