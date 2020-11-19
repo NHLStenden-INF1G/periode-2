@@ -58,6 +58,11 @@ class Template
 		}
 	}
 
+	function AddLine($content = '')
+	{
+		$this->content .= $content.enter;
+	}
+
 	function GetContent()
 	{
 		global $DB, $site, $user;
@@ -65,11 +70,6 @@ class Template
 		ob_start();
 		require('tpl/pages/'.Page);
 		$this->AddLine(ob_get_clean());
-	}
-
-	function AddLine($content = '')
-	{
-		$this->content .= $content.enter;
 	}
 
 	function GetHeader()
@@ -113,7 +113,6 @@ class Template
 
 		return $this->vars[$var];
 	}
-
 
 	function Output()
 	{

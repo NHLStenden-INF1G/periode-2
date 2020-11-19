@@ -27,139 +27,156 @@ class Database
 				$this->error .= $e->getMessage();  
 			}  
 		}  
+	
+	function Close(){
+		$this->link = null;
+		$this->stmt = null;
+	}
+
+	function pdoDebug(){
 		
-		function pdoDebug(){
-			
-			$this->stmt->debugDumpParams();
-			$output = ob_get_contents();
-			$output = ob_get_clean();
+		$this->stmt->debugDumpParams();
+		$output = ob_get_contents();
+		$output = ob_get_clean();
 
-			$this->debug .= $output;
+		$this->debug .= $output;
+		
+		$this->Close();
+	}
+
+	function numRows(){
+		//Get number of rows from most recent SQL Query
+		return $this->stmt->rowCount();
+		$this->Close();
+	}
+
+	function lastInsertId(){  
+		//Get last inserted ID from latest SQL Query
+		return $this->link->lastInsertId(); 
+		$this->Close(); 
+	}  
+
+	function Prepare($query){  
+		$this->stmt = $this->link->prepare($query);  
+	}  
+
+	function Bind($param, $value, $type = null){  
+		if(is_null($type)){
+			switch ($type) {  
+			case 'int':  
+				$type = PDO::PARAM_INT;  
+			break;  
+			case 'bool':  
+				$type = PDO::PARAM_BOOL;  
+			break;  
+			case 'null':  
+				$type = PDO::PARAM_NULL;  
+			break;  
+			default:  
+				$type = PDO::PARAM_STR;  
+			}  
 		}
 
-		function numRows(){
-			//Get number of rows from most recent SQL Query
-			return $this->stmt->rowCount();
-		}
+		$this->stmt->bindValue($param, $value, $type);  
+	}
 
-		function lastInsertId(){  
-			//Get last inserted ID from latest SQL Query
-			return $this->link->lastInsertId();  
-		}  
+	function Select($query, $parameters = null, $values = null){  
+		
 
-		function Prepare($query){  
-			$this->stmt = $this->link->prepare($query);  
-		}  
+		$parameters = array_map('trim', explode(',', $parameters));
+		$values = array_map('trim', explode(',', $values));
 
-		function Bind($param, $value, $type = null){  
-			if(is_null($type)){
-				switch ($type) {  
-				case 'int':  
-					$type = PDO::PARAM_INT;  
-				break;  
-				case 'bool':  
-					$type = PDO::PARAM_BOOL;  
-				break;  
-				case 'null':  
-					$type = PDO::PARAM_NULL;  
-				break;  
-				default:  
-					$type = PDO::PARAM_STR;  
-				}  
-			}
+		$this->Prepare($query);
 
-			$this->stmt->bindValue($param, $value, $type);  
-		}
-
-		function Select($query, $parameters = null, $values = null){  
-			
-
-			$parameters = array_map('trim', explode(',', $parameters));
-			$values = array_map('trim', explode(',', $values));
-
-			$this->Prepare($query);
-
-			if(!is_null($parameters) && !is_null($values)){
-				if(count($parameters) == count($values)){	
-					foreach ($parameters as $key => $value) {
-						$this->Bind($value, $values[$key]);
-					}
-				}
-				else {
-					$this->error .= "Parameter count does not match value count";
-				}
-			}
-
-			$this->pdoDebug();
-			$this->stmt->execute();
-
-			if($this->numRows() == 1){
-				return $this->stmt->fetch(PDO::FETCH_ASSOC);
-			}
-			else if($this->numRows() > 1){
-				return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-			}
-			else {
-				$this->error .= "No rows were found, check your database or your query";
-			}
-		}
-
-		function Update($query, $parameters = null, $values = null){  
-			
-			$parameters = array_map('trim', explode(',', $parameters));
-			$values = array_map('trim', explode(',', $values));
-
-			$this->Prepare($query);
-
-			if(!is_null($parameters) && !is_null($values)){
-				if(count($parameters) == count($values)){	
-					foreach ($parameters as $key => $value) {
-						$this->Bind($value, $values[$key]);
-					}
-				}
-				else {
-					$this->error .= "Parameter count does not match value count";
-				}
-			}
-
-			$this->pdoDebug();
-			$this->stmt->execute();
-		}
-
-		function Insert($table, $parameters, $values){ 
-			$parametersArray = array_map('trim', explode(',', $parameters));
-			$values = array_map('trim', explode(',', $values));
-
-			$PDOParamters = preg_filter('/^(.*?)$/', ':$0', $parametersArray);
-			$PDOParamters = implode(', ', $PDOParamters);
-
-			$query = "INSERT INTO {$table} ({$parameters}) VALUES ({$PDOParamters})";
-			
-			$this->Prepare($query);
-
-			if(count($parametersArray) == count($values)){	
-				foreach ($parametersArray as $key => $value) {					
+		if(!is_null($parameters) && !is_null($values)){
+			if(count($parameters) == count($values)){	
+				foreach ($parameters as $key => $value) {
 					$this->Bind($value, $values[$key]);
 				}
 			}
 			else {
-				$this->error .= "Insertfunction error: Parameter count does not match value count";
+				$this->error .= "Parameter count does not match value count";
 			}
+		}
 
-			$this->pdoDebug();
-			$this->stmt->execute();
+		$this->pdoDebug();
+		$this->stmt->execute();
 
-		}  
+		if($this->numRows() == 1){
+			return $this->stmt->fetch(PDO::FETCH_ASSOC);
+		}
+		else if($this->numRows() > 1){
+			return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else {
+			$this->error .= "No rows were found, check your database or your query";
+		}
+
+		$this->Close();
+
+	}
+
+	function Update($query, $parameters = null, $values = null){  
 		
-		function Delete($table, $parameter, $value){ 
-			$pdoParamter = ":".$parameter;
+		$parameters = array_map('trim', explode(',', $parameters));
+		$values = array_map('trim', explode(',', $values));
 
-			$query = "DELETE FROM {$table} WHERE {$parameter} = {$pdoParamter}";
-			$this->Prepare($query);
-			$this->Bind($pdoParamter, $value);
-			$this->pdoDebug();
-			$this->stmt->execute();
-		}  
+		$this->Prepare($query);
+
+		if(!is_null($parameters) && !is_null($values)){
+			if(count($parameters) == count($values)){	
+				foreach ($parameters as $key => $value) {
+					$this->Bind($value, $values[$key]);
+				}
+			}
+			else {
+				$this->error .= "Parameter count does not match value count";
+			}
+		}
+
+		$this->pdoDebug();
+		$this->stmt->execute();
+		
+		$this->Close();
+	}
+
+	function Insert($table, $parameters, $values){ 
+		$parametersArray = array_map('trim', explode(',', $parameters));
+		$values = array_map('trim', explode(',', $values));
+
+		$PDOParamters = preg_filter('/^(.*?)$/', ':$0', $parametersArray);
+		$PDOParamters = implode(', ', $PDOParamters);
+
+		$query = "INSERT INTO {$table} ({$parameters}) VALUES ({$PDOParamters})";
+		
+		$this->Prepare($query);
+
+		if(count($parametersArray) == count($values)){	
+			foreach ($parametersArray as $key => $value) {					
+				$this->Bind($value, $values[$key]);
+			}
+		}
+		else {
+			$this->error .= "Insertfunction error: Parameter count does not match value count";
+		}
+
+		$this->pdoDebug();
+		$this->stmt->execute();
+
+		$this->Close();
+	}  
+	
+	function Delete($table, $parameter, $value){ 
+		$pdoParamter = ":".$parameter;
+
+		$query = "DELETE FROM {$table} WHERE {$parameter} = {$pdoParamter}";
+		$this->Prepare($query);
+		$this->Bind($pdoParamter, $value);
+		$this->pdoDebug();
+		$this->stmt->execute();
+
+		$this->Close();
+	}  
 
 }
 ?>
