@@ -2,7 +2,7 @@
 
 define('Start', microtime(true));
 
-require 'config/classes/pdo.php';
+require 'config/classes/mysql.php';
 require 'config/classes/core.php';
 require 'config/classes/template.php';
 require 'config/classes/user.php';

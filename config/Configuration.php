@@ -16,8 +16,6 @@ class Config {
 
 	static $error_DB 		= true;
 
-	static $debug_DB 		= false;
-
 	static $loginStartpage 	= '';
 
 	static $cookie_time		= 216000;

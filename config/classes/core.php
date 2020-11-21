@@ -15,8 +15,6 @@ class Core
 		global $DB;
 		
 		echo (Config::$error_DB == true) ? $DB->error : false;
-		echo (Config::$debug_DB == true) ? $DB->debug : false;
-
 	}
 
 	function Redirect($link)
