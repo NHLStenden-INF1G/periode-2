@@ -128,20 +128,6 @@ class User
 		}
 	}
 
-	function Output()
-	{
-		$k = array_keys($this->vars);
-		$v = Array();
-
-		foreach ($this->vars as $value)
-		{
-			$v[] = str_ireplace($k, '', $value);
-		}
-
-		echo str_ireplace($k, $v, $this->content),
-			'<!--TPL Loaded in '.(microtime(true) - Start).' seconds-->';
-	}
-	
 	function Logout()
 	{
 		global $site;
