@@ -124,7 +124,7 @@ class Template
 			$v[] = str_ireplace($k, '', $value);
 		}
 
-		echo str_ireplace($k, $v, $this->content);
+		echo str_ireplace($k, $v, $this->content. '<!-- Site geladen in '.(microtime(true) - Start).' seconden :O -->');
 	}
 }
 ?>
