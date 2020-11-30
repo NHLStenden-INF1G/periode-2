@@ -16,11 +16,13 @@ class Config {
 
 	static $error_DB 		= true;
 
+	static $error_filter 	= true;
+
 	static $loginStartpage 	= '';
 
 	static $cookie_time		= 216000;
 
-	static $hash_function	= 'sha1($input)';
+	static $hash_function	= 'password_hash($input, PASSWORD_BCRYPT)';
 
 }
 ?>

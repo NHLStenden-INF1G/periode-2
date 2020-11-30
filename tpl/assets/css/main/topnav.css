@@ -1,0 +1,52 @@
+/* Navigation bar */
+.navbar {
+    transition: 0.3s;
+    width: 100%;
+    display: grid;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+    grid-row: 1;
+    grid-template-columns: 15% 0.5fr 1fr 1fr;
+    grid-template-rows: minmax(auto, 110px);
+}
+
+.navbar .navbar_items>ul li {
+    transition: 0.3s;
+}
+
+.navbar ul {
+    display: flex;
+    grid-row: 1;
+    grid-column: 4;
+    align-self: stretch;
+    margin-right: 0.8vw;
+}
+
+.navbar ul li {
+    color: var(--tekstColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0vw 2.5vw;
+    transform: skew(-15deg);
+    transition: 0.3s;
+}
+
+.navbar >ul li:hover {
+    background: rgba(61, 53, 116, 0.47);
+    box-shadow: inset 0 -5px 0 0 var(--tekstColor);
+}
+
+.navbar >ul li.active {
+    background: rgba(61, 53, 116, 0.47);
+    box-shadow: inset 0 -5px 0 0 var(--tekstColor);
+}
+
+/* Canvas */
+#canvas {
+    grid-row: 1;
+    height: 650px;
+    position: absolute;
+    width: 100%;
+}

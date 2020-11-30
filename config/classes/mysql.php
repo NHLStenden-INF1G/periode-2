@@ -9,33 +9,41 @@ class Database
         $s=& Config::$DB;
 
         $this->link = new MySQLi($s['hostname'], $s['username'], $s['password'], $s['database']);
-
-        if ($this->link->connect_error) {
+        if ($this->link->connect_error) 
+        {
             $this->error .= "Connection failed: " . $this->link->connect_error;
         }
     }
 
     function prepareQuery($query, $params = NULL) 
     {
-        if($statement = $this->link->prepare($query)) {
-
-            if(IS_NULL($params)){
-                if($statement->execute()) {
+        if($statement = $this->link->prepare($query)) 
+        {
+            if(IS_NULL($params))
+            {
+                if($statement->execute()) 
+                {
                     return $statement;
                     $statement->close();
-                } else {
+                } else 
+                {
                     $this->error .= "Executing Error: ". $this->link->error;
                     return false;
                 }
             }
-            else {
-                if($statement->param_count == count($params)) {
-                    foreach ($params as $key => $value) {
+            else 
+            {
+                if($statement->param_count == count($params)) 
+                {
+
+                    foreach ($params as $key => $value) 
+                    {
                         $dataType[] = substr(gettype($value), 0, 1);
                     }
                     
                     $statement->bind_param(implode($dataType), ...$params);
-                    if(!$statement->execute()){
+                    if(!$statement->execute())
+                    {
                         $this->error .= $this->link->error;
                         return false;
                     } 
@@ -43,13 +51,15 @@ class Database
                     return $statement;
                     $statement->close();  
                 }
-                else {
+                else 
+                {
                     $this->error .= "Parameter count error: does not match with array.";
                     return false;
                 }
             }
         }
-        else {
+        else 
+        {
             $this->error .= "Query Error: ". $this->link->error;
             return false;
         }
@@ -63,7 +73,8 @@ class Database
 
     function Select($query, $params = NULL)
     {
-        if($statement = $this->prepareQuery($query, $params)){
+        if($statement = $this->prepareQuery($query, $params))
+        {
             $result = $statement->get_result();
             return ($result->num_rows > 0 ? $result : false);
         }

@@ -5,6 +5,7 @@ class User
 	public $username, $id, $rank = 0;
 
 	private $data;
+
 	function data($field)
 	{
 		return ((isset($this->data[$field]) && $this->logged_in) ? $this->data[$field] : '');
@@ -37,22 +38,23 @@ class User
 		}
 	}
 
-	function Login($name, $pass, $set_cookies = false)
+	function Login($name, $password, $set_cookies = false)
 	{
-		global $DB, $site;
+		global $DB, $filter;
 
-		$DB->Filter($name);
-		$DB->Filter($pass);
+		$name 		= $filter->sanatizeInput($name, 'string');
+		$password 	= $filter->sanatizeInput($password, 'string');
 
-		$userInfo = $DB->Select('id, password', 'users', 'username', $name);
+		$userInfo 	= $DB->Select('id, password', 'users', 'username', $name);
 
 		if ($userInfo === false)
 		{
-			return '1';
+			return 1;
 		}
-		if ($pass != $userInfo['password'])
+
+		if (!password_verify($password, $userInfo['wachtwoord']))
 		{
-			return '2';
+			return 2;
 		}
 
 		$this->username = $_SESSION['user'] = $name;
@@ -62,7 +64,7 @@ class User
 		{
 			$expire = time() + Config::$cookie_time;
 			setcookie('l_username', $name, $expire, '/');
-			setcookie('l_password', $pass, $expire, '/');
+			setcookie('l_password', $password, $expire, '/');
 		}
 
 		return false;
@@ -81,7 +83,8 @@ class User
 
 	function checkMail($mail)
 	{
-		return (preg_match("/^[a-zA-Z0-9_\.-]+@([a-zA-Z0-9]+([\-]+[a-zA-Z0-9]+)*\.)+[a-z]{2,7}$/i", $mail) && strlen($mail) >= 3 && strlen($mail) <= 64);
+		global $filter;
+		return $filter->validateInput($mail, 'email');
 	}
 
 	function checkMailUse($mail)
@@ -90,7 +93,7 @@ class User
 		return (!$DB->Exists('users', 'mail', $DB->In($mail)));
 	}
 
-	function addUser($name, $mail, $pass, $male = true)
+	function addUser($name, $mail, $pass)
 	{
 		global $DB;
 
@@ -120,9 +123,9 @@ class User
 
 	function Redirect($if_logged_in)
 	{
-		global $user, $core;
+		global $core;
 
-		if ($user->logged_in == $if_logged_in)
+		if ($this->logged_in == $if_logged_in)
 		{
 			$core->Redirect($if_logged_in ? Config::$loginStartpage : '/');
 		}
@@ -133,7 +136,7 @@ class User
 		global $site;
 
 		session_destroy();
-		$site->Redirect('/index');
+		$site->Redirect('/start');
 	}
 }
 ?>
