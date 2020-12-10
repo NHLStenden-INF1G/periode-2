@@ -1,8 +1,8 @@
 ﻿<?php
 
 define('Start', microtime(true));
-define('StyleFolder', 'tpl/');
-define('Handlers', StyleFolder.'handlers/');
+define('styleFolder', 'tpl/');
+define('Handlers', styleFolder.'handlers/');
 
 require 'config/classes/mysql.php';
 require 'config/classes/core.php';
