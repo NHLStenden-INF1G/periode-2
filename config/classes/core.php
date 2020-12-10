@@ -9,6 +9,14 @@ class Core
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
 		define('WebStyle', styleFolder.'assets');
 
+				
+		ini_set('display_errors', 'On');
+
+		//PHP SETTINGS
+		ini_set('max_execution_time', '300'); //Maximale executietijd
+		ini_set('max_input_time', '60'); //Maximale input tijd
+		ini_set('memory_limit', '5120M'); //Max geheugen
+
 		session_start();
 
 	}

@@ -1,8 +1,8 @@
 ﻿<?php
 
 define('Start', microtime(true));
-define('styleFolder', 'tpl/');
-define('Handlers', styleFolder.'handlers/');
+define('StyleFolder', 'tpl/');
+define('Handlers', StyleFolder.'handlers/');
 
 require 'config/classes/mysql.php';
 require 'config/classes/core.php';
@@ -18,7 +18,7 @@ $core   = new Core;
 $user   = new User;
 $TPL    = new Template;
 $filter = new Filter;
-$lang   = new Language();
+$lang   = new Language;
 
 $TPL->Route($_SERVER['PATH_INFO']);
 

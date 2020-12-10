@@ -24,5 +24,6 @@ class Config {
 
 	static $hash_function	= 'password_hash($input, PASSWORD_BCRYPT)';
 
+
 }
 ?>
