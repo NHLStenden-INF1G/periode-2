@@ -29,7 +29,7 @@ class Template
 
 		if ($this->path == '')
 		{
-			$this->path = 'index';
+			$this->path = 'start';
 		}
 		if (!is_file('tpl/pages/'.$this->path.'.php'))
 		{
@@ -38,39 +38,94 @@ class Template
 		define('Page', $this->path.'.php');
 	}
 
+	function GetHandlers()
+	{
+		global $DB, $site, $user, $filter;
+
+		$this->Set('sitename', Config::$siteName);
+		$this->Set('url', URL);
+
+		$this->Set('pageTitle', ucfirst($this->path));
+		$this->Set('assetsFolder', WebStyle);
+
+		if (is_file(Handlers.'MainHandler.php'))
+		{
+			require(Handlers.'MainHandler.php');
+		}
+
+		if (is_file(Handlers.'handler.'.Page))
+		{
+			require(Handlers.'handler.'.Page);
+		}
+	}
+
+	function AddLine($content = '')
+	{
+		$this->content .= $content.enter;
+	}
+
 	function GetContent()
 	{
-		global $DB, $site, $user;
+		global $DB, $site, $user, $filter, $lang;
 
 		ob_start();
 		require('tpl/pages/'.Page);
+		$this->AddLine(ob_get_clean());
 	}
-	
+
 	function GetHeader()
 	{
-		global $DB, $site, $user;
-		
+		global $DB, $site, $user, $filter, $lang;
+
+		ob_start();
 		require('tpl/includes/header.php');
+		$this->AddLine(ob_get_clean());
 	}
 
 	function GetNavigation()
 	{
-		global $DB, $site, $user;
-		
+		global $DB, $site, $user, $filter, $lang;
+		ob_start();
 		require('tpl/includes/nav.php');
+		$this->AddLine(ob_get_clean());
 	}
 
 	function GetFooter()
 	{
-		global $DB, $site, $user;
-		
+		global $DB, $site, $user, $filter, $lang;
+		ob_start();
 		require('tpl/includes/footer.php');
+		$this->AddLine(ob_get_clean()); 
 	}
 	
+	function Set($var, $value)
+	{
+		$this->vars['{'.strtolower($var).'}'] = $value;
+	}
+	
+	function Get($var)
+	{
+		$var = '{'.strtolower($var).'}';
+
+		if (!isset($this->vars[$var]))
+		{
+			return null;
+		}
+
+		return $this->vars[$var];
+	}
 
 	function Output()
 	{
-		echo $this->content;
+		$k = array_keys($this->vars);
+		$v = Array();
+
+		foreach ($this->vars as $value)
+		{
+			$v[] = str_ireplace($k, '', $value);
+		}
+
+		echo str_ireplace($k, $v, $this->content. '<!-- Site geladen in '.(microtime(true) - Start).' seconden :O -->');
 	}
 }
 ?>

@@ -1,60 +1,109 @@
 <?php
-class MySQL
+class Database
 {
 	private $link;
+	public  $error;
+	
+    function __construct()
+    {  
+        $s=& Config::$DB;
 
-	function __construct()
+        $this->link = new MySQLi($s['hostname'], $s['username'], $s['password'], $s['database']);
+        if ($this->link->connect_error) 
+        {
+            $this->error .= "Connection failed: " . $this->link->connect_error;
+        }
+    }
+
+    function prepareQuery($query, $params = NULL) 
+    {
+        if($statement = $this->link->prepare($query)) 
+        {
+            if(IS_NULL($params))
+            {
+                if($statement->execute()) 
+                {
+                    return $statement;
+                    $statement->close();
+                } else 
+                {
+                    $this->error .= "Executing Error: ". $this->link->error;
+                    return false;
+                }
+            }
+            else 
+            {
+                if($statement->param_count == count($params)) 
+                {
+
+                    foreach ($params as $key => $value) 
+                    {
+                        $dataType[] = substr(gettype($value), 0, 1);
+                    }
+                    
+                    $statement->bind_param(implode($dataType), ...$params);
+                    if(!$statement->execute())
+                    {
+                        $this->error .= $this->link->error;
+                        return false;
+                    } 
+
+                    return $statement;
+                    $statement->close();  
+                }
+                else 
+                {
+                    $this->error .= "Parameter count error: does not match with array.";
+                    return false;
+                }
+            }
+        }
+        else 
+        {
+            $this->error .= "Query Error: ". $this->link->error;
+            return false;
+        }
+    }
+
+    function SelectRow($query, $params = NULL)
+    {
+        $result = $this->Select($query.' LIMIT 1', $params);
+        return ($result->num_rows > 0 ? $result->fetch_object() : false);
+    }
+
+    function Select($query, $params = NULL)
+    {
+        if($statement = $this->prepareQuery($query, $params))
+        {
+            $result = $statement->get_result();
+            return ($result->num_rows > 0 ? $result : false);
+        }
+            return false;
+    }
+
+    function Update($query, $params = NULL)
+    {
+        return ($this->prepareQuery($query, $params) ? true : false);
+    }
+
+    function Insert($query, $params = NULL)
+    {
+        return ($this->prepareQuery($query, $params) ? true : false);
+    }
+
+    function Delete($query, $params = NULL)
+    {
+        return ($this->prepareQuery($query, $params) ? true : false);
+    }
+
+    function Exists($query, $params = NULL)
 	{
-		$s =& Config::$DB;
-		$this->link = new MySQLi(($s['persistent'] ? 'p:' : '').$s['hostname'], $s['loginname'], $s['password'], $s['database']);
-	}
-
-	function Query($query)
-	{
-		return $this->link->query($query);
-	}
-
-	function Run($query)
-	{
-		$this->link->real_query($query);
-	}
-
-	function Select($columns, $table, $key, $value)
-	{
-		return $this->GetRow('SELECT '.$columns.' FROM '.$table.' WHERE '.$key." = '".$value."'", false);
-	}
-
-	function Insert($table, $values)
-	{
-		foreach ($values as $key => $value)
-		{
-			$values[$key] = "'".$value."'";
-		}
-
-		$this->Run('INSERT INTO '.$table.' ('.implode(', ', array_keys($values)).') VALUES('.implode(', ', array_values($values)).')');
-	}
-
-	function Update($table, $key, $value, $updatevalues)
-	{
-		$update = Array();
-
-		foreach ($updatevalues as $k => $v)
-		{
-			$update[] = $k.' = \''.$v.'\'';
-		}
-
-		$this->Run('UPDATE '.$table.' SET '.implode(', ', $update)." WHERE ".$key." = '".$value."' LIMIT 1");
-	}
-
-	function Delete($table, $key, $value)
-	{
-		$this->Run("DELETE FROM ".$table." WHERE ".$key." = '".$value."' LIMIT 1");
-	}
-
-	function Exists($table, $key, $value)
-	{
-		return ($this->Get("SELECT * FROM ".$table." WHERE ".$key." = '".$value."' LIMIT 1")->num_rows > 0);
-	}
-
+        return ($this->prepareQuery($query, $params)->get_result()->num_rows > 0 ? true : false);
+    }
+    
+    function InsertId()
+    {
+        return $this->link->insert_id;
+    }
 }
 ?>
