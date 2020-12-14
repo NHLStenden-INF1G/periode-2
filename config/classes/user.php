@@ -2,7 +2,7 @@
 class User
 {
 	public $logged_in = false;
-	public $username, $id, $rank = 0;
+	public $email, $naam, $id, $rank = 0;
 
 	private $data;
 
@@ -13,96 +13,80 @@ class User
 
 	function __construct()
 	{
-		global $site, $DB;
+		global $core, $DB;
 
-		if (isset($_SESSION['user']))
+		if (isset($_SESSION['email']))
 		{
-			$this->username = $_SESSION['user'];
+			$this->email = $_SESSION['email'];
 			$this->logged_in = true;
 
-			$this->data = $DB->FilterRow($DB->Select('username, id, password, mail', 'users', 'username', $this->username));
+			$this->data = $DB->Select("SELECT * FROM gebruikers WHERE email = ?", array($this->email))->fetch_assoc();
+
 			if ($this->data === false)
 			{
 				$this->Logout();
 			}
 
-			$this->id = intval($this->data('id'));
-			$this->rank = intval($this->data('rank'));
-		}
-		else if (isset($_COOKIE['l_username']) && isset($_COOKIE['l_hash']))
-		{
-			if ($this->Login($_COOKIE['l_username'], $_COOKIE['l_password'], false) === false)
-			{
-				$site->Redirect('/');
-			}
-		}
+			$this->id = intval($this->data('gebruiker_id'));
+			$this->rank = intval($this->data('level'));
+			$this->naam = $this->data('voornaam').' '.$this->data('achternaam');
+		} 
 	}
 
-	function Login($name, $password, $set_cookies = false)
+	function Login($email, $password)
 	{
 		global $DB, $filter;
 
-		$name 		= $filter->sanatizeInput($name, 'string');
+		$email 		= $filter->sanatizeInput($email, 'email');
 		$password 	= $filter->sanatizeInput($password, 'string');
 
-		$userInfo 	= $DB->Select('id, password', 'users', 'username', $name);
+		$userInfo 	= $DB->Select("SELECT * FROM gebruikers WHERE email = ?", array($email));
 
 		if ($userInfo === false)
 		{
 			return 1;
 		}
 
-		if (!password_verify($password, $userInfo['wachtwoord']))
+		$userData   = $userInfo->fetch_assoc();
+
+		if (!password_verify($password, $userData['wachtwoord']))
 		{
 			return 2;
 		}
 
-		$this->username = $_SESSION['user'] = $name;
-		$this->id = intval($userInfo['id']);
+		$_SESSION['email'] = $email;
 
-		if ($set_cookies)
-		{
-			$expire = time() + Config::$cookie_time;
-			setcookie('l_username', $name, $expire, '/');
-			setcookie('l_password', $password, $expire, '/');
-		}
-
+		
 		return false;
 	}
 
-	function checkName($name)
+	function Register($voorNaam, $achterNaam, $regEmail, $regPass1, $regPass2)
 	{
-		return (preg_match('/^[a-zA-Z0-9]+$/', $name) && strlen($name) >= 3 && strlen($name) <= 32);
-	}
+		global $DB, $filter;
 
-	function checkNameUse($name)
-	{
-		global $DB;
-		return (!$DB->Exists('users', 'username', $DB->In($name)));
-	}
+		$voorNaam 		= $filter->sanatizeInput($voorNaam, 'string');
+		$achterNaam 	= $filter->sanatizeInput($achterNaam, 'string');
+		$regEmail 		= $filter->sanatizeInput($regEmail, 'email');
+		$regPass1 		= $filter->sanatizeInput($regPass1, 'string');
+		$regPass2 		= $filter->sanatizeInput($regPass2, 'string');
 
-	function checkMail($mail)
-	{
-		global $filter;
-		return $filter->validateInput($mail, 'email');
-	}
+		$userInfo 	= $DB->Exists("SELECT * FROM gebruikers WHERE email = ?", array($regEmail));
+	
+		if ($userInfo)
+		{
+			return 1;
+		}
 
-	function checkMailUse($mail)
-	{
-		global $DB;
-		return (!$DB->Exists('users', 'mail', $DB->In($mail)));
-	}
+		if($regPass1 != $regPass2)
+		{
+			return 2;
+		}
 
-	function addUser($name, $mail, $pass)
-	{
-		global $DB;
+		$regPass2 = password_hash($regPass2, PASSWORD_DEFAULT);
+		$DB->Insert("INSERT INTO gebruikers (email, voornaam, achternaam, wachtwoord, level) 
+							VALUES ('{$regEmail}', '{$voorNaam}', '{$achterNaam}', '{$regPass2}', '1')");
 
-		$DB->Insert('users',
-			Array(
-				'username' => $name,
-				'password' => $pass,
- 			)
-		);
+		return false;
 	}
 
 	function IdName($id)
@@ -127,16 +111,26 @@ class User
 
 		if ($this->logged_in == $if_logged_in)
 		{
-			$core->Redirect($if_logged_in ? Config::$loginStartpage : '/');
+			$core->Redirect(Config::$loginStartpage);
+		}
+	}
+
+	function LoginCheck()
+	{
+		global $core;
+
+		if (!$this->logged_in)
+		{
+			$core->Redirect('/start');
 		}
 	}
 
 	function Logout()
 	{
-		global $site;
+		global $core;
 
 		session_destroy();
-		$site->Redirect('/start');
+		$core->Redirect('/start');
 	}
 }
 ?>

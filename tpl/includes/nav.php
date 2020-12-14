@@ -1,8 +1,8 @@
         <canvas id="canvas"></canvas>
         <nav class="navbar">
-            <img class="link" data-link="" src="{assetsFolder}/images/logo.png"/>
+            <img class="link" data-link="/start" src="{assetsFolder}/images/logo.png"/>
             <ul>
-                <li class="active link" data-link="">
+                <li class="link" data-link="">
                     <span>News</span>
                 </li>
                 <li class="link" data-link="">
@@ -14,9 +14,7 @@
                 <li class="link" data-link="">
                     <span>Populair</span>
                 </li>
-                <li class="link" data-link="http://google.nl">
-                    <span>Aanmelden</span>
-                </li>
+                {loginKnop}
             </ul>
             <div class="mobileBurger">
                 <div></div>

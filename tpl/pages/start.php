@@ -2,7 +2,8 @@
     <main> 
         <div class="Spotlight"> 
         
-            <div class="sectionTitle">In de spotlight</div>             
+            <div class="sectionTitle">In de spotlight</div>
+            
             <div class="spotlightVideoContainer"> 
                 <div class="contentBlock"> 
                     <div class="contentBlock-side link" data-link=""></div>                     
@@ -69,7 +70,7 @@
                                 <div class="videoDetailsTitle">Videotitel</div>                                 
                                 <div class="videoDetailsViews">111 weergaven</div>                                 
                                 <div class="videoDetailsDate">Docent | 22-11-2020 om 8:00
-</div>                                 
+                            </div>                                 
                             </div>                             
                         </div>                         
                     </div>                     

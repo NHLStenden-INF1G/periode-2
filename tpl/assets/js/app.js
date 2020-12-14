@@ -27,6 +27,7 @@ const burgerMenu = () => {
 
 const menuLinks = () => {
     const menuLink = document.querySelectorAll(".link");
+    console.log(menuLink);
     menuLink.forEach((link, index) => {
         link.addEventListener('click', () => {
             window.location.href = menuLink[index].dataset.link;
