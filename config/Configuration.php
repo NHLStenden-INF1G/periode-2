@@ -9,7 +9,7 @@ class Config {
 		'hostname'		=> '127.0.0.1',
 		'username'		=> 'root',
 		'password'		=> '',
-		'database'		=> 'ictportal',
+		'database'		=> 'stendenflix',
 	);
 
 	static $errorfile		= 'error';
