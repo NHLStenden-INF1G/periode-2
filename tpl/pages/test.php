@@ -1,7 +1,25 @@
-<style>
-h1 {
-    font-size: clamp(40px, 5vw, 70px);
-}
-</style>
+<?php 
 
-<h1>My fancy font</h1>
+    if(isset($_POST['submit']))
+    {
+        $rules = array(   
+            'text' => array(
+                'type' => 'string',
+                'verplicht' => true
+            )
+         );
+         
+
+
+        var_dump($filter->validateFields($rules));
+    }    
+
+?>
+<div class="mainWrapper"> 
+    <main>
+        <form method="post">
+            <input type="text" name="text">
+            <input type="submit" name="submit">
+        </form>
+    </main>
+</div>

@@ -2,7 +2,7 @@
 class User
 {
 	public $logged_in = false;
-	public $username, $id, $rank = 0;
+	public $email, $naam, $id, $rank = 0;
 
 	private $data;
 
@@ -13,112 +13,152 @@ class User
 
 	function __construct()
 	{
-		global $site, $DB;
+		global $core, $DB;
 
-		if (isset($_SESSION['user']))
+		if (isset($_SESSION['email']))
 		{
-			$this->username = $_SESSION['user'];
+			$this->email = $_SESSION['email'];
 			$this->logged_in = true;
 
-			$this->data = $DB->FilterRow($DB->Select('username, id, password, mail', 'users', 'username', $this->username));
+		$this->data = $DB->Select("SELECT * FROM gebruiker WHERE email = ?", [$this->email])[0];
+
 			if ($this->data === false)
 			{
 				$this->Logout();
 			}
 
-			$this->id = intval($this->data('id'));
-			$this->rank = intval($this->data('rank'));
-		}
-		else if (isset($_COOKIE['l_username']) && isset($_COOKIE['l_hash']))
-		{
-			if ($this->Login($_COOKIE['l_username'], $_COOKIE['l_password'], false) === false)
-			{
-				$site->Redirect('/');
-			}
-		}
+			$this->id = intval($this->data('gebruiker_id'));
+			$this->rank = intval($this->data('level'));
+			$this->naam = $this->data('voornaam').'	&nbsp;'.$this->data('achternaam');
+		} 
 	}
 
-	function Login($name, $password, $set_cookies = false)
+	function Login($email, $password)
 	{
 		global $DB, $filter;
 
-		$name 		= $filter->sanatizeInput($name, 'string');
+		$email 		= $filter->sanatizeInput($email, 'email');
 		$password 	= $filter->sanatizeInput($password, 'string');
 
-		$userInfo 	= $DB->Select('id, password', 'users', 'username', $name);
+		$userInfo 	= $DB->Select("SELECT * FROM gebruiker WHERE email = ? LIMIT 1",[$email]);
 
-		if ($userInfo === false)
+		if (empty($userInfo))
 		{
 			return 1;
 		}
 
-		if (!password_verify($password, $userInfo['wachtwoord']))
+		if (!password_verify($password, $userInfo[0]['wachtwoord']))
 		{
 			return 2;
 		}
 
-		$this->username = $_SESSION['user'] = $name;
-		$this->id = intval($userInfo['id']);
+		$_SESSION['email'] = $email;
 
-		if ($set_cookies)
+		
+		return false;
+	}
+
+	function Register($voorNaam, $achterNaam, $regEmail, $regPass1, $regPass2)
+	{
+		global $DB, $filter;
+
+		$voorNaam 		= $filter->sanatizeInput($voorNaam, 'string');
+		$achterNaam 	= $filter->sanatizeInput($achterNaam, 'string');
+		$regEmail 		= $filter->sanatizeInput($regEmail, 'email');
+		$regPass1 		= $filter->sanatizeInput($regPass1, 'string');
+		$regPass2 		= $filter->sanatizeInput($regPass2, 'string');
+
+		$emailLijst = array(
+			'student.nhlstenden.com',
+			'nhlstenden.com'
+		);
+		
+		$emailDomein = explode("@", $regEmail)[1];
+		
+		
+		if (!in_array($emailDomein, $emailLijst))
 		{
-			$expire = time() + Config::$cookie_time;
-			setcookie('l_username', $name, $expire, '/');
-			setcookie('l_password', $password, $expire, '/');
+			return 3;
 		}
+
+		$userInfo 	= $DB->Select("SELECT * FROM gebruiker WHERE email = ?", [$regEmail]);
+
+		if (!empty($userInfo))
+		{
+			return 1;
+		}
+
+		if($regPass1 != $regPass2)
+		{
+			return 2;
+		}
+
+		$regPass2 = password_hash($regPass2, PASSWORD_DEFAULT);
+
+		$DB->Insert("INSERT INTO gebruiker (email, voornaam, achternaam, wachtwoord, level) 
+							VALUES (?, ?, ?, ?, ?)", 
+							[$regEmail, $voorNaam, $achterNaam, $regPass2, 1]);
 
 		return false;
 	}
 
-	function checkName($name)
-	{
-		return (preg_match('/^[a-zA-Z0-9]+$/', $name) && strlen($name) >= 3 && strlen($name) <= 32);
-	}
 
-	function checkNameUse($name)
-	{
-		global $DB;
-		return (!$DB->Exists('users', 'username', $DB->In($name)));
-	}
-
-	function checkMail($mail)
-	{
-		global $filter;
-		return $filter->validateInput($mail, 'email');
-	}
-
-	function checkMailUse($mail)
-	{
-		global $DB;
-		return (!$DB->Exists('users', 'mail', $DB->In($mail)));
-	}
-
-	function addUser($name, $mail, $pass)
-	{
+	function userLevel($id) {
 		global $DB;
 
-		$DB->Insert('users',
-			Array(
-				'username' => $name,
-				'password' => $pass,
- 			)
-		);
+		$gebruikerResult = $DB->Select("SELECT level FROM gebruiker WHERE gebruiker_id = ? LIMIT 1", [$id])[0];
+
+			switch ($gebruikerResult['level']) 
+			{
+				case 1:
+				default:
+					return 'Student';
+					break;
+				case 2:
+					return 'Docent';
+					break;			
+				case 3:
+					return 'Administrator';
+					break;		
+			}
+		
 	}
 
-	function IdName($id)
+	function userPermissions($level)
 	{
-		global $DB;
+		switch ($level) 
+		{
+			case 1:
+			default:
+				//Student
+				return array(
+					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
 
-		$row = $DB->GetRow("SELECT username FROM users WHERE id = '".$id."'", Array('username' => ''));
-		return $DB->Out($row['username']);
-	}
 
-	function NameId($name)
-	{
-		global $DB;
+					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
 
-		$row = $DB->GetRow("SELECT id FROM users WHERE username = '".$name."'", Array('id' => '0'));
-		return intval($row['id']);
+				);
+			break;
+			case 2:
+				//Docent
+				return array(
+					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
+
+					'NAV_ADMIN' => array('fa fa-sign-out', '/admin/'),
+					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
+
+				);			
+			break;			
+			case 3:
+				//Administrator
+				return array(
+					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
+
+					'NAV_ADMIN' => array('fa fa-sign-out', '/admin/'),
+					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
+				);			
+			break;		
+		}
 	}
 
 	function Redirect($if_logged_in)
@@ -127,16 +167,26 @@ class User
 
 		if ($this->logged_in == $if_logged_in)
 		{
-			$core->Redirect($if_logged_in ? Config::$loginStartpage : '/');
+			$core->Redirect('/'.Config::$loginStartpage);
+		}
+	}
+
+	function LoginCheck()
+	{
+		global $core;
+
+		if (!$this->logged_in)
+		{
+			$core->Redirect('/start');
 		}
 	}
 
 	function Logout()
 	{
-		global $site;
+		global $core;
 
 		session_destroy();
-		$site->Redirect('/start');
+		$core->Redirect('/start');
 	}
 }
 ?>

@@ -45,11 +45,16 @@ class Database
                     if(!$statement->execute())
                     {
                         $this->error .= $this->link->error;
-                        return false;
+                       
+                        // return $statement->num_rows();
                     } 
+                    else {
+                        echo 1;
 
-                    return $statement;
-                    $statement->close();  
+                        return $statement;
+                        $statement->close();  
+
+                    }
                 }
                 else 
                 {

@@ -6,10 +6,10 @@ class Config {
 
 	## MySQL Connect Settings
 	static $DB = Array(
-		'hostname'		=> '127.0.0.1',
+		'hostname'		=> 'localhost',
 		'username'		=> 'root',
 		'password'		=> '',
-		'database'		=> 'ictportal',
+		'database'		=> 'stendenflix'
 	);
 
 	static $errorfile		= 'error';
@@ -18,7 +18,7 @@ class Config {
 
 	static $error_filter 	= true;
 
-	static $loginStartpage 	= '';
+	static $loginStartpage 	= 'start';
 
 	static $cookie_time		= 216000;
 
