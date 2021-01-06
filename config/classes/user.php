@@ -58,7 +58,7 @@ class User
 		return false;
 	}
 
-	function Register($voorNaam, $achterNaam, $regEmail, $regPass1, $regPass2)
+	function Register($voorNaam, $achterNaam, $regEmail, $regPass1, $regPass2, $level = 1)
 	{
 		global $DB, $filter;
 
@@ -97,12 +97,47 @@ class User
 
 		$DB->Insert("INSERT INTO gebruiker (email, voornaam, achternaam, wachtwoord, level) 
 							VALUES (?, ?, ?, ?, ?)", 
-							[$regEmail, $voorNaam, $achterNaam, $regPass2, 1]);
+							[$regEmail, $voorNaam, $achterNaam, $regPass2, $level]);
 
 		return false;
 	}
 
+	function Edit($voorNaam, $achterNaam, $regEmail, $regPass1, $regPass2, $level, $userID)
+	{
+		global $DB, $filter;
 
+		$voorNaam 		= $filter->sanatizeInput($voorNaam, 'string');
+		$achterNaam 	= $filter->sanatizeInput($achterNaam, 'string');
+		$regEmail 		= $filter->sanatizeInput($regEmail, 'email');
+		$regPass1 		= $filter->sanatizeInput($regPass1, 'string');
+		$regPass2 		= $filter->sanatizeInput($regPass2, 'string');
+
+		$emailLijst = array(
+			'student.nhlstenden.com',
+			'nhlstenden.com'
+		);
+		
+		$emailDomein = explode("@", $regEmail)[1];
+		
+		
+		if (!in_array($emailDomein, $emailLijst))
+		{
+			return 3;
+		}
+
+		if($regPass1 != $regPass2)
+		{
+			return 2;
+		}
+
+		$regPass2 = password_hash($regPass2, PASSWORD_DEFAULT);
+
+		$DB->Update("UPDATE gebruiker SET email = ?, voornaam = ?, achternaam = ?, wachtwoord = ?, level = ?
+						WHERE gebruiker_id = ?", 
+							[$regEmail, $voorNaam, $achterNaam, $regPass2, $level, $userID]);
+
+		return false;
+	}
 	function userLevel($id) {
 		global $DB;
 
@@ -124,6 +159,25 @@ class User
 		
 	}
 
+	function userLevelName($type) {
+		global $DB;
+
+			switch ($type) 
+			{
+				case 1:
+				default:
+					return 'Student';
+					break;
+				case 2:
+					return 'Docent';
+					break;			
+				case 3:
+					return 'Administrator';
+					break;		
+			}
+		
+	}
+	
 	function userPermissions($level)
 	{
 		switch ($level) 
@@ -133,8 +187,6 @@ class User
 				//Student
 				return array(
 					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
-
-
 					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
 
 				);
@@ -143,8 +195,7 @@ class User
 				//Docent
 				return array(
 					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
-
-					'NAV_ADMIN' => array('fa fa-sign-out', '/admin/'),
+					'NAV_ADMIN' => array('fa fa-cogs', '/admin/'),
 					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
 
 				);			
@@ -153,8 +204,7 @@ class User
 				//Administrator
 				return array(
 					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
-
-					'NAV_ADMIN' => array('fa fa-sign-out', '/admin/'),
+					'NAV_ADMIN' => array('fa fa-cogs', '/admin/'),
 					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
 				);			
 			break;		
