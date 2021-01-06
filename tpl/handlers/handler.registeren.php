@@ -52,6 +52,10 @@ if(isset($_POST['regSubmit']))
         {
             $this->Set("regError", "Wachtwoorden komen niet overeen!");
         }
+        else if($regAntwoord == 3)
+        {
+            $this->Set("regError", "Geen NHL Stenden mail!");
+        }
         else {
             $loginAntwoord = $user->Login($regEmail, $regPass2);
             $core->Redirect(Config::$loginStartpage);

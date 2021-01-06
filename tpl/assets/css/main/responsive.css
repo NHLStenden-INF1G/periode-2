@@ -14,8 +14,7 @@
     }
 
     .navbar.active {
-        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-
+        background: #008487;
         /* background: linear-gradient(-45deg, #29144e, #250e4b, #280a58, #3c1181); */
         background-size: 400% 400%;
         animation: gradient 15s ease infinite;
@@ -48,7 +47,7 @@
         height: calc(100% - 105px);
         margin: 0;
         width: 100%;
-        background-color: #29144e;
+        background-color: #008487;
         display: flex;
         flex-direction: column;
         transform: translateY(-150%);

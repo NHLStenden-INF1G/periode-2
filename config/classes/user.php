@@ -20,7 +20,7 @@ class User
 			$this->email = $_SESSION['email'];
 			$this->logged_in = true;
 
-			$this->data = $DB->Select("SELECT * FROM gebruikers WHERE email = ?", array($this->email))->fetch_assoc();
+		$this->data = $DB->Select("SELECT * FROM gebruiker WHERE email = ?", [$this->email])[0];
 
 			if ($this->data === false)
 			{
@@ -29,7 +29,7 @@ class User
 
 			$this->id = intval($this->data('gebruiker_id'));
 			$this->rank = intval($this->data('level'));
-			$this->naam = $this->data('voornaam').' '.$this->data('achternaam');
+			$this->naam = $this->data('voornaam').'	&nbsp;'.$this->data('achternaam');
 		} 
 	}
 
@@ -40,16 +40,14 @@ class User
 		$email 		= $filter->sanatizeInput($email, 'email');
 		$password 	= $filter->sanatizeInput($password, 'string');
 
-		$userInfo 	= $DB->Select("SELECT * FROM gebruikers WHERE email = ?", array($email));
+		$userInfo 	= $DB->Select("SELECT * FROM gebruiker WHERE email = ? LIMIT 1",[$email]);
 
-		if ($userInfo === false)
+		if (empty($userInfo))
 		{
 			return 1;
 		}
 
-		$userData   = $userInfo->fetch_assoc();
-
-		if (!password_verify($password, $userData['wachtwoord']))
+		if (!password_verify($password, $userInfo[0]['wachtwoord']))
 		{
 			return 2;
 		}
@@ -70,9 +68,22 @@ class User
 		$regPass1 		= $filter->sanatizeInput($regPass1, 'string');
 		$regPass2 		= $filter->sanatizeInput($regPass2, 'string');
 
-		$userInfo 	= $DB->Exists("SELECT * FROM gebruikers WHERE email = ?", array($regEmail));
-	
-		if ($userInfo)
+		$emailLijst = array(
+			'student.nhlstenden.com',
+			'nhlstenden.com'
+		);
+		
+		$emailDomein = explode("@", $regEmail)[1];
+		
+		
+		if (!in_array($emailDomein, $emailLijst))
+		{
+			return 3;
+		}
+
+		$userInfo 	= $DB->Select("SELECT * FROM gebruiker WHERE email = ?", [$regEmail]);
+
+		if (!empty($userInfo))
 		{
 			return 1;
 		}
@@ -83,26 +94,71 @@ class User
 		}
 
 		$regPass2 = password_hash($regPass2, PASSWORD_DEFAULT);
-		$DB->Insert("INSERT INTO gebruikers (email, voornaam, achternaam, wachtwoord, level) 
-							VALUES ('{$regEmail}', '{$voorNaam}', '{$achterNaam}', '{$regPass2}', '1')");
+
+		$DB->Insert("INSERT INTO gebruiker (email, voornaam, achternaam, wachtwoord, level) 
+							VALUES (?, ?, ?, ?, ?)", 
+							[$regEmail, $voorNaam, $achterNaam, $regPass2, 1]);
 
 		return false;
 	}
 
-	function IdName($id)
-	{
+
+	function userLevel($id) {
 		global $DB;
 
-		$row = $DB->GetRow("SELECT username FROM users WHERE id = '".$id."'", Array('username' => ''));
-		return $DB->Out($row['username']);
+		$gebruikerResult = $DB->Select("SELECT level FROM gebruiker WHERE gebruiker_id = ? LIMIT 1", [$id])[0];
+
+			switch ($gebruikerResult['level']) 
+			{
+				case 1:
+				default:
+					return 'Student';
+					break;
+				case 2:
+					return 'Docent';
+					break;			
+				case 3:
+					return 'Administrator';
+					break;		
+			}
+		
 	}
 
-	function NameId($name)
+	function userPermissions($level)
 	{
-		global $DB;
+		switch ($level) 
+		{
+			case 1:
+			default:
+				//Student
+				return array(
+					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
 
-		$row = $DB->GetRow("SELECT id FROM users WHERE username = '".$name."'", Array('id' => '0'));
-		return intval($row['id']);
+
+					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
+
+				);
+			break;
+			case 2:
+				//Docent
+				return array(
+					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
+
+					'NAV_ADMIN' => array('fa fa-sign-out', '/admin/'),
+					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
+
+				);			
+			break;			
+			case 3:
+				//Administrator
+				return array(
+					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
+
+					'NAV_ADMIN' => array('fa fa-sign-out', '/admin/'),
+					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
+				);			
+			break;		
+		}
 	}
 
 	function Redirect($if_logged_in)
@@ -111,7 +167,7 @@ class User
 
 		if ($this->logged_in == $if_logged_in)
 		{
-			$core->Redirect(Config::$loginStartpage);
+			$core->Redirect('/'.Config::$loginStartpage);
 		}
 	}
 

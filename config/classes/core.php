@@ -5,6 +5,10 @@ class Core
 
 	function __construct()
 	{
+		global $DB, $filter;
+		
+	
+		//echo (Config::$error_filter == true) 	? '<pre>'.$filter->debug.'</pre>' 	: false;
 
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
 		define('WebStyle', '/'.styleFolder.'assets');
@@ -23,10 +27,7 @@ class Core
 
 	function __destruct()
 	{
-		global $DB, $filter;
-		
-		echo (Config::$error_DB		== true) 	? '<pre>'.$DB->error.'</pre>' 		: false;
-		echo (Config::$error_filter == true) 	? '<pre>'.$filter->debug.'</pre>' 	: false;
+
 	}
 
 	function Redirect($link)
