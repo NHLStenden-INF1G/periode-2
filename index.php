@@ -4,7 +4,7 @@ define('Start', microtime(true));
 define('styleFolder', 'tpl/');
 define('Handlers', styleFolder.'handlers/');
 
-require 'config/classes/mysql2.php';
+require 'config/classes/mysql.php';
 require 'config/classes/core.php';
 require 'config/classes/template.php';
 require 'config/classes/user.php';

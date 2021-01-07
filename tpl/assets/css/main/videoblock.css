@@ -2,7 +2,7 @@
 .videoBlock {
     grid-row: 1;
     display: grid;
-    grid-template-columns: 20px 70% 1fr 20px;
+    grid-template-columns: 20px 70% 1fr 20px 20px;
     grid-template-rows: 20px fit-content(40%) fit-content(40%) 20px 20px;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .videoBlock > .videoComments {
-    grid-column: 3;
+    grid-column: 3/6;
     grid-row: 2/6;
     background-color: #ffffff;
     box-shadow: -0.5vw 0.3vw 18px 0.03vw rgba(0, 0, 0, 0.33);

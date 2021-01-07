@@ -1,114 +1,130 @@
 <?php
-class Database
-{
-	private $link;
-	public  $error;
+
+class Database {	
 	
+    private $connection;
+	public  $error;
+
     function __construct()
     {  
         $s=& Config::$DB;
-
-        $this->link = new MySQLi($s['hostname'], $s['username'], $s['password'], $s['database']);
-        if ($this->link->connect_error) 
+        try 
         {
-            $this->error .= "Connection failed: " . $this->link->connect_error;
-        }
-    }
-
-    function prepareQuery($query, $params = NULL) 
-    {
-        if($statement = $this->link->prepare($query)) 
-        {
-            if(IS_NULL($params))
+            $this->connection = new MySQLi($s['hostname'], $s['username'], $s['password'], $s['database']);
+            
+            if ($this->connection->connect_error) 
             {
-                if($statement->execute()) 
-                {
-                    return $statement;
-                    $statement->close();
-                } else 
-                {
-                    $this->error .= "Executing Error: ". $this->link->error;
-                    return false;
-                }
-            }
-            else 
+                throw new Exception("Could not connect to database: ". $this->link->connect_error);   
+            }		
+        }
+        catch(Exception $e)
+        {
+            throw new Exception($e->getMessage());   
+        }		
+    }
+
+    // Insert a row/s in a Database Table
+    function Insert($query, $params = []) 
+    {
+        try 
+        {
+            $stmt = $this->executeStatement($query, $params);
+            $stmt->close();
+            return $this->connection->insert_id;
+        } 
+        catch(Exception $e)
+        {
+            throw New Exception($e->getMessage());
+        }
+	
+        return false;
+    }
+
+    // Select a row/s in a Database Table
+    function Select($query, $params = []) 
+    {
+        try
+        {
+            $stmt = $this->executeStatement( $query , $params );
+		
+            $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);				
+            $stmt->close();
+		
+            return $result;
+		
+        }
+        catch(Exception $e)
+        {
+            throw New Exception($e->getMessage());
+        }
+	
+        return false;
+    }
+
+    // Update a row/s in a Database Table
+    function Update($query, $params = []) 
+    {
+        try 
+        {
+            $this->executeStatement( $query , $params )->close();
+        } 
+        catch(Exception $e) 
+        {
+            throw New Exception( $e->getMessage() );
+        }
+	
+        return false;
+    }		
+
+    // Remove a row/s in a Database Table
+    function Delete($query, $params = [])
+    {
+        try
+        {
+            $this->executeStatement( $query , $params )->close();
+        } 
+        catch(Exception $e)
+        {
+            throw New Exception( $e->getMessage() );
+        }
+	
+        return false;
+    }		
+
+    // execute statement
+    function executeStatement($query, $params = [])
+    {
+        try 
+        {
+            $stmt = $this->connection->prepare($query);
+		
+            if($stmt === false) 
             {
-                if($statement->param_count == count($params)) 
-                {
-
-                    foreach ($params as $key => $value) 
-                    {
-                        $dataType[] = substr(gettype($value), 0, 1);
-                    }
-                    
-                    $statement->bind_param(implode($dataType), ...$params);
-                    if(!$statement->execute())
-                    {
-                        $this->error .= $this->link->error;
-                       
-                        // return $statement->num_rows();
-                    } 
-                    else {
-                        echo 1;
-
-                        return $statement;
-                        $statement->close();  
-
-                    }
-                }
-                else 
-                {
-                    $this->error .= "Parameter count error: does not match with array.";
-                    return false;
-                }
+                throw New Exception("Unable to do prepared statement: " . $query);
             }
+
+            if($params)
+            {
+                
+                foreach ($params as $key => $value) 
+                {
+                    $dataType[] = substr(gettype($value), 0, 1);
+                }
+                $stmt->bind_param(implode($dataType), ...$params);
+            }
+		
+           $stmt->execute();
+		
+           return $stmt;
+		
         }
-        else 
+        catch(Exception $e)
         {
-            $this->error .= "Query Error: ". $this->link->error;
-            return false;
+            throw New Exception( $e->getMessage() );
         }
+	
     }
 
-    function SelectRow($query, $params = NULL)
-    {
-        $result = $this->Select($query.' LIMIT 1', $params);
-        return ($result->num_rows > 0 ? $result->fetch_object() : false);
-    }
-
-    function Select($query, $params = NULL)
-    {
-        if($statement = $this->prepareQuery($query, $params))
-        {
-            $result = $statement->get_result();
-            return ($result->num_rows > 0 ? $result : false);
-        }
-            return false;
-    }
-
-    function Update($query, $params = NULL)
-    {
-        return ($this->prepareQuery($query, $params) ? true : false);
-    }
-
-    function Insert($query, $params = NULL)
-    {
-        return ($this->prepareQuery($query, $params) ? true : false);
-    }
-
-    function Delete($query, $params = NULL)
-    {
-        return ($this->prepareQuery($query, $params) ? true : false);
-    }
-
-    function Exists($query, $params = NULL)
-	{
-        return ($this->prepareQuery($query, $params)->get_result()->num_rows > 0 ? true : false);
-    }
-    
-    function InsertId()
-    {
-        return $this->link->insert_id;
-    }
+		
 }
 ?>

@@ -1,3 +1,17 @@
+<style>
+.mainWrapper > main {
+    height: max-content;
+    grid-template-rows: unset;
+}
+
+body { 
+    overflow:hidden;
+    grid-template-rows: 110px 6vw auto 2vw 150vh 300px;
+}
+#canvas {
+    height: 100%;
+}
+</style>
 <div class="mainWrapper"> 
     <main> 
         <div class="Spotlight">
