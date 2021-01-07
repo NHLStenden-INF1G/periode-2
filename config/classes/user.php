@@ -138,6 +138,7 @@ class User
 
 		return false;
 	}
+
 	function userLevel($id) {
 		global $DB;
 
