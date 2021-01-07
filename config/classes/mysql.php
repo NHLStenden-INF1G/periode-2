@@ -124,7 +124,11 @@ class Database {
         }
 	
     }
-
+    
+    function InsertId()
+    {
+        return $this->connection->insert_id;
+    }
 		
 }
 ?>
