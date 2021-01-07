@@ -11,7 +11,7 @@ class Core
 		//echo (Config::$error_filter == true) 	? '<pre>'.$filter->debug.'</pre>' 	: false;
 
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
-		define('WebStyle', '/'.styleFolder.'assets');
+		define('WebStyle', styleFolder.'assets');
 
 		/*
 		ini_set('display_errors', 'On');
