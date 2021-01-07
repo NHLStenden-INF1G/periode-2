@@ -114,7 +114,6 @@ nav  > ul li.active {
   
 .dropdown-content div:hover {
     background: rgba(62, 67, 70, 0.253);
-    transform: scaleY(1);
 }
 
 nav > ul li.dropdown:hover .dropdown-content {
