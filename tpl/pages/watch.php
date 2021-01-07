@@ -20,10 +20,10 @@
 				{
 					$id = $_GET['id'];
 					//ophalen video en informatie van video
-					$query = mysqli_query($con,	"SELECT video.titel, video.omschrijving, video.uploadDatum, video.video_id, video.videoPath, gebruiker.voornaam, gebruiker.achternaam
+					$query = mysqli_query($con,	"SELECT video.titel, video.omschrijving, video.uploadDatum, video.video_id, video.videoPath, video.gebruiker_id, gebruiker.voornaam, gebruiker.achternaam
 												FROM `video` 
 												JOIN gebruiker ON video.gebruiker_id=gebruiker.gebruiker_id
-												WHERE video.video_id='$id'"); // moeten nog een join schrijven om docent naam op te halen
+												WHERE video.video_id='$id'");
 					while($row = mysqli_fetch_assoc($query))
 					{
 						$location = $row['videoPath'];
@@ -35,7 +35,57 @@
 						$omschrijving = $row['omschrijving'];
 						$datum = $row['uploadDatum'];
 					}
-					//ophalen opmerkingen
+					
+					//ophalen ratings
+					$query3 = mysqli_query($con, "SELECT AVG(rating) as avgrating FROM `beoordeling` WHERE video_id='$id'");
+					while($row = mysqli_fetch_assoc($query3))
+					{
+						$beoordeling = $row['avgrating'];
+					}
+					
+					//opleiding selecteren
+					$query4 = mysqli_query($con, 	"SELECT opleiding.naam 
+													FROM `opleiding`
+													JOIN vak_video ON  opleiding.opleiding_id=vak_video.opleiding_id
+													WHERE video_id='$id'");
+					while($row = mysqli_fetch_assoc($query4))
+					{
+						$opleiding = $row['naam'];
+					}
+					
+					//tags selecteren, werkt nog niet want geen id bij tags
+					$query5 = mysqli_query($con, "SELECT naam FROM `tag` WHERE video_id='$id'");
+					while($row = mysqli_fetch_assoc($query5))
+					{
+						$tag = $row['naam'];
+					}
+					
+					// vak naam selecteren
+					$query6 = mysqli_query($con, 	"SELECT vak_naam
+													FROM `vak`
+													JOIN vak_video ON vak.vak_id=vak_video.vak_id
+													WHERE video_id='$id'");
+					while($row = mysqli_fetch_assoc($query6))
+					{
+						$vak = $row['vak_naam'];
+					}
+					
+					//query opmerkingen
+					$query2 = mysqli_query($con,	"SELECT opmerking.tekst, gebruiker.voornaam, gebruiker.achternaam
+													FROM `opmerking`
+													JOIN gebruiker ON opmerking.gebruiker_id=gebruiker.gebruiker_id
+													WHERE video_id='$id'"); 
+					
+					echo "<div><video src='{assetsFolder}/uploads/".$location."' controls width='320px' height='200px' ></div><br>";
+					echo "<div>";
+					echo "Je kijkt: ".$name."<br>";
+					echo "Geupload door: ".$docentVnaam." ".$docentAnaam." op:".$datum."<br>";
+					echo "Beoordeling: ".$beoordeling."<br>";
+					echo "Opleiding: ".$opleiding."<br>";
+					echo "Vak : ".$vak."<br>";
+					echo "Tags: ".$tag."<br>";
+					echo "Beschrijving: ".$omschrijving."<br>";
+					//ophalen opmerkingen en weergeven
 					$query2 = mysqli_query($con,	"SELECT opmerking.tekst, gebruiker.voornaam, gebruiker.achternaam
 													FROM `opmerking`
 													JOIN gebruiker ON opmerking.gebruiker_id=gebruiker.gebruiker_id
@@ -43,28 +93,12 @@
 					while($row = mysqli_fetch_assoc($query2))
 					{
 						$opmerking = $row['tekst'];
+						$gebruikerVnaam = $row['voornaam'];
+						$gebruikerAnaam = $row['achternaam'];
+						echo $gebruikerVnaam." ".$gebruikerAnaam."zegt: ".$opmerking."<br>";
 					}
-					//ophalen ratings
-					$query3 = mysqli_query($con, "SELECT AVG(rating) FROM `beoordeling` WHERE video_id='$id'");
-					while($row = mysqli_fetch_assoc($query3))
-					{
-						$beoordeling = $row['rating'];
-					}
-					
-					// query 4 voor opleiding
-					// query 5 voor tags
-					// query 6 voor views
-					// query 7 voor vakken
-					echo "<div><video src='{assetsFolder}/uploads/".$location."' controls width='320px' height='200px' ></div><br>"; //video pad gaat vanuit index.php, met test in root werkt het
-					echo "<div>";
-					echo "Je kijkt: ".$name."<br>";
-					echo "Geupload door: ".$docent." op:".$datum."<br>";
-					echo "Beoordeling: ".$beoordeling."<br>";
-					//echo "Aantal views: ".$views."<br>"; // moet ook nog een query voor
-					echo "Beschrijving: ".$omschrijving."<br>";
-					echo "Opmerkingen: ".$opmerking."<br>";
 					echo "</div>";
-					//beoordeling moet nog, tags, vakken/opleiding, beoordeling moet ook gemiddelde, tags en vakken ook loop om alle weer te geven
+					
 
 				}
 				else
