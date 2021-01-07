@@ -4,6 +4,7 @@ if(isset($_POST["submitButton"]))
 {
     if(!empty($_POST['titel'])) 
     {
+        print_r($_POST);
         if(!empty($_POST['titel'] && !empty($_FILES["file"]["name"])))
         {
 
@@ -101,10 +102,10 @@ if(isset($_POST["submitButton"]))
                     echo "<td>".$value['voornaam']." ".$value['achternaam']. "</td>";
                     echo "<td>".$value['titel']."</td>";
                     echo "<td>".$value['uploadDatum']."</td>";
-                    echo "<td class='link' data-link='/admin/videobeheer/edit/".$value['gebruiker_id']."'>
+                    echo "<td class='link' data-link='/admin/videobeheer/edit/".$value['video_id']."'>
                     <i class='fa fa-pencil-square-o' aria-hidden='true'></i>
                     </td>";
-                    echo "<td class='link' data-link='/admin/videobeheer/verwijder/".$value['gebruiker_id']."'>
+                    echo "<td class='link' data-link='/admin/videobeheer/verwijder/".$value['video_id']."'>
                             <i class='fa fa-times' aria-hidden='true'></i>
                         </td>";
                 echo "</tr>";
@@ -118,6 +119,7 @@ if(isset($_POST["submitButton"]))
         else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'upload')
         {
             $videoData = $DB->Select("SELECT vak_id, vak_naam FROM vak");
+            $tagData = $DB->Select("SELECT tag.naam AS tagnaam, opleiding.* FROM tag INNER JOIN opleiding ON opleiding.opleiding_id = tag.opleiding_id");
 
             echo '<div class="sectionTitle">uploaden</div>
                     <form enctype="multipart/form-data" method="POST">';
@@ -128,6 +130,17 @@ if(isset($_POST["submitButton"]))
                 foreach($videoData as $key => $vakLijst) 
                 { 
                     echo "<option value='{$vakLijst["vak_id"]}'>{$vakLijst["vak_naam"]}</option>";
+                }
+               
+                echo '</select></label><br>';
+            }
+
+            if(!empty($tagData))  {
+                echo '<label for="vak">Tags:<select name="tagKeuze" multiple>';
+
+                foreach($tagData as $key => $tagLijst) 
+                { 
+                    echo "<option value='{$tagLijst["tag_id"]}'>{$tagLijst["tagnaam"]}</option>";
                 }
                
                 echo '</select></label><br>';
@@ -149,8 +162,17 @@ if(isset($_POST["submitButton"]))
         //Laat de delete pagina zien
         else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'verwijder')
         {
-           
-            //header('Location: /admin/videobeheer');
+            $videoID = $filter->sanatizeInput($_GET['Path_3'], 'int');
+
+            //Verwijder van server
+            $videoPath = $DB->Select("SELECT videoPath FROM video WHERE video_id = ?", [$videoID])[0]['videoPath'];
+
+            unlink($_SERVER['DOCUMENT_ROOT'].$videoPath);
+
+            //Verwijder van database
+            $DB->Delete("DELETE FROM video WHERE video_id = ?", [$videoID]);
+
+            header('Location: /admin/videobeheer');
         }
 
         //Laat de studentaanpassen pagina zien
