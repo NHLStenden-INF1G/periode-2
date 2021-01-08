@@ -5,8 +5,7 @@
 }
 
 body { 
-    overflow:hidden;
-    grid-template-rows: 110px 6vw auto 2vw 150vh 300px;
+    grid-template-rows: 110px 6vw auto 2vw;
 }
 #canvas {
     height: 100%;

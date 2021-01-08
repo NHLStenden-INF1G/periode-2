@@ -29,7 +29,7 @@
     grid-column: 3/6;
     background-color: #ffffff;
     overflow: scroll;
-    padding: 3%;
+    padding: 1%;
 }
 .adminTableView::-webkit-scrollbar {
     display: none;
@@ -76,4 +76,9 @@ table td {
 
 input, select {
     width: 100%;
+}
+
+.sectionTitle.link {
+    font-size: clamp(12px, 1vw, 30px); 
+    border-bottom: none;
 }

@@ -40,7 +40,7 @@ class Template
 
 	function GetHandlers()
 	{
-		global $DB, $site, $user, $filter, $lang, $core;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
 
 		$this->Set('sitename', Config::$siteName);
 		$this->Set('url', URL);
@@ -66,7 +66,7 @@ class Template
 
 	function GetContent()
 	{
-		global $DB, $site, $user, $filter, $lang, $core;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
 
 		ob_start();
 		require('tpl/pages/'.Page);
@@ -75,7 +75,7 @@ class Template
 
 	function GetHeader()
 	{
-		global $DB, $site, $user, $filter, $lang, $core;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
 
 		ob_start();
 		require('tpl/includes/header.php');
@@ -84,7 +84,7 @@ class Template
 
 	function GetNavigation()
 	{
-		global $DB, $site, $user, $filter, $lang, $core;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
 		ob_start();
 		require('tpl/includes/nav.php');
 		$this->AddLine(ob_get_clean());
@@ -92,7 +92,7 @@ class Template
 
 	function GetFooter()
 	{
-		global $DB, $site, $user, $filter, $lang, $core;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
 		ob_start();
 		require('tpl/includes/footer.php');
 		$this->AddLine(ob_get_clean()); 

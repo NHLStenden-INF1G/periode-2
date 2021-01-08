@@ -2,7 +2,7 @@
 if(!defined('Start')) exit('403');
 
 class Config {
-	static $siteName 		= 'NHL Stenden';
+	static $siteName 		= 'Spotlight';
 
 	## MySQL Connect Settings
 	static $DB = Array(
