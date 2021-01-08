@@ -143,7 +143,7 @@
                             <label>Tagnaam: <input type="text" placeholder="Tagnaam" name="tagNaam" value="'.$tagResult['naam'].'"></label><br>';
                 
             if(!empty($opleidingData))  {
-                echo '<label>Opleiding (meerdere mogelijk): <select name="tagOpleiding[]" multiple>';
+                echo '<label>Opleiding (meerdere mogelijk): <select name="tagOpleiding">';
 
                 foreach($opleidingData as $key => $opleidingLijst) 
                 { 

@@ -30,7 +30,7 @@
             $searchTermString = $filter->sanatizeInput($searchTerm[0], "string");
     
             $searchResult = [];
-           // .Gebruiker,  .opleiding, .tag, vak, vak_video, .video
+           // .Gebruiker,  .opleiding, .tag, vak, video_vak, .video
 
 
             //Opleidingnaam + jaar
@@ -39,10 +39,10 @@
                 $opleidingResultVideo = $DB->Select("SELECT * FROM opleiding 
                                                         INNER JOIN vak 
                                                         ON vak.opleiding_id = opleiding.opleiding_id
-                                                        INNER JOIN vak_video 
-                                                        ON vak_video.vak_id = vak.vak_id
+                                                        INNER JOIN video_vak 
+                                                        ON video_vak.vak_id = vak.vak_id
                                                         INNER JOIN video
-                                                        ON video.video_id = vak_video.video_id
+                                                        ON video.video_id = video_vak.video_id
                                                         WHERE opleiding.naam LIKE CONCAT('%',?,'%')
                                                         AND opleiding.jaar = ?", [$searchTermString, $searchTermInt]);
 
@@ -72,10 +72,10 @@
 
             //Vakresultaat
             $vakResultVideo = $DB->Select("SELECT * FROM vak 
-                                            INNER JOIN vak_video 
-                                            ON vak_video.vak_id = vak.vak_id
+                                            INNER JOIN video_vak 
+                                            ON video_vak.vak_id = vak.vak_id
                                             INNER JOIN video
-                                            ON video.video_id = vak_video.video_id
+                                            ON video.video_id = video_vak.video_id
                                             WHERE vak.vak_naam LIKE CONCAT('%',?,'%')", [$searchTermString]);
 
             $searchResult['vakResult'] = $vakResultVideo;
