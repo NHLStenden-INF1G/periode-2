@@ -48,7 +48,7 @@ if(isset($_POST["submitButton"]))
 
 
             $videoID = $DB->InsertId();
-            $DB->Insert("INSERT INTO vak_video (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
+            $DB->Insert("INSERT INTO video_vak (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
         }
         else {
             echo "Error: Geen link/video meegegeven.";
@@ -78,8 +78,8 @@ if(isset($_POST["submitButton"]))
         if(!isset($_GET['Path_2']) && !isset($_GET['Path_3']))
         {
             $videoResult = $DB->Select("SELECT * FROM video 
-                                        INNER JOIN vak_video 
-                                        ON vak_video.video_id = video.video_id
+                                        INNER JOIN video_vak 
+                                        ON video_vak.video_id = video.video_id
                                         INNER JOIN gebruiker
                                         ON gebruiker.gebruiker_id = video.gebruiker_id");
 
@@ -98,7 +98,6 @@ if(isset($_POST["submitButton"]))
             foreach($videoResult as $key => $value) 
             {
                 echo "<tr>";
-                    //td
                     echo "<td>".$value['voornaam']." ".$value['achternaam']. "</td>";
                     echo "<td>".$value['titel']."</td>";
                     echo "<td>".$value['uploadDatum']."</td>";
@@ -181,8 +180,8 @@ if(isset($_POST["submitButton"]))
             $videoID = $filter->sanatizeInput($_GET['Path_3'], 'int');
 
             $videoResult = $DB->Select("SELECT * FROM video 
-                                        INNER JOIN vak_video 
-                                        ON vak_video.video_id = video.video_id
+                                        INNER JOIN video_vak 
+                                        ON video_vak.video_id = video.video_id
                                         INNER JOIN gebruiker
                                         ON gebruiker.gebruiker_id = video.gebruiker_id
                                         WHERE video.video_id != ?", [$videoID]);
