@@ -7,7 +7,7 @@ class Core
 		global $DB;
 		
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
-		define('WebStyle', styleFolder.'assets');
+		define('WebStyle', '/'.styleFolder.'assets');
 
 		//PHP SETTINGS
 
