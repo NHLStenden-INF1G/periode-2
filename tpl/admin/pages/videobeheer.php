@@ -12,7 +12,7 @@ if(isset($_POST["submitButton"]))
             //Als het een bestand is
             if(isset($_FILES['file']['name'])) 
             {
-                $videoAllowedTypes = array('video/mp4', 'video/webm', 'video/H264'); 
+                $videoAllowedTypes = array('video/mp4'); 
                 //Is een toegestaan bestandstype
                 if(in_array($_FILES["file"]["type"], $videoAllowedTypes) && $_FILES["file"]["size"] < 5000000000) 
                 {
@@ -29,9 +29,7 @@ if(isset($_POST["submitButton"]))
                     $DB->Insert("INSERT INTO video (gebruiker_id, titel, videopath, videolengte)
                       VALUES (?, ?, ?, ?);",[$user->id, $postTitel, $videoPathDB, $videolengte]);
 
-                    $core->createThumbnail($videoPathDB, $videolengte);
-
-                    $core->createVideoPreview($videoPathDB, $videolengte);
+                    $videoTools->createThumbnail($videoPathDB, $videolengte);
 
                     header('Location: /admin/videobeheer');
                     
@@ -112,9 +110,7 @@ if(isset($_POST["editSubmit"]))
                     $DB->Update("UPDATE video SET gebruiker_id = ?, titel = ?, videopath = ?, videolengte = ?
                                 WHERE video_id = ?",[$user->id, $postTitel, $videoPathDB, $videolengte, $videoID]);
 
-                    $core->createThumbnail($videoPathDB, $videolengte);
-
-                    $core->createVideoPreview($videoPathDB, $videolengte);
+                    $videoTools->createThumbnail($videoPathDB, $videolengte);
 
                     header('Location: /admin/videobeheer');
                     

@@ -40,13 +40,14 @@ class Template
 
 	function GetHandlers()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
 
 		$this->Set('sitename', Config::$siteName);
 		$this->Set('url', URL);
 
 		$this->Set('pageTitle', ucfirst($this->path));
 		$this->Set('assetsFolder', WebStyle);
+		$this->Set('uploadsFolder', uploadFolder);
 
 		if (is_file(Handlers.'MainHandler.php'))
 		{
@@ -66,7 +67,7 @@ class Template
 
 	function GetContent()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
 
 		ob_start();
 		require('tpl/pages/'.Page);
@@ -75,7 +76,7 @@ class Template
 
 	function GetHeader()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
 
 		ob_start();
 		require('tpl/includes/header.php');
@@ -84,7 +85,7 @@ class Template
 
 	function GetNavigation()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
 		ob_start();
 		require('tpl/includes/nav.php');
 		$this->AddLine(ob_get_clean());
@@ -92,7 +93,7 @@ class Template
 
 	function GetFooter()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
 		ob_start();
 		require('tpl/includes/footer.php');
 		$this->AddLine(ob_get_clean()); 

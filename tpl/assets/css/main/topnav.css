@@ -120,13 +120,7 @@ nav > ul li.dropdown:hover .dropdown-content {
   transform: scaleY(1);
 
 }
-/* Canvas */
-#canvas {
-    grid-row: 1;
-    height: 650px;
-    position: absolute;
-    width: 100%;
-}
+
 /* TOP NAV MOBILEBURGER */
 
 @media (max-width: 950px) {

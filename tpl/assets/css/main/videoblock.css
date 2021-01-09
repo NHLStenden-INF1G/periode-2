@@ -48,7 +48,7 @@
     justify-content: center;
 }
 
-.videoBlock form {
+.videoBlock .rating {
     unicode-bidi: bidi-override;
     direction: rtl;
     text-align: right;
@@ -112,9 +112,12 @@ button.star:hover {
 }
 
 button.star:hover ~ button.star,
-button.star:hover {
+button.star:hover, button.fa.fa-star.star, button.fa.fa-star-half-o.star   {
     color: gold;
 }
+
+
+
 
 .videoComments > span {
     font-family: 'Bebas Neue', cursive;

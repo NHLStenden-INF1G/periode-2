@@ -1,4 +1,3 @@
-// shim layer with setTimeout fallback
     window.requestAnimFrame = (function(){
         return  window.requestAnimationFrame       ||
         window.webkitRequestAnimationFrame ||
@@ -77,13 +76,19 @@
     }
 
     Gradient.prototype.draw = function(){
-        var gradient = ctx.createLinearGradient(0, 0, this.width,this.height);
+
+       var x1 = 0, y1 = 0, x2, y2, length = this.width;
+
+        // calculate gradient line based on angle
+        x2 = x1 + Math.cos(150* Math.PI) * length;
+        y2 = y1 + Math.sin(150* Math.PI) * length;
+
+        var gradient = ctx.createLinearGradient(0, this.height, x2, y2);
 
         for(var i = 0; i < this.colorStops.length; i++){
             var stop = this.colorStops[i],
             pos = stop.pos,
             color = stop.currColor;
-
             gradient.addColorStop(pos,color);
         }
 
@@ -93,7 +98,6 @@
         
         for(var j = 0; j < this.circles.length; j++) {
             var c = this.circles[j];
-
             ctx.beginPath();
             ctx.globalCompositeOperation = "lighter";		
             ctx.arc(c.x, c.y, c.r, Math.PI*2, false);
@@ -107,7 +111,9 @@
             if(c.y < -50) c.y = this.height+50;
             if(c.x > this.width+50) c.x = -50;
             if(c.y > this.height+50) c.y = -50;
-        }        
+
+        }      
+
     }
 
     var $width, $height, gradient,
@@ -116,29 +122,55 @@
         circles = [],
         stopAColor = [
             { 'r':'0', 'g':'90', 'b':'167' },
+            { 'r':'131', 'g':'58', 'b':'180' },
             { 'r':'255', 'g':'0', 'b':'204' },
-            { 'r':'0', 'g':'132', 'b':'135' },
+            { 'r':'0', 'g':'132', 'b':'135' }
         ]
         stopBColor = [
+            { 'r':'0', 'g':'90', 'b':'167' },
+            { 'r':'253', 'g':'29', 'b':'29' },
+            { 'r':'255', 'g':'0', 'b':'204' },
+           { 'r':'51', 'g':'51', 'b':'153' }
+        ],
+        stopCColor = [
             { 'r':'0', 'g':'132', 'b':'135' },
-            { 'r':'51', 'g':'51', 'b':'153' },
-            { 'r':'1', 'g':'33', 'b':'135' }
+           { 'r':'253', 'g':'29', 'b':'29' },
+           { 'r':'81', 'g':'81', 'b':'153' },
+           { 'r':'1', 'g':'33', 'b':'135' }
         ];
 
     var updateUI = function(){
         var W = window.innerWidth, H = window.innerHeight;
+
+        var element = document.querySelector('#canvas');
+      // var heightval = element.computedStyleMap().get('height').value;
+       // var heightunit = element.computedStyleMap().get('height').unit;
+
         canvas.width = W;
-        canvas.height = H;
+        switch(true) {
+            case "px":
+                canvas.height = heightval;
+                break;
+            case "%":
+                canvas.height = heightperc/100*H;
+                break;
+            default:
+                canvas.height = H;
+                break;
+        }
+
 
         gradient = new Gradient(ctx, canvas.width, canvas.height, circles);
         gradient.addStop(0, stopAColor);
-        gradient.addStop(1, stopBColor);
-        
+        gradient.addStop(0.5, stopBColor);
+        gradient.addStop(1, stopCColor);
+
         if(circles.length < 20){
             for(var i = 0; i < 20; i++ ){
                 gradient.circles.push(new gradient.addCircles(canvas.width, canvas.height));
             }
         }
+        
     }   
 
     //interpolation

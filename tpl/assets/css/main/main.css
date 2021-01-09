@@ -29,11 +29,12 @@ body.active {
 }
 
 .pageCanvas {
-    background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
     grid-row: 1;
     grid-column: 1;
     height: 650px;
     width: 100%;
+    position: absolute;
+
 }
 
 .pageTitle {

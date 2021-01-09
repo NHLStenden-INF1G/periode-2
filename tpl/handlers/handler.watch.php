@@ -1,5 +1,5 @@
 <?php
-    if(!empty($_POST) && !isset($_GET['Path_1'])){
+    if(!empty($_POST) && !isset($_GET['Path_2'])){
         
         if($_POST[array_keys ($_POST)[0]]){
             $chosenRating = $filter->sanatizeInput($_POST[array_keys ($_POST)[0]], "int");
@@ -12,11 +12,11 @@
             header("Refresh:0");
         }
     }
-    else if(isset($_GET['Path_1']) && $_GET['Path_1'] == 'viewupdate') {
+    else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'viewupdate') {
         $videoID = $filter->sanatizeInput($_POST['videoID'], "int");
         $DB->Update("UPDATE video SET views = views + 1 WHERE video_id = ?", [$videoID]);
     }
-    else if(isset($_GET['Path_1']) && $_GET['Path_1'] == 'watchupdate'  && $user->logged_in) {
+    else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'watchupdate'  && $user->logged_in) {
         $videoID = $filter->sanatizeInput($_POST['videoID'], "int");
         $timestamp = $filter->sanatizeInput($_POST['timestamp'], "int");
         
@@ -29,7 +29,7 @@
             $DB->Update("UPDATE voortgang SET timestamp = ?, datum = current_timestamp() WHERE video_id = ? AND gebruiker_id = ?", [$timestamp, $videoID, $user->id]);
         }
     }
-    else if(isset($_GET['Path_1']) && $_GET['Path_1'] == 'watchprogess' && $user->logged_in) {
+    else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'watchprogess' && $user->logged_in) {
         $videoID = $filter->sanatizeInput($_POST['videoID'], "int");
         $selectVoortgang = $DB->Select("SELECT timestamp FROM voortgang WHERE video_id = ? AND gebruiker_id = ?", [$videoID, $user->id])[0]['timestamp'];
        
@@ -37,7 +37,7 @@
             header("timestamp: {$selectVoortgang}");
         }
         else {
-           header("timestamp: 0");
+           // header("timestamp: 0");
         }
     }
 

@@ -8,6 +8,7 @@ class Core
 		
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
 		define('WebStyle', '/'.styleFolder.'assets');
+		define('uploadFolder', '/uploads');
 
 		//PHP SETTINGS
 
@@ -56,23 +57,5 @@ class Core
 		}
 	}
 
-	function createThumbnail($videoPath, $videoLengte)
-	{
-		$videoPath = substr($videoPath, 1);
-		$thumbNailnaam = explode("uploads/video/", explode(".", $videoPath)[0])[1].'.png';
-		$videoLengte = rand(1, $videoLengte);
-		$cmd = '"config/_lib/bin/ffmpeg" -i '.$videoPath.' -ss '.$videoLengte.' -vframes 1 uploads/thumbnails/'.$thumbNailnaam.'';
-		shell_exec($cmd);
-	}
-
-	function createVideoPreview($videoPath, $videoLengte) 
-	{
-		$videoPath = substr($videoPath, 1);
-		$videoGif = explode("uploads/video/", explode(".", $videoPath)[0])[1].'.gif';
-		$videoLengte = rand(1, $videoLengte);
-
-		$cmd = '"config/_lib/bin/ffmpeg" -ss '.$videoLengte.' -t 3 -i '.$videoPath.' -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 uploads/previews/'.$videoGif.'';
-		shell_exec($cmd);
-	}
 }
 ?>
