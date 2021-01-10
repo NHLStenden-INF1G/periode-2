@@ -1,0 +1,84 @@
+.adminView {
+    display: grid;
+    grid-template-columns: 20px 25% 1fr 20px 20px;
+    grid-template-rows: 20px 20px 30vw 20px 20px;
+}
+
+.adminViewRand {
+    background-color: #188287;
+    grid-row: 1/4;
+    grid-column: 1/5;
+}
+
+.adminContent {
+    grid-row: 2/5;
+    grid-column: 2/6;
+    background-color: #ffffff;
+    box-shadow: -0.5vw 0.3vw 18px 0.03vw rgba(0, 0, 0, 0.33);
+}
+
+.adminOptions {
+    background-color: #86b4b9;
+    grid-row: 2/5;
+    grid-column: 2;
+    padding: 3%;
+}
+
+.adminTableView {
+    grid-row: 2/5;
+    grid-column: 3/6;
+    background-color: #ffffff;
+    overflow: scroll;
+    padding: 1%;
+}
+.adminTableView::-webkit-scrollbar {
+    display: none;
+}
+
+
+table {
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+}
+
+table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+table th {
+    padding: 12px 15px;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+}
+
+input, select {
+    width: 100%;
+}
+
+.sectionTitle.link {
+    font-size: clamp(12px, 1vw, 30px); 
+    border-bottom: none;
+}

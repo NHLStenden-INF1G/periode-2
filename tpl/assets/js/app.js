@@ -1,9 +1,9 @@
 /* Burger Menu Controller */
 const burgerMenu = () => {
     const burger = document.querySelector('.mobileBurger');
-    const navbar = document.querySelector('.navbar');
-    const nav = document.querySelector('.navbar > ul');
-    const navLinks = document.querySelectorAll('.navbar > ul > li > span');
+    const navbar = document.querySelector('nav');
+    const nav = document.querySelector('nav > ul');
+    const navLinks = document.querySelectorAll('nav > ul > li > span');
     const body = document.querySelector('body');
 
     burger.addEventListener('click', ()=> {
