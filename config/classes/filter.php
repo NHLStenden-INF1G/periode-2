@@ -70,6 +70,9 @@ class Filter {
         {
             return true;
         }
+        else {
+            return $this->validationErrors;
+        }
     }
 
     function getValidationErrors()
