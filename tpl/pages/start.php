@@ -1,5 +1,12 @@
 <?php 
 
+    if(isset($_POST['deleteCommentSubmit'])) {
+        $commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
+        $DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
+    }
+
+
+
 $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rating, 
 											video.videoPath, video.uploadDatum, video.video_id, video.titel, video.videolengte, video.views,
 											gebruiker.voornaam, gebruiker.achternaam 
@@ -59,16 +66,36 @@ $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rati
 								<?php 
 								if(!empty($videoResult['videoComments'])) {
 									foreach ($videoResult['videoComments'] as $key => $value) {
+                                        
 										foreach ($value as $key1 => $value1) {
 											$commentUser = $value['voornaam']. ' '. $value['achternaam'];
 											$commentTekst = $value['tekst'];
-											$commentDate = $value['datum'];
-										}
-										echo '<li> 
+                                            $commentDate = $value['datum'];
+                                            $commentID = $value['opmerking_id'];
+                                        }
+
+                                        if($user->rank >= 2) {
+                                            echo '<li> 
+                                            <form method="post" style="display: flex;">
+                                                <span class="videoComments">'.$commentUser.'</span>
+                                                <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <input type="hidden" value="'.$commentID.'" name="deleteCommentID">
+                                            </form>
+                                            
+											<span class="videoCommentsText">'.$commentTekst.'</span> 
+											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+										</li>';
+                                        }
+                                        else {
+                                            echo '<li> 
 											<span class="videoComments">'.$commentUser.'</span> 
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
 											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
 										</li>';
+                                        }
+
 									}
 								}
 								else {
