@@ -152,42 +152,72 @@
                 <div class="Aanbevolen">
                     <div class="sectionTitle">Aanbevolen</div>
                     <div class="thumbnailContainer">
-                        <div class="videoThumbBlock" data-pg-collapsed>
-                            <div class="pg-empty-placeholder videoThumbBlockRand"></div>
-                            <div class="videoThumb" data-pg-collapsed>
-                                <div class="videoThumbImg"></div>
-                                <div class="videoThumbTags"> 
-                                    <li class="videoTag">test</li>                                     
-                                </div>
-                                <div class="videoDetailsTitle">Testtitel</div>
-                                <div class="videoThumbDocent">videoThumbDocent</div>
-                                <div class="videoThumbDetails">videoThumbDetails</div>
+					<?php 
+                        $voortgangResult = $DB->Select("SELECT video.*, gebruiker.voornaam, gebruiker.achternaam
+                                                        FROM video 
+                                                        INNER JOIN gebruiker
+                                                        ON gebruiker.gebruiker_id = video.gebruiker_id
+														WHERE video.video_id != ?
+														ORDER BY RAND()
+                                                        LIMIT 3", [$videoResult['video_id']]);
+
+                        if(!empty($voortgangResult)) {
+
+                        foreach ($voortgangResult as $key => $value) {
+
+                        $value['videoTags'] = $DB->Select("SELECT * FROM tag_video 
+                                INNER JOIN tag 
+                                    ON tag.tag_id = tag_video.tag_id
+                                WHERE tag_video.video_id = ?", [$value['video_id']]);
+
+                        if($user->logged_in) {
+                            $voortgangTime = $DB->Select("SELECT timestamp FROM voortgang WHERE gebruiker_id = ? AND video_id = ?", [$user->id, $value['video_id']]);
+                            
+                            if(!empty($voortgangTime[0]['timestamp'])) {
+                                $percentage = $videoTools->getProgress($voortgangTime[0]['timestamp'], $value['videoLengte']);
+                            }
+                            else {
+                                $percentage = 0;
+                            }
+                        }
+                        else {
+                            $percentage = 0;
+                        }
+
+
+                        $value['rating'] = $DB->Select("SELECT AVG(rating) AS rating FROM beoordeling WHERE video_id = ?",[$value['video_id']])[0]['rating'];
+
+                            echo "<div class='videoThumbBlock'>
+                            <div class='videoThumbBlockRand'></div>
+                            <div class='videoThumb link' data-link='/watch/{$value['video_id']}' id='{$videoTools->getVideoName($value['videoPath'])}'>
+                            <img class='videoThumbImg' src='{uploadsFolder}/{$videoTools->getThumbnail($value['videoPath'])}' id='thumb-{$videoTools->getVideoName($value['videoPath'])}'>
+                            <div class='videoThumbTags'> ";
+
+                            foreach ($value['videoTags'] as $key1 => $value1) {
+                                echo "<li class='videoTag link' data-link=''>#{$value1['naam']}</li>";
+                            }
+
+                            echo "</div>
+                            <div class='videoDetailContainer'>
+                            <div class='videoDetailsTitle'><strong style='font-size: clamp(27px, 0.3vw, 30px);'>{$value['titel']}</strong></div>
+                            <div class='videoThumbDocent'>{$value['voornaam']} {$value['achternaam']}</div>
+                            <div class='videoThumbDetails'>{$value['uploadDatum']}
+                            <div style='margin-left: -0.4vw; margin-bottom: 0.5vw;'>
+                            ".$videoTools->getRating($value['rating'], $value['video_id'])."</div>
+                            <p>(".gmdate("H:i:s", $value['videoLengte']).")</p>
+
                             </div>
-                        </div>
-                        <div class="videoThumbBlock" data-pg-collapsed>
-                            <div class="pg-empty-placeholder videoThumbBlockRand"></div>
-                            <div class="videoThumb" data-pg-collapsed>
-                                <div class="videoThumbImg"></div>
-                                <div class="videoThumbTags"> 
-                                    <li class="videoTag">test</li>                                     
-                                </div>
-                                <div class="videoDetailsTitle">Testtitel</div>
-                                <div class="videoThumbDocent">videoThumbDocent</div>
-                                <div class="videoThumbDetails">videoThumbDetails</div>
                             </div>
-                        </div>
-                        <div class="videoThumbBlock" data-pg-collapsed>
-                            <div class="pg-empty-placeholder videoThumbBlockRand"></div>
-                            <div class="videoThumb" data-pg-collapsed>
-                                <div class="videoThumbImg"></div>
-                                <div class="videoThumbTags"> 
-                                    <li class="videoTag">test</li>                                     
-                                </div>
-                                <div class="videoDetailsTitle">Testtitel</div>
-                                <div class="videoThumbDocent">videoThumbDocent</div>
-                                <div class="videoThumbDetails">videoThumbDetails</div>
+                            <div class='videoProgress' style='grid-row: 5; grid-column: 1; background-color: red; width: {$percentage}%;'></div>
                             </div>
-                        </div>
+                            </div>";
+                            }
+                        } else {
+                            echo 'Nog geen video\'s!';
+                        }
+                            echo '</div>
+                                </div>';     
+                        ?>    
                     </div>
                 </div>
 	</main>

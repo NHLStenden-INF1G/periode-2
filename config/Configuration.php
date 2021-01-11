@@ -22,7 +22,6 @@ class Config {
 
 	static $cookie_time		= 216000;
 
-	static $hash_function	= 'password_hash($input, PASSWORD_BCRYPT)';
 
 
 }

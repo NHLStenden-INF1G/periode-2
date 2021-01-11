@@ -202,8 +202,8 @@ if(isset($_POST["editSubmit"]))
         else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'upload')
         {
             $videoData = $DB->Select("SELECT vak_id, vak_naam FROM vak");
-            $tagData = $DB->Select("SELECT tag.tag_id, tag.naam AS tagnaam, opleiding.* FROM tag INNER JOIN opleiding ON opleiding.opleiding_id = tag.opleiding_id");
 
+            $tagData = $DB->Select("SELECT * FROM tag");
             echo '<div class="sectionTitle">uploaden</div>
                     <form enctype="multipart/form-data" method="POST">';
 
@@ -224,7 +224,7 @@ if(isset($_POST["editSubmit"]))
                 foreach($tagData as $key => $tagLijst) 
                 { 
 
-                    echo "<option value='{$tagLijst['tag_id']}'>{$tagLijst["tagnaam"]}</option>";
+                    echo "<option value='{$tagLijst['tag_id']}'>{$tagLijst["naam"]}</option>";
                 }
                
                 echo '</select></label><br>';

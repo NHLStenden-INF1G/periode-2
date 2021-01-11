@@ -37,6 +37,18 @@ Class Video {
 		return explode("/uploads/video/", explode(".", $videoPath)[0])[1];
 	}
 
+	function getProgress($timeStamp, $videoLengte){
+		$ratio = $timeStamp / $videoLengte;
+		$fraction = $ratio - floor($ratio);
+		$percentage = 100 * $fraction;
+
+		if($percentage == 0){
+			$percentage = 100;
+		}
+
+		return $percentage;
+	}
+
 	function getRating($starNumber, $videoID, $html = null) {
 		
 		global $DB, $user;
@@ -53,8 +65,6 @@ Class Video {
 		else {
 			$html .= "<div class='rating'>";
 		}
-
-
 
 		for( $x = 4; $x > -1; $x-- )
 		{
