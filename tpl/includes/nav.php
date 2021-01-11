@@ -2,6 +2,11 @@
 
 <nav>
     <img class="link" data-link="/start" src="{assetsFolder}/images/logo.png"/>
+    <div class="inputSearch">
+        <i class="fa fa-search icon"></i>
+        <input id="liveInput" type="text" onkeyup="showResult(this.value)" placeholder="Zoeken...">
+    </div>
+    <div id="livesearch"></div>
     <ul>
         <li class="link" data-link="/">
             <span>Start</span>

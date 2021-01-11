@@ -50,6 +50,9 @@ Class Video {
 				$html .= "<div class='rating'>";
 			}
 		}
+		else {
+			$html .= "<div class='rating'>";
+		}
 
 
 
@@ -77,6 +80,9 @@ Class Video {
 			else {
 				$html .= '</div>';
 			}
+		}
+		else {
+			$html .= "</div>";
 		}
 		return $html;
 	}

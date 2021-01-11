@@ -39,7 +39,6 @@ $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rati
 											ON tag_video.tag_id = tag.tag_id
 										WHERE tag_video.video_id = ?", [$videoResult['video_id']]);
 										
-					print_r($videoResult);
 				}
 
 ?>
@@ -78,6 +77,21 @@ $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rati
 
 								?>
                             </ul>
+                            <div class='postComment' style="grid-row: 3; grid-column: 2;">
+                                <?php 
+
+                                if($user->logged_in){
+                                    echo '<form method="POST">
+                                            <input type="text" name="commentText" style="width: 80%;" placeholder="Een nieuwe comment plaatsen...">
+                                            <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
+                                            <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
+                                        </form>';
+                                }
+                                else {
+                                    echo '<input type="text" placeholder="Log in om een reactie te plaatsen" disabled>';
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div class="videoDetails">
                             <div class="videoUpload">

@@ -1,14 +1,23 @@
 <?php
     if(!empty($_POST) && !isset($_GET['Path_2'])){
         
-        if($_POST[array_keys ($_POST)[0]]){
-            $chosenRating = $filter->sanatizeInput($_POST[array_keys ($_POST)[0]], "int");
+        if(!isset($_POST['commentSubmit'])){
+            
+            if($_POST[array_keys ($_POST)[0]]){
+                $chosenRating = $filter->sanatizeInput($_POST[array_keys ($_POST)[0]], "int");
 
 
-            $videoID =  $filter->sanatizeInput($_POST['videoID'], "int");
+                $videoID =  $filter->sanatizeInput($_POST['videoID'], "int");
 
-            $DB->Insert("INSERT INTO beoordeling (rating, video_id, gebruiker_id) VALUES (?, ?, ?)", [$chosenRating, $videoID, $user->id]);
+                $DB->Insert("INSERT INTO beoordeling (rating, video_id, gebruiker_id) VALUES (?, ?, ?)", [$chosenRating, $videoID, $user->id]);
 
+                header("Refresh:0");
+            }
+        }
+        else if(isset($_POST['commentSubmit'])) {
+            $commentTekst = $filter->sanatizeInput($_POST['commentText'], "string");
+            $videoID = $filter->sanatizeInput($_POST['commentVideoID'], "int");
+            $DB->Insert("INSERT INTO opmerking (tekst, video_id, gebruiker_id) VALUES (?, ?, ?)", [$commentTekst, $videoID, $user->id]);
             header("Refresh:0");
         }
     }

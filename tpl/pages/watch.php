@@ -46,7 +46,6 @@
 										WHERE tag_video.video_id = ?", [$id]);	
 										
 					$this->Set("pageTitle", $videoResult['titel']);
-					print_r($videoResult);
 				}
 				else
 				{
@@ -87,7 +86,22 @@
 								}
 
 								?>
-                            </ul>
+							</ul>
+							<div class='postComment' style="grid-row: 3; grid-column: 2;">
+                                <?php 
+
+                                if($user->logged_in){
+                                    echo '<form method="POST">
+                                            <input type="text" name="commentText" style="width: 80%;" placeholder="Een nieuwe comment plaatsen...">
+                                            <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
+                                            <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
+                                        </form>';
+                                }
+                                else {
+                                    echo '<input type="text" placeholder="Log in om een reactie te plaatsen" disabled>';
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div class="videoDetails">
                             <div class="videoUpload">

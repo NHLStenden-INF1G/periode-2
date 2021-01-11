@@ -57,6 +57,7 @@ class Template
 		if (is_file(Handlers.'handler.'.Page))
 		{
 			require(Handlers.'handler.'.Page);
+		
 		}
 	}
 
@@ -125,8 +126,9 @@ class Template
 		{
 			$v[] = str_ireplace($k, '', $value);
 		}
+		echo str_ireplace($k, $v, $this->content);
 
-		echo str_ireplace($k, $v, $this->content. '<!-- Site geladen in '.(microtime(true) - Start).' seconden :O -->');
+		//echo str_ireplace($k, $v, $this->content. '<!-- Site geladen in '.(microtime(true) - Start).' seconden :O -->');
 	}
 }
 ?>
