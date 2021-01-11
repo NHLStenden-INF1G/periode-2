@@ -3,6 +3,8 @@ const burgerMenu = () => {
     const burger = document.querySelector('.mobileBurger');
     const navbar = document.querySelector('nav');
     const nav = document.querySelector('nav > ul');
+    const navSearch = document.querySelector('nav > .inputSearch');
+
     const navLinks = document.querySelectorAll('nav > ul > li > span');
     const body = document.querySelector('body');
 
@@ -10,6 +12,7 @@ const burgerMenu = () => {
         nav.classList.toggle('active');
         navbar.classList.toggle('active');
         body.classList.toggle('active');
+        navSearch.classList.toggle('active');
         
         navLinks.forEach((link, index) =>{
             if(link.style.animation) {
@@ -34,6 +37,20 @@ const menuLinks = () => {
     });
 }
 
+const thumbNails = () => {
+    const elements = document.querySelectorAll(".videoThumb");
+    elements.forEach((link, index) => {
+        const thumbImage = document.getElementById('thumb-' + link.id);
+
+        link.addEventListener('mouseenter', ()=> {
+            thumbImage.src = "/uploads/previews/" + link.id + ".gif";
+        });
+        link.addEventListener('mouseleave', ()=>{
+            thumbImage.src = "/uploads/thumbnails/" + link.id + ".png";
+        });
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function(){
 
     /* Canvas Controller */
@@ -51,4 +68,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     menuLinks();
     burgerMenu();
+    thumbNails();
+ 
 });

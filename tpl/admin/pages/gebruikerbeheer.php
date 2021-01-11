@@ -208,15 +208,15 @@
             $gebruikerResult = $DB->Select("SELECT * FROM gebruiker WHERE gebruiker_id = ? LIMIT 1 ", [$gebruikerID]); 
             //Haalt alle docenten op
 
-    echo '<form method="post">
-            {updateError}<br />
-            <label>Voornaam: <input type="text" name="voorNaam" placeholder="Voornaam" value="'.$gebruikerResult[0]['voornaam'].'" required></label><br />
-            <label>Achternaam: <input type="text" name="achterNaam" placeholder="Achternaam" value="'.$gebruikerResult[0]['achternaam'].'" required></label><br />
-            <label>Email: <input type="email" name="regEmail" placeholder="Emailadres" value="'.$gebruikerResult[0]['email'].'" required></label><br />
-            <label>Wachtwoord: <input type="password" name="regPass1" placeholder="Wachtwoord" required></label><br />
-            <label>Herhaal wachtwoord: <input type="password" name="regPass2" placeholder="Herhaal Wachtwoord" required></label><br />
-            <input type="hidden" value="'.$gebruikerResult[0]['gebruiker_id'].'" name="gebruikerID">
-            <label>Level: <select name="levelSelect">';
+        echo '<form method="post">
+                    {updateError}<br />
+                    <label>Voornaam: <input type="text" name="voorNaam" placeholder="Voornaam" value="'.$gebruikerResult[0]['voornaam'].'" required></label><br />
+                    <label>Achternaam: <input type="text" name="achterNaam" placeholder="Achternaam" value="'.$gebruikerResult[0]['achternaam'].'" required></label><br />
+                    <label>Email: <input type="email" name="regEmail" placeholder="Emailadres" value="'.$gebruikerResult[0]['email'].'" required></label><br />
+                    <label>Wachtwoord: <input type="password" name="regPass1" placeholder="Wachtwoord" required></label><br />
+                    <label>Herhaal wachtwoord: <input type="password" name="regPass2" placeholder="Herhaal Wachtwoord" required></label><br />
+                    <input type="hidden" value="'.$gebruikerResult[0]['gebruiker_id'].'" name="gebruikerID">
+                    <label>Level: <select name="levelSelect">';
             for( $i=1; $i < 3; $i++ ) {
                 echo '<option ' . ($gebruikerResult[0]['level'] == $i ? 'selected="selected"' : '') . ' value="'.$i.'">' . $user->userLevelName($i) . '</option>';
             }

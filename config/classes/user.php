@@ -20,7 +20,7 @@ class User
 			$this->email = $_SESSION['email'];
 			$this->logged_in = true;
 
-		$this->data = $DB->Select("SELECT * FROM gebruiker WHERE email = ?", [$this->email])[0];
+			$this->data = $DB->Select("SELECT * FROM gebruiker WHERE email = ?", [$this->email])[0];
 
 			if ($this->data === false)
 			{

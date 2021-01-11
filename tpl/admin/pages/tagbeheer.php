@@ -5,9 +5,10 @@
             if(!empty($_POST['tagOpleiding'])) {
                 $tagNaam = $filter->sanatizeInput($_POST['tagNaam'], 'string');
 
+                $tagID = $DB->Insert("INSERT INTO tag (naam) VALUES (?)", [$tagNaam]);               
                 foreach ($_POST['tagOpleiding'] as $key => $value) {
                     $tagOpleiding = $filter->sanatizeInput($value, 'int');
-                    $DB->Insert("INSERT INTO tag (opleiding_id, naam) VALUES (?, ?)", [$tagOpleiding, $tagNaam]);               
+                    $DB->Insert("INSERT INTO tag_opleiding (tag_id, opleiding_id) VALUES (?, ?)", [$tagID, $tagOpleiding]);               
                 }
 
                 header("Location: /admin/tagbeheer");
@@ -25,14 +26,16 @@
         if(!empty($_POST['tagNaam'])){
             if(!empty($_POST['tagOpleiding'])) {
                 $tagNaam = $filter->sanatizeInput($_POST['tagNaam'], 'string');
+                $tagID = $filter->sanatizeInput($_POST['tagID'], 'int');
+
+                    $DB->Update("UPDATE tag SET naam = ? WHERE tag_id = ?", [$tagNaam, $tagID]);
 
                 foreach ($_POST['tagOpleiding'] as $key => $value) {
                     $tagOpleiding = $filter->sanatizeInput($value, 'int');
-                    $DB->Delete("DELETE FROM tag WHERE tag_id = ?", [$tagID]);
-                    $DB->Insert("INSERT INTO tag (opleiding_id, naam) VALUES (?, ?)", [$tagOpleiding, $tagNaam]);               
+                    $DB->Delete("DELETE FROM tag_opleiding WHERE tag_id = ?", [$tagID]);
+                    $DB->Insert("INSERT INTO tag_opleiding (tag_id, opleiding_id) VALUES (?, ?)", [$tagID, $tagOpleiding]);       
                 }
-
-                header("Location: /admin/tagbeheer");
+                    header("Location: /admin/tagbeheer");
             }
             else {
                 echo "Geen opleiding opgegeven";
@@ -61,15 +64,11 @@
         //Laat de weergave pagina zien
         if(!isset($_GET['Path_2']) && !isset($_GET['Path_3']))
         {
-            $gebuikerResult = $DB->Select("SELECT opleiding.naam AS opleidingnaam, tag.naam AS tagnaam, tag.tag_id, opleiding.jaar FROM tag 
-                                            INNER JOIN opleiding
-                                            ON opleiding.opleiding_id = tag.opleiding_id"); //Haalt alle docenten op
+            $gebuikerResult = $DB->Select("SELECT * FROM tag"); //Haalt alle docenten op
 
             echo '<div class="sectionTitle">overzicht</div><table>
                     <thead>
                         <tr>
-                            <th>Opleiding</th>
-                            <th>Jaar</th>
                             <th>Tagnaam</th>
                             <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
                             <th><i class="fa fa-times" aria-hidden="true"></i></th>
@@ -80,9 +79,7 @@
             foreach($gebuikerResult as $key => $value) 
             {
                 echo "<tr>";
-                echo "<td>".$value['opleidingnaam']."</td>";
-                echo "<td>".$value['jaar']."</td>";
-                echo "<td>".$value['tagnaam']."</td>";
+                echo "<td>".$value['naam']."</td>";
                     echo "<td class='link' data-link='/admin/tagbeheer/edit/".$value['tag_id']."'>
                     <i class='fa fa-pencil-square-o' aria-hidden='true'></i>
                     </td>";
@@ -137,7 +134,7 @@
 
             if(!empty($tagResult)){
                 $opleidingData = $DB->Select("SELECT * FROM opleiding");
-
+               
                 echo '<div class="sectionTitle">aanpassen</div>
                         <form method="post">
                             <label>Tagnaam: <input type="text" placeholder="Tagnaam" name="tagNaam" value="'.$tagResult['naam'].'"></label><br>';
@@ -147,13 +144,9 @@
 
                 foreach($opleidingData as $key => $opleidingLijst) 
                 { 
-                    if(in_array($opleidingLijst['opleiding_id'], $tagResult)) {
-                        echo "<option class='optionSelected' value='{$opleidingLijst['opleiding_id']}' selected >{$opleidingLijst['naam']} (geselecteerd)</option>";
-                    }
                     
-                    else {
                         echo "<option value='{$opleidingLijst['opleiding_id']}'>{$opleidingLijst['naam']}</option>";
-                    }
+                    
                 }
 
                 echo '</select></label><br>';

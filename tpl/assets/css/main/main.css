@@ -20,7 +20,7 @@ body {
     display: grid;
     padding: 0;
     margin: 0;
-    grid-template-rows: 110px 2vw auto 2vw 150vh 300px;
+    grid-template-rows: 110px 1vw auto 2vw auto 300px;
     grid-template-columns: 1fr;
 }
 
@@ -29,11 +29,12 @@ body.active {
 }
 
 .pageCanvas {
-    background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
     grid-row: 1;
     grid-column: 1;
     height: 650px;
     width: 100%;
+    position: absolute;
+
 }
 
 .pageTitle {
@@ -85,7 +86,38 @@ body.active {
     margin-bottom: 10px;
 }
 
+.searchTitle {
+    font-family: 'Bebas Neue', cursive;
+    letter-spacing: 0.15vw;
+    color: #5b5753;
+    text-transform: uppercase;
+    height: min-content;
+    width: max-content;
+    font-size: clamp(20x, 1vw, 20px);
+    padding: 0 1vw;
+    margin: 0.5vw 0;
+}
 
+.searchResultTags, .searchResult, .searchResult a {
+    font-family: 'Bebas Neue', cursive;
+    color: black;
+    font-size: clamp(15px, 1vw, 20px);
+    padding: 0 1vw;
+}
+
+#livesearch {
+    background-color: white;
+    box-shadow: 3px 3px 16px -6px;
+    transition: 0.3s;
+}
+
+a.videoTag {
+    font-family: "Roboto", sans-serif !important;
+    color: white !important;
+}
+.searchResultTags, a.videoTag {
+    display: inline-block;
+}
 /* SECTIONS */
 
 .spotlightVideo {
@@ -119,4 +151,20 @@ body.active {
         justify-content: center;
         grid-template-columns: unset;
     }
+
+    .searchResultTags, .searchResult, .searchResult a {
+        padding: 2vw 1vw;
+    }
+
+    
+
+    .inputSearch {
+        grid-column: 1/5 !important;
+        grid-row: 2;
+    }
+
+    .inputSearch.active {
+        display: none;
+    }
+
 }

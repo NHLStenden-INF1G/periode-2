@@ -1,111 +1,195 @@
-<?php
-	//connectie met database, dit is tijdelijk tot we remco zijn class implementeren
-	$host = "localhost"; /* Host name */
-	$user = "root"; /* User */
-	$password = ""; /* Password */
-	$dbname = "stendenflix"; /* Database name */
-
-	$con = mysqli_connect($host, $user, $password,$dbname);
-	// Check connection
-	if (!$con) {
-	  die("Connection failed: " . mysqli_connect_error());
+<?php 
+	if(isset($_POST['deleteCommentSubmit'])) {
+		$commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
+		$DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
 	}
-?>
-<div class="mainWrapper"> 
-    <main>
-		<div class="Spotlight">
-			 <?php
-				// SELECT tekst FROM `opmerking` WHERE video_id='$id'"
-				if(isset($_GET['id']))
-				{
-					$id = $_GET['id'];
-					//ophalen video en informatie van video
-					$query = mysqli_query($con,	"SELECT video.titel, video.omschrijving, video.uploadDatum, video.video_id, video.videoPath, video.gebruiker_id, gebruiker.voornaam, gebruiker.achternaam
-												FROM `video` 
-												JOIN gebruiker ON video.gebruiker_id=gebruiker.gebruiker_id
-												WHERE video.video_id='$id'");
-					while($row = mysqli_fetch_assoc($query))
-					{
-						$location = $row['videoPath'];
-						$id = $row['video_id'];
-						$name = $row['titel'];
-						$docent = $row['gebruiker_id'];
-						$docentVnaam = $row['voornaam'];
-						$docentAnaam = $row['achternaam'];
-						$omschrijving = $row['omschrijving'];
-						$datum = $row['uploadDatum'];
-					}
-					
-					//ophalen ratings
-					$query3 = mysqli_query($con, "SELECT AVG(rating) as avgrating FROM `beoordeling` WHERE video_id='$id'");
-					while($row = mysqli_fetch_assoc($query3))
-					{
-						$beoordeling = $row['avgrating'];
-					}
-					
-					//opleiding selecteren
-					$query4 = mysqli_query($con, 	"SELECT opleiding.naam 
-													FROM `opleiding`
-													JOIN vak_video ON  opleiding.opleiding_id=vak_video.opleiding_id
-													WHERE video_id='$id'");
-					while($row = mysqli_fetch_assoc($query4))
-					{
-						$opleiding = $row['naam'];
-					}
-					
-					//tags selecteren, werkt nog niet want geen id bij tags
-					$query5 = mysqli_query($con, "SELECT naam FROM `tag` WHERE video_id='$id'");
-					while($row = mysqli_fetch_assoc($query5))
-					{
-						$tag = $row['naam'];
-					}
-					
-					// vak naam selecteren
-					$query6 = mysqli_query($con, 	"SELECT vak_naam
-													FROM `vak`
-													JOIN vak_video ON vak.vak_id=vak_video.vak_id
-													WHERE video_id='$id'");
-					while($row = mysqli_fetch_assoc($query6))
-					{
-						$vak = $row['vak_naam'];
-					}
-					
-					//query opmerkingen
-					$query2 = mysqli_query($con,	"SELECT opmerking.tekst, gebruiker.voornaam, gebruiker.achternaam
-													FROM `opmerking`
-													JOIN gebruiker ON opmerking.gebruiker_id=gebruiker.gebruiker_id
-													WHERE video_id='$id'"); 
-					
-					echo "<div><video src='{assetsFolder}/uploads/".$location."' controls width='320px' height='200px' ></div><br>";
-					echo "<div>";
-					echo "Je kijkt: ".$name."<br>";
-					echo "Geupload door: ".$docentVnaam." ".$docentAnaam." op:".$datum."<br>";
-					echo "Beoordeling: ".$beoordeling."<br>";
-					echo "Opleiding: ".$opleiding."<br>";
-					echo "Vak : ".$vak."<br>";
-					echo "Tags: ".$tag."<br>";
-					echo "Beschrijving: ".$omschrijving."<br>";
-					//ophalen opmerkingen en weergeven
-					$query2 = mysqli_query($con,	"SELECT opmerking.tekst, gebruiker.voornaam, gebruiker.achternaam
-													FROM `opmerking`
-													JOIN gebruiker ON opmerking.gebruiker_id=gebruiker.gebruiker_id
-													WHERE video_id='$id'"); // opmerking moet ook nog een join krijgen ivm naam van commenter en een loopje voor alle comments
-					while($row = mysqli_fetch_assoc($query2))
-					{
-						$opmerking = $row['tekst'];
-						$gebruikerVnaam = $row['voornaam'];
-						$gebruikerAnaam = $row['achternaam'];
-						echo $gebruikerVnaam." ".$gebruikerAnaam."zegt: ".$opmerking."<br>";
-					}
-					echo "</div>";
-					
+	
+	if(isset($_GET['Path_1']))
+			{
+				$id = $filter->sanatizeInput($_GET['Path_1'], "int");
+				//ophalen video en informatie van video
+				$videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rating, 
+											video.videoPath, video.uploadDatum, video.video_id, video.titel, video.videolengte, video.views,
+											gebruiker.voornaam, gebruiker.achternaam 
+											FROM video 
+											INNER JOIN gebruiker 
+												ON video.gebruiker_id = gebruiker.gebruiker_id
+											LEFT JOIN beoordeling
+												ON beoordeling.video_id = video.video_id
+											INNER JOIN video_vak 
+												ON video_vak.video_id = video.video_id
+											INNER JOIN vak 
+												ON vak.vak_id = video_vak.vak_id
+											INNER JOIN opleiding
+												ON opleiding.opleiding_id = vak.opleiding_id
+											WHERE video.video_id= ?
+											LIMIT 1", [$id])[0];
 
+				foreach (array_keys($videoResult) as $key => $value) {
+					if(empty($videoResult[$value])) {
+						$error = true;
+					}
+					else {
+						$error = false;
+					}
+				}
+				
+				if(!$error) 
+				{
+					$videoResult['videoComments'] = $DB->Select("SELECT opmerking.*, gebruiker.voornaam, gebruiker.achternaam, gebruiker.level FROM opmerking 
+										INNER JOIN gebruiker 
+											ON gebruiker.gebruiker_id = opmerking.gebruiker_id
+										WHERE video_id = ?", [$id]);
+
+					$videoResult['videoTags'] = $DB->Select("SELECT tag.naam FROM tag_video 
+										INNER JOIN tag 
+											ON tag_video.tag_id = tag.tag_id
+										WHERE tag_video.video_id = ?", [$id]);	
+										
+					$this->Set("pageTitle", $videoResult['titel']);
 				}
 				else
 				{
-					echo "Error!";
+					header("Location: /error");
 				}
-			?>
-		</div>
+			}
+			else
+			{
+				header("Location: /error");
+			}
+		?>
+		<div class="mainWrapper"> 
+    <main>
+		<div class="spotlightVideo">
+                    <div class="videoBlock">
+                        <video controls id="<?= $videoResult['video_id']; ?>">
+                            <source src="<?= $videoResult['videoPath'] ?>" type="video/mp4" preload>
+                        </video>
+                        <div class="videoBlockRand"></div>
+                        <div class="videoComments">
+                            <span>laatste reacties</span>
+                            <ul> 
+								<?php 
+								if(!empty($videoResult['videoComments'])) {
+									foreach ($videoResult['videoComments'] as $key => $value) {
+										
+										foreach ($value as $key1 => $value1) {
+											$commentUser = $value['voornaam']. ' '. $value['achternaam'];
+											$commentTekst = $value['tekst'];
+											$commentDate = $value['datum'];
+											$commentID = $value['opmerking_id'];
+										}
+
+                                        if($user->rank >= 2) {
+                                            echo '<li> 
+                                            <form method="post" style="display: flex;">
+                                                <span class="videoComments">'.$commentUser.'</span>
+                                                <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <input type="hidden" value="'.$commentID.'" name="deleteCommentID">
+                                            </form>
+                                            
+											<span class="videoCommentsText">'.$commentTekst.'</span> 
+											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+										</li>';
+                                        }
+                                        else {
+                                            echo '<li> 
+											<span class="videoComments">'.$commentUser.'</span> 
+											<span class="videoCommentsText">'.$commentTekst.'</span> 
+											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+										</li>';
+                                        }
+									}
+								}
+								else {
+									echo "Nog geen reacties, wees de eerste! #first";
+								}
+
+								?>
+							</ul>
+							<div class='postComment' style="grid-row: 3; grid-column: 2;">
+                                <?php 
+
+                                if($user->logged_in){
+                                    echo '<form method="POST">
+                                            <input type="text" name="commentText" style="width: 80%;" placeholder="Een nieuwe comment plaatsen...">
+                                            <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
+                                            <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
+                                        </form>';
+                                }
+                                else {
+                                    echo '<input type="text" placeholder="Log in om een reactie te plaatsen" disabled>';
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="videoDetails">
+                            <div class="videoUpload">
+                                <span class="videoTitle"><?= $videoResult['titel'] ?></span>
+                                <span><?= $videoResult['voornaam'] ?> <?= $videoResult['achternaam'] ?></span>
+                                <span><?= $videoResult['views'] ?> weergaven</span>
+								<span><?= $videoResult['uploadDatum'] ?> </span>
+                            </div>
+                            <div class="videoRatings">
+								<?= $videoTools->getRating($videoResult['rating'], $videoResult['video_id']); ?>
+                            </div>
+                            <div class="videoTagsContainer">
+							<?php 
+
+									foreach ($videoResult['videoTags'] as $key => $value) {
+										foreach ($value as $key1 => $value1) {
+											$tagNaam = $value['naam'];
+										}
+										echo '<span class="videoTag">#'.$tagNaam.'</span>';
+									}
+							?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Aanbevolen">
+                    <div class="sectionTitle">Aanbevolen</div>
+                    <div class="thumbnailContainer">
+                        <div class="videoThumbBlock" data-pg-collapsed>
+                            <div class="pg-empty-placeholder videoThumbBlockRand"></div>
+                            <div class="videoThumb" data-pg-collapsed>
+                                <div class="videoThumbImg"></div>
+                                <div class="videoThumbTags"> 
+                                    <li class="videoTag">test</li>                                     
+                                </div>
+                                <div class="videoDetailsTitle">Testtitel</div>
+                                <div class="videoThumbDocent">videoThumbDocent</div>
+                                <div class="videoThumbDetails">videoThumbDetails</div>
+                            </div>
+                        </div>
+                        <div class="videoThumbBlock" data-pg-collapsed>
+                            <div class="pg-empty-placeholder videoThumbBlockRand"></div>
+                            <div class="videoThumb" data-pg-collapsed>
+                                <div class="videoThumbImg"></div>
+                                <div class="videoThumbTags"> 
+                                    <li class="videoTag">test</li>                                     
+                                </div>
+                                <div class="videoDetailsTitle">Testtitel</div>
+                                <div class="videoThumbDocent">videoThumbDocent</div>
+                                <div class="videoThumbDetails">videoThumbDetails</div>
+                            </div>
+                        </div>
+                        <div class="videoThumbBlock" data-pg-collapsed>
+                            <div class="pg-empty-placeholder videoThumbBlockRand"></div>
+                            <div class="videoThumb" data-pg-collapsed>
+                                <div class="videoThumbImg"></div>
+                                <div class="videoThumbTags"> 
+                                    <li class="videoTag">test</li>                                     
+                                </div>
+                                <div class="videoDetailsTitle">Testtitel</div>
+                                <div class="videoThumbDocent">videoThumbDocent</div>
+                                <div class="videoThumbDetails">videoThumbDetails</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 	</main>
 </div>
+<script src="/tpl/assets/js/video.js"></script>

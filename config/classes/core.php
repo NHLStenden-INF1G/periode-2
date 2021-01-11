@@ -8,6 +8,7 @@ class Core
 		
 		define('URL', 'http://'.$_SERVER['SERVER_NAME']);
 		define('WebStyle', '/'.styleFolder.'assets');
+		define('uploadFolder', '/uploads');
 
 		//PHP SETTINGS
 
@@ -19,12 +20,6 @@ class Core
 		
 		session_start();
 
-	}
-
-	function __destruct()
-	{
-		global $filter;
-		echo (Config::$error_filter == true) ? '<pre>'.$filter->debug.'</pre>' 	: false;
 	}
 
 	function Redirect($link)
