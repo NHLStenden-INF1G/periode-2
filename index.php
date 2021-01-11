@@ -26,10 +26,10 @@ $videoParser    = new getID3;
 $videoTools     = new Video;
 
 $TPL->Route($_SERVER['PATH_INFO']);
+$TPL->GetHandlers();
 
 $TPL->GetHeader();
 $TPL->GetNavigation();
-$TPL->GetHandlers();
 $TPL->GetContent();
 $TPL->GetFooter();
 

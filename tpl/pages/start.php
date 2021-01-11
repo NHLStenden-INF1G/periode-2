@@ -1,5 +1,12 @@
 <?php 
 
+    if(isset($_POST['deleteCommentSubmit'])) {
+        $commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
+        $DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
+    }
+
+
+
 $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rating, 
 											video.videoPath, video.uploadDatum, video.video_id, video.titel, video.videolengte, video.views,
 											gebruiker.voornaam, gebruiker.achternaam 
@@ -39,7 +46,6 @@ $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rati
 											ON tag_video.tag_id = tag.tag_id
 										WHERE tag_video.video_id = ?", [$videoResult['video_id']]);
 										
-					print_r($videoResult);
 				}
 
 ?>
@@ -60,16 +66,36 @@ $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rati
 								<?php 
 								if(!empty($videoResult['videoComments'])) {
 									foreach ($videoResult['videoComments'] as $key => $value) {
+                                        
 										foreach ($value as $key1 => $value1) {
 											$commentUser = $value['voornaam']. ' '. $value['achternaam'];
 											$commentTekst = $value['tekst'];
-											$commentDate = $value['datum'];
-										}
-										echo '<li> 
+                                            $commentDate = $value['datum'];
+                                            $commentID = $value['opmerking_id'];
+                                        }
+
+                                        if($user->rank >= 2) {
+                                            echo '<li> 
+                                            <form method="post" style="display: flex;">
+                                                <span class="videoComments">'.$commentUser.'</span>
+                                                <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <input type="hidden" value="'.$commentID.'" name="deleteCommentID">
+                                            </form>
+                                            
+											<span class="videoCommentsText">'.$commentTekst.'</span> 
+											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+										</li>';
+                                        }
+                                        else {
+                                            echo '<li> 
 											<span class="videoComments">'.$commentUser.'</span> 
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
 											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
 										</li>';
+                                        }
+
 									}
 								}
 								else {
@@ -78,6 +104,21 @@ $videoResult = $DB->Select("SELECT vak.vak_naam, AVG(beoordeling.rating) AS rati
 
 								?>
                             </ul>
+                            <div class='postComment' style="grid-row: 3; grid-column: 2;">
+                                <?php 
+
+                                if($user->logged_in){
+                                    echo '<form method="POST">
+                                            <input type="text" name="commentText" style="width: 80%;" placeholder="Een nieuwe comment plaatsen...">
+                                            <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
+                                            <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
+                                        </form>';
+                                }
+                                else {
+                                    echo '<input type="text" placeholder="Log in om een reactie te plaatsen" disabled>';
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div class="videoDetails">
                             <div class="videoUpload">

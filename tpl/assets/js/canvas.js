@@ -143,21 +143,9 @@
         var W = window.innerWidth, H = window.innerHeight;
 
         var element = document.querySelector('#canvas');
-      // var heightval = element.computedStyleMap().get('height').value;
-       // var heightunit = element.computedStyleMap().get('height').unit;
 
+        canvas.height= window.getComputedStyle(element).height.split("px")[0];
         canvas.width = W;
-        switch(true) {
-            case "px":
-                canvas.height = heightval;
-                break;
-            case "%":
-                canvas.height = heightperc/100*H;
-                break;
-            default:
-                canvas.height = H;
-                break;
-        }
 
 
         gradient = new Gradient(ctx, canvas.width, canvas.height, circles);

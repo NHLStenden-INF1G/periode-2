@@ -30,7 +30,6 @@
                         <button type='submit' name='submitButton'>wachtwoord veranderen</button>
                         <span class='button link' data-link='/profiel/{$user->id}'>annuleren</span>
                         </form>";
-                //todo: profielcreatie
             }
             else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
 
@@ -40,16 +39,17 @@
 
 
                         
-                    $voortgangResult = $DB->Select("SELECT * FROM voortgang 
+                    $voortgangResult = $DB->Select("SELECT  video.*, voortgang.*, gebruiker.voornaam, gebruiker.achternaam
+                                                    FROM voortgang 
                                                     INNER JOIN video
                                                     ON video.video_id = voortgang.video_id
                                                     INNER JOIN gebruiker
                                                     ON gebruiker.gebruiker_id = video.gebruiker_id
-                                                    WHERE voortgang.gebruiker_id = ? ORDER BY datum
-                                                    LIMIT 3", [$gebruikerID]);
+
+                                                    WHERE voortgang.gebruiker_id = ? ORDER BY voortgang.datum DESC
+                                                    LIMIT 6", [$gebruikerID]);
                     
-                      echo '
-                    <div class="Aanbevolen">
+                      echo '<div class="Aanbevolen">
                     <div class="sectionTitle">recent bekeken video\'s</div>
                     <div class="thumbnailContainer">';
 
@@ -64,40 +64,32 @@
                         $fraction = $ratio - floor($ratio);
                         $percentage = 100 * $fraction;
 
+                        if($percentage == 0){
+                            $percentage = 100;
+                        }
+
+                        $value['rating'] = $DB->Select("SELECT AVG(rating) AS rating FROM beoordeling WHERE video_id = ?",[$value['video_id']])[0]['rating'];
                     echo "<div class='videoThumbBlock'>
                             <div class='videoThumbBlockRand'></div>
                                 <div class='videoThumb link' data-link='/watch/{$value['video_id']}' id='{$videoTools->getVideoName($value['videoPath'])}'>
                                 <img class='videoThumbImg' src='{uploadsFolder}/{$videoTools->getThumbnail($value['videoPath'])}' id='thumb-{$videoTools->getVideoName($value['videoPath'])}'>
                                 <div class='videoThumbTags'> ";
                                 foreach ($value['videoTags'] as $key1 => $value1) {
-                                    echo "<li class='videoTag link' data-link=''>{$value1['naam']}</li>";
+                                    echo "<li class='videoTag link' data-link=''>#{$value1['naam']}</li>";
                                 }
+
                                 echo "
                                 </div>
                                 <div class='videoDetailContainer'>
-                                    <div class='videoDetailsTitle'><strong>{$value['titel']}</strong></div>
+                                    <div class='videoDetailsTitle'><strong style='font-size: clamp(30px, 0.3vw, 30px);'>{$value['titel']}</strong></div>
                                     <div class='videoThumbDocent'>{$value['voornaam']} {$value['achternaam']}</div>
-                                    <div class='videoThumbDetails'><!-- sterren --> {$value['datum']}</div>
+                                    <div class='videoThumbDetails'>{$value['uploadDatum']}<div style='margin-left: -0.5vw; margin-bottom: 0.5vw;'>".$videoTools->getRating($value['rating'], $value['video_id'])."</div></div>
                                 </div>
                                 <div class='videoProgress' style='grid-row: 5; grid-column: 1; background-color: red; width: {$percentage}%;'></div>
                             </div>
                     </div>";
                     }
-?>
-                  <script>
-                        const elements = document.querySelectorAll(".videoThumb");
-                        elements.forEach((link, index) => {
-                            const thumbImage = document.getElementById('thumb-' + link.id);
 
-                            link.addEventListener('mouseenter', ()=> {
-                                thumbImage.src = "/uploads/previews/" + link.id + ".gif";
-                            });
-                            link.addEventListener('mouseleave', ()=>{
-                                thumbImage.src = "/uploads/thumbnails/" + link.id + ".png";
-                            });
-                        });
-                  </script>
-                  <?php
                     echo '</div>
                     </div>';
                 }

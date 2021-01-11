@@ -183,7 +183,7 @@ if(isset($_POST["editSubmit"]))
             {
                 echo "<tr>";
                     echo "<td>".$value['voornaam']." ".$value['achternaam']. "</td>";
-                    echo "<td>".$value['titel']."</td>";
+                    echo "<td class='link' data-link='/watch/".$value['video_id']."'>".$value['titel']."</td>";
                     echo "<td>".$value['uploadDatum']."</td>";
                     echo "<td class='link' data-link='/admin/videobeheer/edit/".$value['video_id']."'>
                     <i class='fa fa-pencil-square-o' aria-hidden='true'></i>

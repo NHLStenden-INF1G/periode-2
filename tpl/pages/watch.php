@@ -1,8 +1,9 @@
-<div class="mainWrapper"> 
-    <main>
-
-		<?php 
-    
+<?php 
+	if(isset($_POST['deleteCommentSubmit'])) {
+		$commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
+		$DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
+	}
+	
 	if(isset($_GET['Path_1']))
 			{
 				$id = $filter->sanatizeInput($_GET['Path_1'], "int");
@@ -46,7 +47,6 @@
 										WHERE tag_video.video_id = ?", [$id]);	
 										
 					$this->Set("pageTitle", $videoResult['titel']);
-					print_r($videoResult);
 				}
 				else
 				{
@@ -58,6 +58,8 @@
 				header("Location: /error");
 			}
 		?>
+		<div class="mainWrapper"> 
+    <main>
 		<div class="spotlightVideo">
                     <div class="videoBlock">
                         <video controls id="<?= $videoResult['video_id']; ?>">
@@ -70,16 +72,35 @@
 								<?php 
 								if(!empty($videoResult['videoComments'])) {
 									foreach ($videoResult['videoComments'] as $key => $value) {
+										
 										foreach ($value as $key1 => $value1) {
 											$commentUser = $value['voornaam']. ' '. $value['achternaam'];
 											$commentTekst = $value['tekst'];
 											$commentDate = $value['datum'];
+											$commentID = $value['opmerking_id'];
 										}
-										echo '<li> 
+
+                                        if($user->rank >= 2) {
+                                            echo '<li> 
+                                            <form method="post" style="display: flex;">
+                                                <span class="videoComments">'.$commentUser.'</span>
+                                                <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <input type="hidden" value="'.$commentID.'" name="deleteCommentID">
+                                            </form>
+                                            
+											<span class="videoCommentsText">'.$commentTekst.'</span> 
+											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+										</li>';
+                                        }
+                                        else {
+                                            echo '<li> 
 											<span class="videoComments">'.$commentUser.'</span> 
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
 											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
 										</li>';
+                                        }
 									}
 								}
 								else {
@@ -87,7 +108,22 @@
 								}
 
 								?>
-                            </ul>
+							</ul>
+							<div class='postComment' style="grid-row: 3; grid-column: 2;">
+                                <?php 
+
+                                if($user->logged_in){
+                                    echo '<form method="POST">
+                                            <input type="text" name="commentText" style="width: 80%;" placeholder="Een nieuwe comment plaatsen...">
+                                            <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
+                                            <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
+                                        </form>';
+                                }
+                                else {
+                                    echo '<input type="text" placeholder="Log in om een reactie te plaatsen" disabled>';
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div class="videoDetails">
                             <div class="videoUpload">
