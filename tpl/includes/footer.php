@@ -1,3 +1,4 @@
+test
 </body>
 </html>
 <script src="{assetsFolder}/js/canvas.js"></script>

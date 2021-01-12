@@ -131,9 +131,9 @@
             <div class="adminContent"></div>
             <div class="adminOptions">
             <div class="sectionTitle">gebruikerbeheer</div>
-                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer/invoegen" style="font-size: clamp(20px, 1vw, 30px); border-bottom: none;">> invoegen</div>
-                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer" style="font-size: clamp(20px, 1vw, 30px); border-bottom: none;">> terug naar overzicht</div>
-                <div class="sectionTitle link" data-link="/admin/start" style="font-size: clamp(20px, 1vw, 30px); border-bottom: none;">> terug naar hoofdmenu</div>
+                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer/invoegen"> {BEHEER_NAV_INVOEGEN}</div>
+                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
+                <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
 
             </div>
             <div class="adminTableView">

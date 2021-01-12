@@ -1,5 +1,6 @@
 <?php 
     //Handler
+
     if(isset($_POST['submitInvoegen'])){
         if(!empty($_POST['tagNaam'])){
             if(!empty($_POST['tagOpleiding'])) {

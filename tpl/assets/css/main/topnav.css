@@ -27,23 +27,31 @@ nav ul {
     justify-content: flex-end;
 }
 
-nav ul li span {
+nav ul li span, nav ul button span {
     font-family: 'Roboto', sans-serif;
     transform: skew(15deg);
     font-weight: 700;
 }
 
-nav ul li {
+nav ul li, nav ul button {
     color: var(--tekstColor);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0vw 2.5vw;
+    padding: 0vw 2vw;
     transform: skew(-15deg);
     transition: 0.3s;
+    border-radius: 0;
+    height: 100%;
+    width: max-content;
+    background-color: transparent;
 }
 
-nav > ul li:hover {
+nav ul button {
+    padding: 0vw 1.2vw;
+}
+
+nav > ul li:hover, nav > ul button:hover {
     background: rgba(3, 1, 17, 0.219);
     box-shadow: inset 0 -5px 0 0 var(--tekstColor);
 }
@@ -82,7 +90,7 @@ nav  > ul li.active {
 
 
 .dropdown {
-    width: max-content;
+    width: calc(max-content -200px);
 }
 
 
@@ -91,7 +99,6 @@ nav  > ul li.active {
     position: absolute;
     top: 105px;
     background-color: #f9f9f9;
-    min-width: 164px;
     box-shadow: inset 0 -5px 0 0 #008487;
     padding-bottom: 5px;
     z-index: 1;
@@ -103,7 +110,7 @@ nav  > ul li.active {
 .dropdown-content div {
     padding: 0.7em;
     transition: 0.3s ease;
-    width: 190px;
+    width: 10vw;
 }
 
 .dropdown-content > div > p {

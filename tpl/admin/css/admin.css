@@ -35,6 +35,48 @@
     display: none;
 }
 
+.mainWrapper > main {
+    height: max-content;
+    grid-template-rows: unset;
+}
+
+body { 
+    grid-template-rows: 110px 1vw auto 2vw;
+}
+#canvas {
+    height: 100%;
+}
+
+
+
+.adminRow {
+    display: flex; 
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.adminBlock {
+    background-color: #318c91; 
+    width: 200px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    height: 200px;
+    transition: 0.3s;
+    margin: 0.3vw;
+}
+
+.adminBlock > span {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(20px, 0.7vw, 20px) !important;
+    color: white;
+    font-size: 1vw;
+    letter-spacing: 0.15vw;
+}
+
+.adminBlock:hover {
+    transform: scale(1.05);
+}
 
 table {
     border-collapse: collapse;

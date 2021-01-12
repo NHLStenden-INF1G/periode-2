@@ -1,4 +1,6 @@
 <?php 
+    $this->Set("pageTitle", $this->Get("PROFIEL_TITEL"));
+
     if(isset($_POST['submitButton'])) {
         if(!empty($_POST['passwordOne'])) {
             if(!empty($_POST['passwordTwo'])) {
@@ -22,13 +24,14 @@
             <?php
 
 if ($user->logged_in && isset($_GET['Path_1']) == $user->id && isset($_GET['Path_2']) == 'edit') {
-    $this->Set("subpageTitle", "Mijn profiel aanpassen");
-
-        echo "<form method='post'>
-                <label>Wachtwoord: <input type='password' name='passwordOne' placeholder='Wachtwoord' required /></label><br />
-                <label>Wachtwoord (herhaal): <input type='password' name='passwordTwo' placeholder='Wachtwoord' required /></label><br />
-                <button type='submit' name='submitButton'>wachtwoord veranderen</button>
-                <span class='button link' data-link='/profiel/{$user->id}'>annuleren</span>
+    $this->Set("subpageTitle", $this->Get("PROFIEL_AANPASSEN_TITEL"));
+    $this->Set("pageTitle", $this->Get("PROFIEL_AANPASSEN_TITEL"));
+    
+        echo "<style>#canvas { height: 100%; }</style><form method='post'>
+                <label>{PROFIEL_AANPASSEN_WACHTWOORD}: <input type='password' name='passwordOne' placeholder='{PROFIEL_AANPASSEN_WACHTWOORD}' required /></label><br />
+                <label>{PROFIEL_AANPASSEN_HERHAAL}: <input type='password' name='passwordTwo' placeholder='{PROFIEL_AANPASSEN_WACHTWOORD}' required /></label><br />
+                <button type='submit' name='submitButton'>{PROFIEL_AANPASSEN_VERANDEREN}</button>
+                <span class='button link' data-link='/profiel/{$user->id}'>{PROFIEL_AANPASSEN_ANNULEREN}</span>
             </form>";
 }
 else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
@@ -48,7 +51,7 @@ else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
                                         LIMIT 6", [$gebruikerID]);
 
           echo '<div class="Aanbevolen">
-                    <div class="sectionTitle">recent bekeken video\'s</div>
+                    <div class="sectionTitle">{PROFIEL_RECENTE_VIDEOS}</div>
                     <div class="thumbnailContainer">';
     if(!empty($voortgangResult)) {
      
@@ -91,7 +94,7 @@ else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
             </div>";
         }
     } else {
-        echo 'Nog geen video\'s bekeken!';
+        echo '{VIDEO_GEEN}';
     }
         echo '</div>
         </div>';       
@@ -106,7 +109,7 @@ else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
 
     if(!empty($gebruikerResult)) {
         $userlevel =  $user->userLevel($gebruikerResult[0]['gebruiker_id']);
-        $this->Set("subpageTitle", "Profiel van {$gebruikerResult[0]['voornaam']} {$gebruikerResult[0]['achternaam']} ({$userlevel}) {$editButton}");
+        $this->Set("subpageTitle", "{$gebruikerResult[0]['voornaam']} {$gebruikerResult[0]['achternaam']} ({$userlevel}) {$editButton}");
 
         if($gebruikerResult[0]['level'] >= 2) {
             $uploadResult = $DB->Select("SELECT * FROM video 
@@ -118,7 +121,7 @@ else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
                                         ", [$gebruikerID]);
 
             echo '<div style="grid-row: 3;">
-            <div class="sectionTitle">geuploade video\'s</div>
+            <div class="sectionTitle">{PROFIEL_GEUPLOADE_VIDEOS}</div>
             <div class="thumbnailContainer">';
             if(!empty($uploadResult)){
 
@@ -168,14 +171,14 @@ else if(isset($_GET['Path_1']) && !isset($_GET['Path_2'])){
             }
         }
         else {
-            echo 'Deze docent heeft nog geen video\'s geuploaded';
+            echo '{VIDEO_GEEN}';
         }
         echo '</div>
         </div>';
             }
     }   
     else {
-        $this->Set("subpageTitle", "Profiel niet gevonden!");
+        $this->Set("subpageTitle", $this->Get("PROFIEL_NIET"));
     }
 }
 

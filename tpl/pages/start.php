@@ -63,7 +63,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
 ?>
 
                 <div class="spotlightVideo">
-        <div class="sectionTitle">in de spotlight</div>
+        <div class="sectionTitle">{START_SPOTLIGHT}</div>
 
                     <div class="videoBlock">
                         <video playsinline controls id="<?= $videoResult['video_id']; ?>">
@@ -71,7 +71,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                         </video>
                         <div class="videoBlockRand"></div>
                         <div class="videoComments">
-                            <span>laatste reacties</span>
+                            <span>{VIDEO_REACTIES}</span>
                             <ul> 
 								<?php 
 								if(!empty($videoResult['videoComments'])) {
@@ -95,21 +95,21 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                                             </form>
                                             
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+											<span class="videoCommentsDate">{REACTIE_DATUM}: '.$commentDate.'</span> 
 										</li>';
                                         }
                                         else {
                                             echo '<li> 
 											<span class="videoComments">'.$commentUser.'</span> 
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">Geplaats op: '.$commentDate.'</span> 
+											<span class="videoCommentsDate">{REACTIE_DATUM}: '.$commentDate.'</span> 
 										</li>';
                                         }
 
 									}
 								}
 								else {
-									echo "Nog geen reacties, wees de eerste! #first";
+									echo "{REACTIE_EERSTE}";
 								}
 
 								?>
@@ -119,13 +119,13 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
 
                                 if($user->logged_in){
                                     echo '<form method="POST">
-                                            <input type="text" name="commentText" style="width: 80%;" placeholder="Een nieuwe comment plaatsen...">
+                                            <input type="text" name="commentText" style="width: 80%;" placeholder="{REACTIE_PLAATS}...">
                                             <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
                                             <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
                                         </form>';
                                 }
                                 else {
-                                    echo '<input type="text" placeholder="Log in om een reactie te plaatsen" disabled>';
+                                    echo '<input type="text" placeholder="{REACTIE_LOGIN}" disabled>';
                                 }
                                 ?>
                             </div>
@@ -134,7 +134,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                             <div class="videoUpload">
                                 <span class="videoTitle"><?= $videoResult['titel'] ?></span>
                                 <span><?= $videoResult['voornaam'] ?> <?= $videoResult['achternaam'] ?></span>
-                                <span><?= $videoResult['views'] ?> weergaven</span>
+                                <span><?= $videoResult['views'] ?> {VIDEO_WEERGAVEN}</span>
 								<span><?= $videoResult['uploadDatum'] ?> </span>
                             </div>
                             <div class="videoRatings">
@@ -156,7 +156,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                 </div>
                 
                 <div class="Aanbevolen">
-                    <div class="sectionTitle">Aanbevolen</div>
+                    <div class="sectionTitle">{VIDEO_AANBEVOLEN}</div>
                     <div class="thumbnailContainer">
                         <?php 
                         $voortgangResult = $DB->Select("SELECT video.*, gebruiker.voornaam, gebruiker.achternaam
@@ -218,7 +218,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                             </div>";
                             }
                         } else {
-                            echo 'Nog geen video\'s!';
+                            echo '{VIDEO_GEEN}';
                         }
                             echo '</div>
                                 </div>';     
