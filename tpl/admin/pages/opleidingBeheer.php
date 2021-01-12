@@ -39,10 +39,9 @@ if(isset($_POST['submitAanpassen'])) {
             <div class="adminContent"></div>
             <div class="adminOptions">
             <div class="sectionTitle">opleidingbeheer</div>
-                <div class="sectionTitle link" data-link="/admin/opleidingbeheer/invoegen">> invoegen</div>
-                <div class="sectionTitle link" data-link="/admin/opleidingbeheer">> terug naar overzicht</div>
-
-                <div class="sectionTitle link" data-link="/admin/start">> terug naar hoofdmenu</div>
+                <div class="sectionTitle link" data-link="/admin/opleidingbeheer/invoegen">> {BEHEER_NAV_INVOEGEN}</div>
+                <div class="sectionTitle link" data-link="/admin/opleidingbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
+                <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
             </div>
             <div class="adminTableView">
         <?php 

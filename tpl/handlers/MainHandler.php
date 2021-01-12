@@ -27,7 +27,7 @@ if ($user->logged_in)
 							</li>');
 }
 else {
-	$this->Set('loginKnop', '<li class="link" data-link="/login"><span>Aanmelden</span></li>');
+	$this->Set('loginKnop', '<li class="link" data-link="/login"><span>'.$this->Get('NAV_AANMELDEN').'</span></li>');
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
     if(!empty($_POST) && !isset($_GET['Path_2'])){
         
-        if(!isset($_POST['commentSubmit'])){
+        if(!isset($_POST['commentSubmit']) && !isset($_POST['taalKnop'])){
             
             if($_POST[array_keys ($_POST)[0]]){
                 $chosenRating = $filter->sanatizeInput($_POST[array_keys ($_POST)[0]], "int");

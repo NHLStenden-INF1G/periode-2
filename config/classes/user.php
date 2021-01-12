@@ -188,8 +188,8 @@ class User
 				//Student
 				return array(
 					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
+					'NAV_SUGGESTIE' => array('fa fa-lightbulb-o', '/suggestie'),
 					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
-
 				);
 			break;
 			case 2:
@@ -197,8 +197,8 @@ class User
 				return array(
 					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
 					'NAV_ADMIN' => array('fa fa-cogs', '/admin/'),
+					'NAV_SUGGESTIE' => array('fa fa-lightbulb-o', '/suggestie/'),
 					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
-
 				);			
 			break;			
 			case 3:
@@ -206,6 +206,7 @@ class User
 				return array(
 					'NAV_MIJNPROFIEL' => array('fa fa-user-circle-o', '/profiel/'.$this->id),
 					'NAV_ADMIN' => array('fa fa-cogs', '/admin/'),
+					'NAV_SUGGESTIE' => array('fa fa-lightbulb-o', '/suggestie/'),	
 					'NAV_UITLOGGEN' => array('fa fa-sign-out', '/logout'),
 				);			
 			break;		

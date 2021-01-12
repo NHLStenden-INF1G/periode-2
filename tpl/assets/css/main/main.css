@@ -16,6 +16,28 @@
     --tekstColor: #ffffff;
 }
 
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
 body {
     display: grid;
     padding: 0;
@@ -25,7 +47,8 @@ body {
 }
 
 body.active {
-    overflow-x: hidden;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .pageCanvas {
@@ -68,7 +91,7 @@ body.active {
     box-shadow: 3px 3px 16px -6px;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto;
     padding: 1.5%;
 }
 
@@ -131,6 +154,7 @@ a.videoTag {
 
 .spotlightVideo, .Aanbevolen {
     height: min-content;
+    width: 100%;
 }
 
 @media (max-width: 950px) {

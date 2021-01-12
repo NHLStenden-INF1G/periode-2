@@ -1,4 +1,5 @@
 <?php
+    $this->Set("pageTitle", $this->Get("ADMIN_VIDEOBEHEER"));
 
 if(isset($_POST["submitButton"])) 
 {
@@ -18,7 +19,7 @@ if(isset($_POST["submitButton"]))
                 {
                     $uploadFolder = $_SERVER['DOCUMENT_ROOT'].'/uploads/video/';
                     $bestandsNaam = basename(sha1(time().$_FILES["file"]["tmp_name"]));
-                    $uploadExtensie = '.'.explode(".", $_FILES["file"]["name"])[1];
+                    $uploadExtensie = '.mp4';
                     $videoPath = $uploadFolder.$bestandsNaam.$uploadExtensie; 
                     
                     move_uploaded_file($_FILES["file"]["tmp_name"], $videoPath);
@@ -35,20 +36,6 @@ if(isset($_POST["submitButton"]))
                     
                 }
             }
-            else {
-                    $youtubeLink = $filter->sanatizeInput($_POST['ytlink'], 'url');
-        
-                    //Als het een youtube URL is
-                    if(strpos($youtubeLink, "youtube")) {
-                        $playbackID = explode('?v=', $_POST['ytlink'])[1];
-                        $DB->Insert("INSERT INTO video (gebruiker_id, titel, playback_id) VALUES (?, ?, ?);",[$user->id, $postTitel, $playbackID]);
-                        header('Location: /admin/videobeheer');
-                    } else {
-                        echo "Geen valide Youtube URL";
-                    }
-                
-            }
-
 
             $videoID = $DB->InsertId();
             $DB->Insert("INSERT INTO video_vak (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
@@ -58,11 +45,11 @@ if(isset($_POST["submitButton"]))
             }
         }
         else {
-            echo "Error: Geen link/video meegegeven.";
+            echo "Error: {VIDEOBEHEER_UPLOADEN_BESTAND_KIEZEN_GEEN}";
         }
     }
     else {
-        echo "Error: Geen titel meegegeven.";
+        echo "Error:  {VIDEOBEHEER_UPLOADEN_BESTAND_TITEL_GEEN}";
     }
 }
 
@@ -90,7 +77,7 @@ if(isset($_POST["editSubmit"]))
                     
                     $uploadFolder = $_SERVER['DOCUMENT_ROOT'].'/uploads/video/';
                     $bestandsNaam = basename(sha1(time().$_FILES["file"]["tmp_name"]));
-                    $uploadExtensie = '.'.explode(".", $_FILES["file"]["name"])[1];
+                    $uploadExtensie = '.mp4';
                     $videoPathUpload = $uploadFolder.$bestandsNaam.$uploadExtensie; 
                     
                     //Video verwijderen
@@ -116,20 +103,6 @@ if(isset($_POST["editSubmit"]))
                     
                 }
             }
-            else {
-                    $youtubeLink = $filter->sanatizeInput($_POST['ytlink'], 'url');
-        
-                    //Als het een youtube URL is
-                    if(strpos($youtubeLink, "youtube")) {
-                        $playbackID = explode('?v=', $_POST['ytlink'])[1];
-                        $DB->Insert("INSERT INTO video (gebruiker_id, titel, playback_id) VALUES (?, ?, ?);",[$user->id, $postTitel, $playbackID]);
-                        header('Location: /admin/videobeheer');
-                    } else {
-                        echo "Geen valide Youtube URL";
-                    }
-                
-            }
-
 
             $videoID = $DB->InsertId();
             $DB->Insert("INSERT INTO video_vak (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
@@ -139,7 +112,7 @@ if(isset($_POST["editSubmit"]))
             }
     }
     else {
-        echo "Error: Geen titel meegegeven.";
+        echo "Error:  {VIDEOBEHEER_UPLOADEN_BESTAND_TITEL_GEEN}";
     }
 }
 ?>
@@ -149,11 +122,10 @@ if(isset($_POST["editSubmit"]))
             <div class="adminViewRand"></div>
             <div class="adminContent"></div>
             <div class="adminOptions">
-            <div class="sectionTitle">videobeheer</div>
-                <div class="sectionTitle link" data-link="/admin/videobeheer/upload">> uploaden</div>
-                <div class="sectionTitle link" data-link="/admin/videobeheer">> terug naar overzicht</div>
-                <div class="sectionTitle link" data-link="/admin/start">> terug naar hoofdmenu</div>
-
+            <div class="sectionTitle">{ADMIN_VIDEOBEHEER}</div>
+                <div class="sectionTitle link" data-link="/admin/videobeheer/upload">> {BEHEER_NAV_UPLOADEN}</div>
+                <div class="sectionTitle link" data-link="/admin/videobeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
+                <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
             </div>
             <div class="adminTableView">
         <?php 
@@ -167,12 +139,12 @@ if(isset($_POST["editSubmit"]))
                                         INNER JOIN gebruiker
                                         ON gebruiker.gebruiker_id = video.gebruiker_id");
 
-            echo '<div class="sectionTitle">overzicht</div><table>
+            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div><table>
                     <thead>
                         <tr>
-                            <th>Docent</th>
-                            <th>Titel</th>
-                            <th>Datum</th>
+                            <th>{VIDEOBEHEER_DOCENT}</th>
+                            <th>{VIDEOBEHEER_TITEL}</th>
+                            <th>{BEHEER_DATUM}</th>
                             <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
                             <th><i class="fa fa-times" aria-hidden="true"></i></th>
                         </tr>
@@ -202,13 +174,13 @@ if(isset($_POST["editSubmit"]))
         else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'upload')
         {
             $videoData = $DB->Select("SELECT vak_id, vak_naam FROM vak");
-            $tagData = $DB->Select("SELECT tag.tag_id, tag.naam AS tagnaam, opleiding.* FROM tag INNER JOIN opleiding ON opleiding.opleiding_id = tag.opleiding_id");
 
-            echo '<div class="sectionTitle">uploaden</div>
+            $tagData = $DB->Select("SELECT * FROM tag");
+            echo '<div class="sectionTitle">upload</div>
                     <form enctype="multipart/form-data" method="POST">';
 
             if(!empty($videoData))  {
-                echo '<label for="vak">Vak:<select name="vakKeuze">';
+                echo '<label for="vak">{VIDEOBEHEER_UPLOADEN_VAK}:<select name="vakKeuze">';
 
                 foreach($videoData as $key => $vakLijst) 
                 { 
@@ -224,21 +196,18 @@ if(isset($_POST["editSubmit"]))
                 foreach($tagData as $key => $tagLijst) 
                 { 
 
-                    echo "<option value='{$tagLijst['tag_id']}'>{$tagLijst["tagnaam"]}</option>";
+                    echo "<option value='{$tagLijst['tag_id']}'>{$tagLijst["naam"]}</option>";
                 }
                
                 echo '</select></label><br>';
             }
           
-            echo '<label for="titel">Videotitel:
-            <input type="text" placeholder="Titel" name="titel"><br></label><br>
-            
-            <label for="ytlink">Upload hier je YT link (mag leeg zijn)
-            <input type="url" placeholder="Youtubelink" name="ytlink"></label>
-        
-            <label for="file">of selecteer een bestand:
+            echo '<label for="titel">{VIDEOBEHEER_TITEL}:
+            <input type="text" placeholder="{VIDEOBEHEER_TITEL}" name="titel"><br></label><br>
+
+            <label for="file">{VIDEOBEHEER_UPLOADEN_BESTAND}
             <input type="file" placeholder="file" name="file"></label>
-            <button name="submitButton" type="submit">uploaden</button>
+            <button name="submitButton" type="submit">upload</button>
         </form>';
         }
 
@@ -283,11 +252,11 @@ if(isset($_POST["editSubmit"]))
                $tagResult = $DB->Select("SELECT * FROM tag"); 
 
             if(!empty($videoResult)){
-                echo '<div class="sectionTitle">aanpassen</div>
+                echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div>
                 <form enctype="multipart/form-data" method="POST">';
 
         if(!empty($videoData))  {
-            echo '<label for="vak">Vak:<select name="vakKeuze">';
+            echo '<label for="vak">{VIDEOBEHEER_UPLOADEN_VAK}:<select name="vakKeuze">';
 
             foreach($videoData as $key => $vakLijst) 
             { 
@@ -320,12 +289,9 @@ if(isset($_POST["editSubmit"]))
             echo '</select></label><br>';
         }
       
-        echo '<label for="titel">Videotitel:
+        echo '<label for="titel">{VIDEOBEHEER_UPLOADEN_TITEL}:
         <input type="text" placeholder="Titel" name="titel" value="'.$videoResult['titel'].'"><br></label><br>
         
-        <label for="ytlink">Upload hier je YT link (mag leeg zijn)
-        <input type="url" placeholder="Youtubelink" name="ytlink" value="'.$videoResult['playback_id'].'"></label>
-    
         <label for="file">of selecteer een bestand:
         <input type="file" placeholder="file" name="file"></label>
         <input type="hidden" name="videoID" value="'.$videoResult['video_id'].'">
