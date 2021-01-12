@@ -24,6 +24,7 @@ nav ul {
     grid-column: 4;
     align-self: stretch;
     margin-right: 0.8vw;
+    justify-content: flex-end;
 }
 
 nav ul li span {

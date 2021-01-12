@@ -11,13 +11,21 @@
         <li class="link" data-link="/">
             <span>Start</span>
         </li>
-        <li class="link" data-link="/zoeken">
-            <span>Zoeken</span>
-        </li>
+        <?php 
+        if($user->logged_in) {
+            echo '<li class="link" data-link="/suggestie">
+                    <span>Suggestie</span>
+                </li>';
+        }
+        ?>
+
         <li class="link" data-link="/populair">
             <span>Populair</span>
         </li>
         {loginKnop}
+        <li>
+            <span>NL</span>
+        </li>
     </ul>
     <div class="mobileBurger">
         <div></div>
