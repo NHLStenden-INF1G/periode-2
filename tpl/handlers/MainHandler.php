@@ -18,13 +18,12 @@ if ($user->logged_in)
 							</div>";
 	}
 
-		$this->Set('loginKnop', '<li class="dropdown">
-								<span><i class="fa fa-user" aria-hidden="true"></i>
-									'.$user->naam.'</span>
-								<div class="dropdown-content">
+		$this->Set('loginKnop', '<ul class="dropdown">
+									<li class="user"><span><i class="fa fa-user" aria-hidden="true"></i> '.$user->naam.'</li></span>
+								<li class="dropdown-content">
 									'.$dropdownMenu.'
-								</div>
-							</li>');
+								</li>
+							</ul>');
 }
 else {
 	$this->Set('loginKnop', '<li class="link" data-link="/login"><span>'.$this->Get('NAV_AANMELDEN').'</span></li>');

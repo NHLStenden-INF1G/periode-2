@@ -60,12 +60,13 @@ if(isset($_POST["editSubmit"]))
 {
     if(!empty($_POST['titel'])) 
     {
+
             $vakKeuze = $filter->sanatizeInput($_POST["vakKeuze"], 'int');
             $postTitel =  $filter->sanatizeInput($_POST["titel"], 'string');
             $videoID =  $filter->sanatizeInput($_POST["videoID"], 'int');
 
             //Als het een bestand is
-            if(isset($_FILES['file']['name'])) 
+            if(!empty($_FILES['file']['name'])) 
             {
                 $videoAllowedTypes = array('video/mp4', 'video/webm', 'video/H264'); 
                 //Is een toegestaan bestandstype
@@ -103,9 +104,16 @@ if(isset($_POST["editSubmit"]))
                     
                 }
             }
+            else {
+                $DB->Update("UPDATE video SET gebruiker_id = ?, titel = ? 
+                            WHERE video_id = ?",[$user->id, $postTitel, $videoID]);
+                header('Location: /admin/videobeheer');
+            }
 
-            $videoID = $DB->InsertId();
+            $DB->Delete("DELETE FROM video_vak WHERE video_id = ?", [$videoID]);
             $DB->Insert("INSERT INTO video_vak (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
+
+            $DB->Delete("DELETE FROM tag_video WHERE video_id = ?", [$videoID]);
 
             foreach ($_POST['tagKeuze'] as $key => $value) {
                 $DB->Insert("INSERT INTO tag_video (tag_id, video_id) VALUES (?, ?)", [$value, $videoID]);
@@ -241,15 +249,14 @@ if(isset($_POST["editSubmit"]))
 
             $videoResult = @$DB->Select("SELECT * FROM video 
                                         INNER JOIN video_vak 
-                                        ON video_vak.video_id = video.video_id
+                                            ON video_vak.video_id = video.video_id
                                         INNER JOIN gebruiker
-                                        ON gebruiker.gebruiker_id = video.gebruiker_id
-                                        INNER JOIN tag_video
-                                        ON tag_video.video_id = video.video_id
-                                        WHERE video.video_id = ?
-                                        LIMIT 1", [$videoID])[0];
-               $videoData = $DB->Select("SELECT vak_id, vak_naam FROM vak");
-               $tagResult = $DB->Select("SELECT * FROM tag"); 
+                                            ON gebruiker.gebruiker_id = video.gebruiker_id
+                                        WHERE video.video_id = ?", [$videoID])[0];
+            $videoResult['videoTags'] = $DB->Select("SELECT tag_id FROM tag_video WHERE video_id = ?", [$videoID]);
+
+            $videoData = $DB->Select("SELECT vak_id, vak_naam FROM vak");
+            $tagResult = $DB->Select("SELECT * FROM tag"); 
 
             if(!empty($videoResult)){
                 echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div>
@@ -274,28 +281,32 @@ if(isset($_POST["editSubmit"]))
 
         if(!empty($tagResult))  {
             echo '<label for="vak">Tags:<select name="tagKeuze[]" multiple>';
+            $videoTags = [];
+
+            foreach ($videoResult['videoTags'] as $key1 => $value) {
+                $videoTags[$value['tag_id']] = 1;
+            }
 
             foreach($tagResult as $key => $tagLijst) 
             { 
-                 if(in_array($videoResult['tag_id'], $tagLijst)) {
-                     echo "<option class='optionSelected' value='{$tagLijst['tag_id']}' selected >{$tagLijst['naam']} (geselecteerd)</option>";
-                 }
-                 
+                 if($videoTags[$tagLijst['tag_id']] == 1) {
+                    echo "<option class='optionSelected' value='{$tagLijst['tag_id']}' selected >{$tagLijst['naam']} (geselecteerd)</option>";
+                }
                  else {
-                     echo "<option value='{$tagLijst['tag_id']}'>{$tagLijst["naam"]}</option>";
+                    echo "<option value='{$tagLijst['tag_id']}'>{$tagLijst["naam"]}</option>";
                  }
             }
            
             echo '</select></label><br>';
         }
       
-        echo '<label for="titel">{VIDEOBEHEER_UPLOADEN_TITEL}:
+        echo '<label for="titel">{VIDEOBEHEER_UPLOADEN_VIDEOTITEL}:
         <input type="text" placeholder="Titel" name="titel" value="'.$videoResult['titel'].'"><br></label><br>
         
-        <label for="file">of selecteer een bestand:
+        <label for="file">{VIDEOBEHEER_UPLOADEN_BESTAND}
         <input type="file" placeholder="file" name="file"></label>
         <input type="hidden" name="videoID" value="'.$videoResult['video_id'].'">
-        <button name="editSubmit" type="submit">aanpassen</button>
+        <button name="editSubmit" type="submit">{VIDEOBEHEER_AANPASSEN_TITEL}</button>
     </form>';
             }
                

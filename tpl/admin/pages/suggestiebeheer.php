@@ -1,6 +1,7 @@
-<?php 
+<?php
     $this->Set("pageTitle", $this->Get("ADMIN_SUGGESTIEBEHEER"));
 ?>
+
 <div class="spotlightVideo">
         <div class="adminView">
             <div class="adminViewRand"></div>
@@ -8,6 +9,7 @@
             <div class="adminOptions">
             <div class="sectionTitle">{ADMIN_SUGGESTIEBEHEER}</div>
                 <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
+
             </div>
             <div class="adminTableView">
         <?php 
@@ -20,7 +22,9 @@
                                         ON gebruiker.gebruiker_id = suggestie.gebruiker_id
                                         ORDER BY datum DESC");
 
-            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div><table>
+            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div>
+            <div style="overflow-x:auto;">
+                <table>
                     <thead>
                         <tr>
                             <th>{SUGGESTIEBEHEER_GEBRUIKER}</th>
@@ -41,7 +45,7 @@
                     echo "<td>".$value['voornaam']." ".$value['achternaam']. "</td>";
                     echo "<td>".$value['datum']."</td>";
                     echo "<td>".$value['tekst']."</td>";
-                    echo "<td>".$value['link']."</td>";
+                    echo "<td class='link' data-link='".$value['link']."'>".$value['link']."</td>";
                     if($value['status'] == 0) {
                         $huidigestatus = '<span style="color: orange" class="fa fa-circle" aria-hidden="true"></i>'; //geen status
                     }
@@ -62,7 +66,7 @@
             }
 
             echo "</tbody>
-            </table>";
+            </table></div>";
 
         }
         //Laat de delete pagina zien

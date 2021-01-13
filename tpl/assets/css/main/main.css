@@ -42,7 +42,7 @@ body {
     display: grid;
     padding: 0;
     margin: 0;
-    grid-template-rows: 110px 1vw auto 2vw auto 300px;
+    grid-template-rows: 110px 1vw auto 2vw auto 10vh auto;
     grid-template-columns: 1fr;
 }
 

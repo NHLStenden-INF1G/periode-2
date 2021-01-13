@@ -5,7 +5,7 @@ const burgerMenu = () => {
     const nav = document.querySelector('nav > ul');
     const navSearch = document.querySelector('nav > .inputSearch');
 
-    const navLinks = document.querySelectorAll('nav > ul > li > span');
+    const navLinks = document.querySelectorAll('nav > ul > li > span, nav > ul > form > button > span, li.dropdown-content');
     const body = document.querySelector('body');
 
     burger.addEventListener('click', ()=> {
@@ -13,7 +13,7 @@ const burgerMenu = () => {
         navbar.classList.toggle('active');
         body.classList.toggle('active');
         navSearch.classList.toggle('active');
-        
+        console.log(navLinks);
         navLinks.forEach((link, index) =>{
             if(link.style.animation) {
                 link.style.animation = '';

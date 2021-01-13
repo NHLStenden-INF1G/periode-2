@@ -1,4 +1,6 @@
 <?php 
+    $this->Set("pageTitle", $this->Get("ADMIN_GEBRUIKERBEHEER"));
+
     $this->Set("regError", "");
 
     //Handler
@@ -42,16 +44,16 @@
             
             if($regAntwoord == 1)
             {
-                $this->Set("regError", "Deze gebruiker bestaat al!");
+                $this->Set("regError", $this->Get("GEBRUIKERBEHEER_BESTAAT"));
             }
 
             else if($regAntwoord == 2)
             {
-                $this->Set("regError", "Wachtwoorden komen niet overeen!");
+                $this->Set("regError", $this->Get("GEBRUIKERBEHEER_WACHTWOORDEN_OVEREEN"));
             }
             else if($regAntwoord == 3)
             {
-                $this->Set("regError", "Geen NHL Stenden mail!");
+                $this->Set("regError", $this->Get("GEBRUIKERBEHEER_INVOEGEN_VERKEERDE_EMAIL"));
             }
             else {
                 header("Refresh:0");
@@ -108,11 +110,11 @@
  
             if($regAntwoord == 2)
             {
-                $this->Set("updateError", "Wachtwoorden komen niet overeen!");
+                $this->Set("updateError", $this->Get("GEBRUIKERBEHEER_WACHTWOORDEN_OVEREEN"));
             }
             else if($regAntwoord == 3)
             {
-                $this->Set("updateError", "Geen NHL Stenden mail!");
+                $this->Set("updateError",  $this->Get("GEBRUIKERBEHEER_INVOEGEN_VERKEERDE_EMAIL"));
             }
             else {
                 header("Refresh:0");
@@ -130,8 +132,8 @@
             <div class="adminViewRand"></div>
             <div class="adminContent"></div>
             <div class="adminOptions">
-            <div class="sectionTitle">gebruikerbeheer</div>
-                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer/invoegen"> {BEHEER_NAV_INVOEGEN}</div>
+            <div class="sectionTitle">{ADMIN_GEBRUIKERBEHEER}</div>
+                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer/invoegen">> {BEHEER_NAV_INVOEGEN}</div>
                 <div class="sectionTitle link" data-link="/admin/gebruikerbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
                 <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
 
@@ -149,7 +151,7 @@
                     <thead>
                         <tr>
                             <th>Level</th>
-                            <th>Naam</th>
+                            <th>{GEBRUIKERBEHEER_NAAM}</th>
                             <th>Email</th>
                             <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
                             <th><i class="fa fa-times" aria-hidden="true"></i></th>
@@ -160,7 +162,6 @@
             foreach($gebuikerResult as $key => $value) 
             {
                 echo "<tr>";
-                    //td
                     echo "<td>{$user->userLevel($value['gebruiker_id'])}</td>";
                     echo "<td>".$value['voornaam']." ".$value['achternaam']. "</td>";
                     echo "<td>".$value['email']."</td>";
@@ -182,13 +183,13 @@
         {
             echo '<form method="post">
                 {regError}
-                <label>Voornaam: <input type="text" name="voorNaam" placeholder="Voornaam" required></label><br />
-                <label>Achternaam: <input type="text" name="achterNaam" placeholder="Achternaam" required></label><br />
+                <label>{GEBRUIKERBEHEER_INVOEGEN_VOORNAAM}: <input type="text" name="voorNaam" placeholder="{GEBRUIKERBEHEER_INVOEGEN_VOORNAAM}" required></label><br />
+                <label>{GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM}: <input type="text" name="achterNaam" placeholder="{GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM}" required></label><br />
                 <label>Email: <input type="email" name="regEmail" placeholder="Emailadres" required></label><br />
-                <label>Wachtwoord: <input type="password" name="regPass1" placeholder="Wachtwoord" required></label><br />
-                <label>Herhaal wachtwoord: <input type="password" name="regPass2" placeholder="Herhaal Wachtwoord" required></label><br />
+                <label>{PROFIEL_AANPASSEN_WACHTWOORD}: <input type="password" name="regPass1" placeholder="{PROFIEL_AANPASSEN_WACHTWOORD}" required></label><br />
+                <label>{GEBRUIKERBEHEER_INVOEGEN_HERHAAL_WACHTWOORD}: <input type="password" name="regPass2" placeholder="{GEBRUIKERBEHEER_INVOEGEN_HERHAAL_WACHTWOORD}" required></label><br />
                 <label>Level: <select name="levelSelect"><option value="1">Student</option><option value="2">Docent</option></select><br />
-                <button type="submit" name="submitInvoegen" required>Invoegen</button>
+                <button type="submit" name="submitInvoegen" required>{BEHEER_NAV_INVOEGEN}</button>
             </form>';
         }
 
@@ -208,13 +209,13 @@
             $gebruikerResult = $DB->Select("SELECT * FROM gebruiker WHERE gebruiker_id = ? LIMIT 1 ", [$gebruikerID]); 
             //Haalt alle docenten op
 
-        echo '<form method="post">
+        echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div><form method="post">
                     {updateError}<br />
-                    <label>Voornaam: <input type="text" name="voorNaam" placeholder="Voornaam" value="'.$gebruikerResult[0]['voornaam'].'" required></label><br />
-                    <label>Achternaam: <input type="text" name="achterNaam" placeholder="Achternaam" value="'.$gebruikerResult[0]['achternaam'].'" required></label><br />
+                    <label>{GEBRUIKERBEHEER_INVOEGEN_VOORNAAM}: <input type="text" name="voorNaam" placeholder="{GEBRUIKERBEHEER_INVOEGEN_VOORNAAM}" value="'.$gebruikerResult[0]['voornaam'].'" required></label><br />
+                    <label>{GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM}: <input type="text" name="achterNaam" placeholder="{GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM}" value="'.$gebruikerResult[0]['achternaam'].'" required></label><br />
                     <label>Email: <input type="email" name="regEmail" placeholder="Emailadres" value="'.$gebruikerResult[0]['email'].'" required></label><br />
-                    <label>Wachtwoord: <input type="password" name="regPass1" placeholder="Wachtwoord" required></label><br />
-                    <label>Herhaal wachtwoord: <input type="password" name="regPass2" placeholder="Herhaal Wachtwoord" required></label><br />
+                    <label>{PROFIEL_AANPASSEN_WACHTWOORD}: <input type="password" name="regPass1" placeholder="{PROFIEL_AANPASSEN_WACHTWOORD}" required></label><br />
+                    <label>{GEBRUIKERBEHEER_INVOEGEN_HERHAAL_WACHTWOORD}: <input type="password" name="regPass2" placeholder="{GEBRUIKERBEHEER_INVOEGEN_HERHAAL_WACHTWOORD}" required></label><br />
                     <input type="hidden" value="'.$gebruikerResult[0]['gebruiker_id'].'" name="gebruikerID">
                     <label>Level: <select name="levelSelect">';
             for( $i=1; $i < 3; $i++ ) {
@@ -223,7 +224,7 @@
             echo '</select>
                 
                 <br />
-            <button type="submit" name="submitEdit" required>Opslaan</button>
+            <button type="submit" name="submitEdit" required>{BEHEER_OPSLAAN}</button>
         </form>';
         }
     ?>

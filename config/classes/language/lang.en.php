@@ -48,6 +48,7 @@ $this->langInput['BEHEER_NAV_UPLOADEN'] = 'UPLOAD';
 $this->langInput['BEHEER_NAV_INVOEGEN'] = 'INSERT';
 $this->langInput['BEHEER_OVERZICHT'] = 'OVERVIEW';
 $this->langInput['BEHEER_DATUM'] = 'Date';
+$this->langInput['BEHEER_OPSLAAN'] = 'Save';
 $this->langInput['SUGGESTIEBEHEER_GEBRUIKER'] = 'User';
 $this->langInput['SUGGESTIEBEHEER_TEKST'] = 'Text';
 $this->langInput['VIDEOBEHEER_DOCENT'] = 'Teacher';
@@ -63,22 +64,31 @@ $this->langInput['VIDEOBEHEER_UPLOADEN_BESTAND_GEEN'] = 'No link/video added';
 $this->langInput['VIDEOBEHEER_AANPASSEN_TITEL'] = 'EDIT';
 $this->langInput['VIDEOBEHEER_AANPASSEN_GESELECTEERD'] = 'selected';
 $this->langInput['GEBRUIKERBEHEER_NAAM'] = 'Name';
+$this->langInput['GEBRUIKERBEHEER_BESTAAT'] = 'This user already exists';
+$this->langInput['GEBRUIKERBEHEER_WACHTWOORDEN_OVEREEN'] = 'Passwords do not match';
 $this->langInput['GEBRUIKERBEHEER_EMAIL'] = 'E-mail';
 $this->langInput['GEBRUIKERBEHEER_INVOEGEN_VOORNAAM'] = 'First Name';
 $this->langInput['GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM'] = 'Last Name';
 $this->langInput['GEBRUIKERBEHEER_INVOEGEN_EMAIL'] = 'E-mail address';
 $this->langInput['GEBRUIKERBEHEER_INVOEGEN_HERHAAL_WACHTWOORD'] = 'Repeat password';
 $this->langInput['GEBRUIKERBEHEER_INVOEGEN_DOCENT'] = 'TEACHER';
-$this->langInput['GEBRUIKERBEHEER_INVOEGEN_VERKEERDE_EMAIL'] = 'No NHL Stenden mail';
+$this->langInput['GEBRUIKERBEHEER_INVOEGEN_VERKEERDE_EMAIL'] = 'Not an NHL Stenden mail';
 $this->langInput['OPLDEIDINGBEHEER_PERIODE'] = 'Period';
 $this->langInput['OPLDEIDINGBEHEER_JAAR'] = 'Year';
-$this->langInput['TAGBEHEER_TAGNAAM'] = 'TAGNAME';
+$this->langInput['OPLDEIDINGBEHEER_HUIDIG'] = 'Current';
+$this->langInput['OPLDEIDINGBEHEER_OPLEIDINGNAAM'] = 'Course Name';
+$this->langInput['TAGBEHEER_TAGNAAM'] = 'Tagname';
 $this->langInput['TAGBEHEER_INVOEGEN_OPLEIDING'] = 'Education (several possible)';
+$this->langInput['TAGBEHEER_GEEN_OPLEIDING'] = 'No Course submitted';
+$this->langInput['TAGBEHEER_GEEN_TAG'] = 'No tag submitted';
 $this->langInput['LOGIN_VERKEERDE_EMAIL'] = 'This user does not exist';
 $this->langInput['LOGIN_VERKEERDE_WACHTWOORD'] = 'Wrong password';
 $this->langInput['LOGIN_AANMELDEN'] = 'Sign Up';
 $this->langInput['LOGIN_REGISTREREN'] = 'Register';
-
+$this->langInput['LOGIN_INLOGGEN'] = 'Log in';
+$this->langInput['LOGIN_SIGN'] = 'Sign in';
+$this->langInput['SUGGESTIE_TEKST'] = 'Place your suggestion for a video here. The suggestion has to be a link to, for example a youtube video, with an explanation of why you want this video.';
+$this->langInput['SUGGESTIE_ERROR'] = 'Not a valid URL';
 
 ?>
 

@@ -43,7 +43,9 @@ window.setInterval(function(){
         const ratio = currentTime / videoDuration;
         const percentage = Math.floor(100 * ratio);
 
-        if(percentage > 60) {
+
+
+        if(percentage > 75) {
             if(!viewUpload) {
                 var viewUpdatexhttp = new XMLHttpRequest();
 
@@ -78,9 +80,11 @@ window.setInterval(function(){
         else {
             location = window.location.pathname;
         }
+
         progressUpdatexhttp.open("POST", location + "/watchupdate", true);
         progressUpdatexhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         progressUpdatexhttp.send("videoID="+videoID +"&timestamp="+currentTime);
+
     } 
 }, 1000);
 
