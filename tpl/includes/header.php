@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="{assetsFolder}/css/main/main.css">
         <link rel="stylesheet" href="{assetsFolder}/css/main/videoblock.css">
         <link rel="stylesheet" href="{assetsFolder}/css/main/thumbnails.css">
+        <link rel="stylesheet" href="{assetsFolder}/css/main/footer.css">
 
         <link rel="stylesheet" href="{assetsFolder}/css/main/input.css">
 

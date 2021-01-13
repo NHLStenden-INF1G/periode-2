@@ -131,7 +131,7 @@
             <div class="adminContent"></div>
             <div class="adminOptions">
             <div class="sectionTitle">gebruikerbeheer</div>
-                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer/invoegen"> {BEHEER_NAV_INVOEGEN}</div>
+                <div class="sectionTitle link" data-link="/admin/gebruikerbeheer/invoegen">> {BEHEER_NAV_INVOEGEN}</div>
                 <div class="sectionTitle link" data-link="/admin/gebruikerbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
                 <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
 

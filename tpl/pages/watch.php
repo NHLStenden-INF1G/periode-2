@@ -62,7 +62,7 @@
     <main>
 		<div class="spotlightVideo">
                     <div class="videoBlock">
-                        <video controls id="<?= $videoResult['video_id']; ?>">
+                        <video playsinline controls id="<?= $videoResult['video_id']; ?>">
                             <source src="<?= $videoResult['videoPath'] ?>" type="video/mp4" preload>
                         </video>
                         <div class="videoBlockRand"></div>

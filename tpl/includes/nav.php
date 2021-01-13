@@ -7,7 +7,7 @@
         <input id="liveInput" type="text" onkeyup="showResult(this.value)" placeholder="{NAV_ZOEKEN}...">
     </div>
     <div id="livesearch"></div>
-    <ul>
+    <ul class="navigationLink">
     {loginKnop}
 
         <li class="link" data-link="/">
