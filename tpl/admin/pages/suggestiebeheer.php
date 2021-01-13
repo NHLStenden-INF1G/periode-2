@@ -1,4 +1,5 @@
 <?php
+    $this->Set("pageTitle", $this->Get("ADMIN_SUGGESTIEBEHEER"));
 ?>
 
 <div class="spotlightVideo">
@@ -6,8 +7,8 @@
             <div class="adminViewRand"></div>
             <div class="adminContent"></div>
             <div class="adminOptions">
-            <div class="sectionTitle">suggestiebeheer</div>
-                <div class="sectionTitle link" data-link="/admin/start">> terug naar hoofdmenu</div>
+            <div class="sectionTitle">{ADMIN_SUGGESTIEBEHEER}</div>
+                <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
 
             </div>
             <div class="adminTableView">
@@ -21,14 +22,14 @@
                                         ON gebruiker.gebruiker_id = suggestie.gebruiker_id
                                         ORDER BY datum DESC");
 
-            echo '<div class="sectionTitle">overzicht</div>
+            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div>
             <div style="overflow-x:auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Gebruiker</th>
-                            <th>Datum</th>
-                            <th>Tekst</th>
+                            <th>{SUGGESTIEBEHEER_GEBRUIKER}</th>
+                            <th>{BEHEER_DATUM}</th>
+                            <th>{SUGGESTIEBEHEER_TEKST}</th>
                             <th>Link</th>
                             <th>Status</th>
                             <th><i class="fa fa-check-circle-o" aria-hidden="true"></i></th>
