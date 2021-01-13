@@ -45,7 +45,7 @@
                     echo "<td>".$value['voornaam']." ".$value['achternaam']. "</td>";
                     echo "<td>".$value['datum']."</td>";
                     echo "<td>".$value['tekst']."</td>";
-                    echo "<td>".$value['link']."</td>";
+                    echo "<td class='link' data-link='".$value['link']."'>".$value['link']."</td>";
                     if($value['status'] == 0) {
                         $huidigestatus = '<span style="color: orange" class="fa fa-circle" aria-hidden="true"></i>'; //geen status
                     }

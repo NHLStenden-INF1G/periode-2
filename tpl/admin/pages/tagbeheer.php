@@ -1,5 +1,6 @@
 <?php 
     //Handler
+    $this->Set("pageTitle", $this->Get("ADMIN_TAGBEHEER"));
 
     if(isset($_POST['submitInvoegen'])){
         if(!empty($_POST['tagNaam'])){
@@ -15,11 +16,11 @@
                 header("Location: /admin/tagbeheer");
             }
             else {
-                echo "Geen opleiding opgegeven";
+                echo "{TAGBEHEER_GEEN_OPLEIDING}";
             }
         }
         else {
-            echo "Geen tagnaam opgegeven";
+            echo "{TAGBEHEER_GEEN_TAG}";
         }
     }
 
@@ -39,11 +40,11 @@
                     header("Location: /admin/tagbeheer");
             }
             else {
-                echo "Geen opleiding opgegeven";
+                echo "{TAGBEHEER_GEEN_OPLEIDING}";
             }
         }
         else {
-            echo "Geen tagnaam opgegeven";
+            echo "{TAGBEHEER_GEEN_TAG}";
         }
     }
 ?>
@@ -53,10 +54,10 @@
             <div class="adminViewRand"></div>
             <div class="adminContent"></div>
             <div class="adminOptions">
-            <div class="sectionTitle">tagbeheer</div>
-                <div class="sectionTitle link" data-link="/admin/tagbeheer/invoegen">> invoegen</div>
-                <div class="sectionTitle link" data-link="/admin/tagbeheer">> terug naar overzicht</div>
-                <div class="sectionTitle link" data-link="/admin/start">> terug naar hoofdmenu</div>
+            <div class="sectionTitle">{ADMIN_TAGBEHEER}</div>
+                <div class="sectionTitle link" data-link="/admin/tagbeheer/invoegen">> {BEHEER_NAV_INVOEGEN}</div>
+                <div class="sectionTitle link" data-link="/admin/tagbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
+                <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
 
             </div>
             <div class="adminTableView">
@@ -67,10 +68,10 @@
         {
             $gebuikerResult = $DB->Select("SELECT * FROM tag"); //Haalt alle docenten op
 
-            echo '<div class="sectionTitle">overzicht</div><table>
+            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div><table>
                     <thead>
                         <tr>
-                            <th>Tagnaam</th>
+                            <th>Tag</th>
                             <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
                             <th><i class="fa fa-times" aria-hidden="true"></i></th>
                         </tr>
@@ -99,22 +100,22 @@
         {
             $opleidingData = $DB->Select("SELECT * FROM opleiding");
 
-            echo '<div class="sectionTitle">invoegen</div>
+            echo '<div class="sectionTitle">{BEHEER_NAV_INVOEGEN}</div>
             <form method="post">
-                <label>Tagnaam: <input type="text" placeholder="Tagnaam" name="tagNaam"></label><br>';
+                <label>Tag: <input type="text" placeholder="{TAGBEHEER_TAGNAAM}" name="tagNaam"></label><br>';
                 
             if(!empty($opleidingData))  {
-                echo '<label>Opleiding (meerdere mogelijk): <select name="tagOpleiding[]" multiple>';
+                echo '<label>{TAGBEHEER_INVOEGEN_OPLEIDING}: <select name="tagOpleiding[]" multiple>';
 
                 foreach($opleidingData as $key => $opleidingLijst) 
                 { 
-                    echo "<option value='{$opleidingLijst["opleiding_id"]}'>{$opleidingLijst["naam"]} (jaar: {$opleidingLijst['jaar']})</option>";
+                    echo "<option value='{$opleidingLijst["opleiding_id"]}'>{$opleidingLijst["naam"]} ({OPLDEIDINGBEHEER_JAAR}: {$opleidingLijst['jaar']})</option>";
                 }
                
                 echo '</select></label><br>';
             } 
                 
-            echo '<button type="submit" name="submitInvoegen" required>Invoegen</button>
+            echo '<button type="submit" name="submitInvoegen" required>{BEHEER_NAV_INVOEGEN}</button>
             </form>';
         }
 
@@ -136,23 +137,23 @@
             if(!empty($tagResult)){
                 $opleidingData = $DB->Select("SELECT * FROM opleiding");
                
-                echo '<div class="sectionTitle">aanpassen</div>
+                echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div>
                         <form method="post">
-                            <label>Tagnaam: <input type="text" placeholder="Tagnaam" name="tagNaam" value="'.$tagResult['naam'].'"></label><br>';
+                            <label>Tag: <input type="text" placeholder="Tagnaam" name="tagNaam" value="'.$tagResult['naam'].'"></label><br>';
                 
             if(!empty($opleidingData))  {
-                echo '<label>Opleiding (meerdere mogelijk): <select name="tagOpleiding[]" multiple>';
+                echo '<label>{TAGBEHEER_INVOEGEN_OPLEIDING}: <select name="tagOpleiding[]" multiple>';
 
                 foreach($opleidingData as $key => $opleidingLijst) 
                 { 
                     
-                        echo "<option value='{$opleidingLijst['opleiding_id']}'>{$opleidingLijst['naam']}</option>";
+                        echo "<option value='{$opleidingLijst['opleiding_id']}'>{$opleidingLijst['naam']} ({OPLDEIDINGBEHEER_JAAR}: {$opleidingLijst['jaar']})</option>";
                     
                 }
 
                 echo '</select></label><br>';
             } 
-                echo '<input type="hidden" name="tagID" value="'.$tagID.'"><button type="submit" name="sumbmitAanpassen">Aanpassen</button></form>';
+                echo '<input type="hidden" name="tagID" value="'.$tagID.'"><button type="submit" name="sumbmitAanpassen">{VIDEOBEHEER_AANPASSEN_TITEL}</button></form>';
             }
             
         }

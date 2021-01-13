@@ -1,4 +1,5 @@
 <?php
+$this->Set("pageTitle", $this->Get("ADMIN_OPLEIDINGBEHEER"));
 
 if(isset($_POST['submitInvoegen'])) {
     if(!empty($_POST['opleidingNaam'])) {
@@ -38,7 +39,7 @@ if(isset($_POST['submitAanpassen'])) {
             <div class="adminViewRand"></div>
             <div class="adminContent"></div>
             <div class="adminOptions">
-            <div class="sectionTitle">opleidingbeheer</div>
+            <div class="sectionTitle">{ADMIN_OPLEIDINGBEHEER}</div>
                 <div class="sectionTitle link" data-link="/admin/opleidingbeheer/invoegen">> {BEHEER_NAV_INVOEGEN}</div>
                 <div class="sectionTitle link" data-link="/admin/opleidingbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
                 <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
@@ -51,12 +52,12 @@ if(isset($_POST['submitAanpassen'])) {
         {
             $opleidingResult = $DB->Select("SELECT * FROM opleiding");
 
-            echo '<div class="sectionTitle">overzicht</div><table>
+            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div><table>
                     <thead>
                         <tr>
-                            <th>Jaar</th>
-                            <th>Periode</th>
-                            <th>Naam</th>
+                            <th>{OPLDEIDINGBEHEER_JAAR}</th>
+                            <th>{OPLDEIDINGBEHEER_PERIODE}</th>
+                            <th>{GEBRUIKERBEHEER_NAAM}</th>
                             <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
                             <th><i class="fa fa-times" aria-hidden="true"></i></th>
                         </tr>
@@ -85,25 +86,25 @@ if(isset($_POST['submitAanpassen'])) {
         //Laat de invoegen pagina zien
         else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'invoegen')
         {
-           echo '<div class="sectionTitle">invoegen</div><form method="POST">
-           <label>Naam: <input type="text" name="opleidingNaam" placeholder="Opleidingnaam"></label>
+           echo '<div class="sectionTitle">{BEHEER_NAV_INVOEGEN}</div><form method="POST">
+           <label>{GEBRUIKERBEHEER_NAAM}: <input type="text" name="opleidingNaam" placeholder="{OPLDEIDINGBEHEER_OPLEIDINGNAAM}"></label>
            
-           <label>Jaar:  
+           <label>{OPLDEIDINGBEHEER_JAAR}:  
                 <select name="opleidingJaar">
-                    <option value="1">Jaar 1</option>
-                    <option value="2">Jaar 2</option>
-                    <option value="3">Jaar 3</option>
-                    <option value="4">Jaar 4</option>
+                    <option value="1">{OPLDEIDINGBEHEER_JAAR} 1</option>
+                    <option value="2">{OPLDEIDINGBEHEER_JAAR} 2</option>
+                    <option value="3">{OPLDEIDINGBEHEER_JAAR} 3</option>
+                    <option value="4">{OPLDEIDINGBEHEER_JAAR} 4</option>
                 </select>
             </label>
-            <label>Periode:  
+            <label>{OPLDEIDINGBEHEER_PERIODE}:  
                 <select name="opleidingPeriode">
-                    <option value="1">Periode 1</option>
-                    <option value="2">Periode 2</option>
-                    <option value="3">Periode 3</option>
-                    <option value="4">Periode 4</option>
+                    <option value="1">{OPLDEIDINGBEHEER_PERIODE} 1</option>
+                    <option value="2">{OPLDEIDINGBEHEER_PERIODE} 2</option>
+                    <option value="3">{OPLDEIDINGBEHEER_PERIODE} 3</option>
+                    <option value="4">{OPLDEIDINGBEHEER_PERIODE} 4</option>
             </select>
-            <button type="submit" name="submitInvoegen">Opslaan</button>';
+            <button type="submit" name="submitInvoegen">{BEHEER_OPSLAAN}</button>';
         }
         
         //Laat de delete pagina zien
@@ -118,25 +119,25 @@ if(isset($_POST['submitAanpassen'])) {
         {
             $opleidingID = $filter->sanatizeInput($_GET['Path_3'], 'int');
             $opleidingData = $DB->Select("SELECT * FROM opleiding WHERE opleiding_id = ? LIMIT 1", [$opleidingID])[0];
-            echo '<div class="sectionTitle">aanpassen</div><form method="POST">
-            <label>Naam: <input type="text" name="opleidingNaam" placeholder="Opleidingnaam" value="'.$opleidingData['naam'].'"></label>
+            echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div><form method="POST">
+            <label>{GEBRUIKERBEHEER_NAAM}: <input type="text" name="opleidingNaam" placeholder="{OPLDEIDINGBEHEER_OPLEIDINGNAAM}" value="'.$opleidingData['naam'].'"></label>
             
-            <label>Jaar: (huidig: '.$opleidingData['jaar'].')
+            <label>{OPLDEIDINGBEHEER_JAAR}: ({OPLDEIDINGBEHEER_HUIDIG}: '.$opleidingData['jaar'].')
                  <select name="opleidingJaar">
-                     <option value="1">Jaar 1</option>
-                     <option value="2">Jaar 2</option>
-                     <option value="3">Jaar 3</option>
-                     <option value="4">Jaar 4</option>
+                     <option value="1">{OPLDEIDINGBEHEER_JAAR} 1</option>
+                     <option value="2">{OPLDEIDINGBEHEER_JAAR} 2</option>
+                     <option value="3">{OPLDEIDINGBEHEER_JAAR} 3</option>
+                     <option value="4">{OPLDEIDINGBEHEER_JAAR} 4</option>
                  </select>
              </label>
-             <label>Periode: (huidig: '.$opleidingData['periode'].')
+             <label>{OPLDEIDINGBEHEER_PERIODE}: ({OPLDEIDINGBEHEER_HUIDIG}: '.$opleidingData['periode'].')
                  <select name="opleidingPeriode">
-                     <option value="1">Periode 1</option>
-                     <option value="2">Periode 2</option>
-                     <option value="3">Periode 3</option>
-                     <option value="4">Periode 4</option>
+                     <option value="1">{OPLDEIDINGBEHEER_PERIODE} 1</option>
+                     <option value="2">{OPLDEIDINGBEHEER_PERIODE} 2</option>
+                     <option value="3">{OPLDEIDINGBEHEER_PERIODE} 3</option>
+                     <option value="4">{OPLDEIDINGBEHEER_PERIODE} 4</option>
              </select>
-             <button type="submit" name="submitAanpassen">Opslaan</button>';
+             <button type="submit" name="submitAanpassen">{BEHEER_OPSLAAN}</button>';
 
         }
 

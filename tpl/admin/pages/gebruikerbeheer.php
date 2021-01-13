@@ -209,7 +209,7 @@
             $gebruikerResult = $DB->Select("SELECT * FROM gebruiker WHERE gebruiker_id = ? LIMIT 1 ", [$gebruikerID]); 
             //Haalt alle docenten op
 
-        echo '<form method="post">
+        echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div><form method="post">
                     {updateError}<br />
                     <label>{GEBRUIKERBEHEER_INVOEGEN_VOORNAAM}: <input type="text" name="voorNaam" placeholder="{GEBRUIKERBEHEER_INVOEGEN_VOORNAAM}" value="'.$gebruikerResult[0]['voornaam'].'" required></label><br />
                     <label>{GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM}: <input type="text" name="achterNaam" placeholder="{GEBRUIKERBEHEER_INVOEGEN_ACHTERNAAM}" value="'.$gebruikerResult[0]['achternaam'].'" required></label><br />

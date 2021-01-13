@@ -45,16 +45,16 @@ if(isset($_POST['regSubmit']))
         
         if($regAntwoord == 1)
         {
-            $this->Set("regError", "Deze gebruiker bestaat al!");
+            $this->Set("regError", $this->Get("GEBRUIKERBEHEER_BESTAAT"));
         }
 
         else if($regAntwoord == 2)
         {
-            $this->Set("regError", "Wachtwoorden komen niet overeen!");
+            $this->Set("regError", $this->Get("GEBRUIKERBEHEER_WACHTWOORDEN_OVEREEN"));
         }
         else if($regAntwoord == 3)
         {
-            $this->Set("regError", "Geen NHL Stenden mail!");
+            $this->Set("regError", $this->Get("GEBRUIKERBEHEER_INVOEGEN_VERKEERDE_EMAIL"));
         }
         else {
             $loginAntwoord = $user->Login($regEmail, $regPass2);

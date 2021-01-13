@@ -27,12 +27,12 @@ if(isset($_POST['loginSubmit']))
 
         if($loginAntwoord == 1)
         {
-            $this->Set("loginError", "Deze gebruiker bestaat niet!");
+            $this->Set("loginError", $this->Get("LOGIN_VERKEERDE_EMAIL"));
         }
 
         else if($loginAntwoord == 2)
         {
-            $this->Set("loginError", "Verkeerd wachtwoord!");
+            $this->Set("loginError", $this->Get("LOGIN_VERKEERDE_WACHTWOORD"));
         }
         else {
             $core->Redirect(Config::$loginStartpage);

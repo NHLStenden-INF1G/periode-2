@@ -10,7 +10,7 @@ $this->langInput['NAV_UITLOGGEN'] = 'Uitloggen';
 $this->langInput['NAV_MIJNPROFIEL'] = 'Mijn profiel';
 $this->langInput['NAV_ADMIN'] = 'Docentenpaneel';
 $this->langInput['NAV_ZOEKEN'] = 'Zoeken';
-$this->langInput['NAV_SUGGESTIE'] = 'Suggestion';
+$this->langInput['NAV_SUGGESTIE'] = 'Suggestie';
 $this->langInput['NAV_POPULAIR'] = 'Populair';
 $this->langInput['NAV_AANMELDEN'] = 'Aanmelden';
 $this->langInput['START_SPOTLIGHT'] = 'IN DE SPOTLIGHT';
@@ -75,13 +75,20 @@ $this->langInput['GEBRUIKERBEHEER_INVOEGEN_DOCENT'] = 'DOCENT';
 $this->langInput['GEBRUIKERBEHEER_INVOEGEN_VERKEERDE_EMAIL'] = 'Geen NHL Stenden mail';
 $this->langInput['OPLDEIDINGBEHEER_PERIODE'] = 'Periode';
 $this->langInput['OPLDEIDINGBEHEER_JAAR'] = 'Jaar';
-$this->langInput['TAGBEHEER_TAGNAAM'] = 'TAGNAAM';
+$this->langInput['OPLDEIDINGBEHEER_HUIDIG'] = 'Huidig';
+$this->langInput['OPLDEIDINGBEHEER_OPLEIDINGNAAM'] = 'Opleidingnaam';
+$this->langInput['TAGBEHEER_TAGNAAM'] = 'Tagnaam';
 $this->langInput['TAGBEHEER_INVOEGEN_OPLEIDING'] = 'Opleiding (meerdere mogelijk)';
+$this->langInput['TAGBEHEER_GEEN_OPLEIDING'] = 'Geen opleiding opgegeven';
+$this->langInput['TAGBEHEER_GEEN_TAG'] = 'Geen tag opgegeven';
 $this->langInput['LOGIN_VERKEERDE_EMAIL'] = 'Deze gebruiker bestaat niet';
 $this->langInput['LOGIN_VERKEERDE_WACHTWOORD'] = 'Verkeerd wachtwoord';
-$this->langInput['LOGIN_AANMELDEN'] = 'AANMELDEN';
-$this->langInput['LOGIN_REGISTREREN'] = 'REGISTREREN';
-
+$this->langInput['LOGIN_AANMELDEN'] = 'Aanmelden';
+$this->langInput['LOGIN_REGISTREREN'] = 'Registreren';
+$this->langInput['LOGIN_INLOGGEN'] = 'Inloggen';
+$this->langInput['LOGIN_SIGN'] = 'Inloggen';
+$this->langInput['SUGGESTIE_TEKST'] = 'Doe hier je suggestie voor een video. De suggestie moet een link zijn van bijvoorbeeld een youtube video, met een tekst waarom je deze video wil.';
+$this->langInput['SUGGESTIE_ERROR'] = 'Geen geldige URL';
 
 ?>
 
