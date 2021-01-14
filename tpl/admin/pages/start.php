@@ -11,9 +11,15 @@
         <div class="adminBlock link" data-link="/admin/videobeheer">
             <span><i class="fa fa-video-camera"></i> {ADMIN_VIDEOBEHEER}</span>
         </div>
+        <?php 
+            if($user->rank >= 3) {
+        ?>
         <div class="adminBlock link" style="background-color: #5c4592;" data-link="/admin/gebruikerbeheer">
             <span><i class="fa fa-users"></i> {ADMIN_GEBRUIKERBEHEER}</span>
         </div>
+        <?php 
+            }
+        ?>
         <div class="adminBlock link" style="background-color: #1e6b2b;" data-link="/admin/vakkenbeheer">
             <span><i class="fa fa-book"></i> {ADMIN_VAKKENBEHEER}</span>
         </div>

@@ -77,8 +77,8 @@ nav > ul.navigationLink > li.langSwitch > form  {
 
 nav > ul.navigationLink > li.langSwitch > form > button {
     transform: skew(0deg);
-
 }
+
 nav > ul.navigationLink > li.langSwitch {
     padding: 0;
 }

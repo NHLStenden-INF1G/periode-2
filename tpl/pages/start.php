@@ -10,16 +10,16 @@
 
 
 
-$videoResult = $DB->Select("SELECT  vak.vak_naam, 
-                                    AVG(beoordeling.rating) AS rating, 
-									video.videoPath, 
-                                    video.uploadDatum, 
-                                    video.video_id, 
-                                    video.titel, 
-                                    video.videolengte, 
-                                    video.views,
-								    gebruiker.voornaam, 
-                                    gebruiker.achternaam 
+                $videoResult = $DB->Select("SELECT  vak.vak_naam, 
+                                                AVG(beoordeling.rating) AS rating, 
+                                                video.videoPath, 
+                                                video.uploadDatum, 
+                                                video.video_id, 
+                                                video.titel, 
+                                                video.videolengte, 
+                                                video.views,
+                                                gebruiker.voornaam, 
+                                                gebruiker.achternaam 
 											FROM video 
 											INNER JOIN gebruiker 
 												ON video.gebruiker_id = gebruiker.gebruiker_id
@@ -35,35 +35,32 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                                             LIMIT 1")[0];
                 if(!empty($videoResult)){
 
-                                            
-				foreach (array_keys($videoResult) as $key => $value) {
-					if(empty($videoResult[$value])) {
-						$error = true;
-					}
-					else {
-						$error = false;
-					}
-				}
+                    foreach (array_keys($videoResult) as $key => $value) {
+                        if(empty($videoResult[$value])) {
+                            $error = true;
+                        }
+                        else {
+                            $error = false;
+                        }
+                    }
 				
-				if(!$error) 
-				{
-					$videoResult['videoComments'] = $DB->Select("SELECT opmerking.*, gebruiker.voornaam, gebruiker.achternaam, gebruiker.level FROM opmerking 
-										INNER JOIN gebruiker 
-											ON gebruiker.gebruiker_id = opmerking.gebruiker_id
-										WHERE video_id = ?", [$videoResult['video_id']]);
+                    if(!$error) {
+                        $videoResult['videoComments'] = $DB->Select("SELECT opmerking.*, gebruiker.voornaam, gebruiker.achternaam, gebruiker.level FROM opmerking 
+                                            INNER JOIN gebruiker 
+                                                ON gebruiker.gebruiker_id = opmerking.gebruiker_id
+                                            WHERE video_id = ?", [$videoResult['video_id']]);
 
-					$videoResult['videoTags'] = $DB->Select("SELECT tag.naam FROM tag_video 
-										INNER JOIN tag 
-											ON tag_video.tag_id = tag.tag_id
-										WHERE tag_video.video_id = ?", [$videoResult['video_id']]);
-										
-                }
+                        $videoResult['videoTags'] = $DB->Select("SELECT tag.naam FROM tag_video 
+                                            INNER JOIN tag 
+                                                ON tag_video.tag_id = tag.tag_id
+                                            WHERE tag_video.video_id = ?", [$videoResult['video_id']]);
+                                            
+                    }
             }
-
 ?>
 
                 <div class="spotlightVideo">
-        <div class="sectionTitle">{START_SPOTLIGHT}</div>
+                    <div class="sectionTitle">{START_SPOTLIGHT}</div>
 
                     <div class="videoBlock">
                         <video playsinline controls id="<?= $videoResult['video_id']; ?>">
@@ -85,7 +82,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                                         }
 
                                         if($user->rank >= 2) {
-                                            echo '<li> 
+                                    echo '<li> 
                                             <form method="post" style="display: flex;">
                                                 <span class="videoComments">'.$commentUser.'</span>
                                                 <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
@@ -95,14 +92,14 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                                             </form>
                                             
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">{REACTIE_DATUM}: '.$commentDate.'</span> 
+											<span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
 										</li>';
                                         }
                                         else {
                                             echo '<li> 
 											<span class="videoComments">'.$commentUser.'</span> 
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">{REACTIE_DATUM}: '.$commentDate.'</span> 
+											<span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
 										</li>';
                                         }
 
@@ -192,7 +189,7 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
 
                         $value['rating'] = $DB->Select("SELECT AVG(rating) AS rating FROM beoordeling WHERE video_id = ?",[$value['video_id']])[0]['rating'];
 
-                            echo "<div class='videoThumbBlock'>
+                    echo "<div class='videoThumbBlock'>
                             <div class='videoThumbBlockRand'></div>
                             <div class='videoThumb link' data-link='/watch/{$value['video_id']}' id='{$videoTools->getVideoName($value['videoPath'])}'>
                             <img class='videoThumbImg' src='{uploadsFolder}/{$videoTools->getThumbnail($value['videoPath'])}' id='thumb-{$videoTools->getVideoName($value['videoPath'])}'>
@@ -203,15 +200,14 @@ $videoResult = $DB->Select("SELECT  vak.vak_naam,
                             }
 
                             echo "</div>
-                            <div class='videoDetailContainer'>
-                            <div class='videoDetailsTitle'><strong style='font-size: clamp(27px, 0.3vw, 30px);'>{$value['titel']}</strong></div>
-                            <div class='videoThumbDocent'>{$value['voornaam']} {$value['achternaam']}</div>
-                            <div class='videoThumbDetails'>{$value['uploadDatum']}
-                            <div style='margin-left: -0.4vw; margin-bottom: 0.5vw;'>
-                            ".$videoTools->getRating($value['rating'], $value['video_id'])."</div>
-                            <p>(".gmdate("H:i:s", $value['videoLengte']).")</p>
-
-                            </div>
+                                    <div class='videoDetailContainer'>
+                                    <div class='videoDetailsTitle'><strong style='font-size: clamp(27px, 0.3vw, 30px);'>{$value['titel']}</strong></div>
+                                    <div class='videoThumbDocent'>{$value['voornaam']} {$value['achternaam']}</div>
+                                    <div class='videoThumbDetails'>{$value['uploadDatum']}
+                                    <div style='margin-left: -0.4vw; margin-bottom: 0.5vw;'>
+                                    ".$videoTools->getRating($value['rating'], $value['video_id'])."</div>
+                                    <p>(".gmdate("H:i:s", $value['videoLengte']).")</p>
+                                </div>
                             </div>
                             <div class='videoProgress' style='grid-row: 5; grid-column: 1; background-color: red; width: {$percentage}%;'></div>
                             </div>

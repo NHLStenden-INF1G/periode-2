@@ -91,14 +91,14 @@
                                             </form>
                                             
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">{REACITE_DATUM}: '.$commentDate.'</span> 
+											<span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
 										</li>';
                                         }
                                         else {
                                             echo '<li> 
 											<span class="videoComments">'.$commentUser.'</span> 
 											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">{REACITE_DATUM}: '.$commentDate.'</span> 
+											<span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
 										</li>';
                                         }
 									}
