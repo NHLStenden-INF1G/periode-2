@@ -1,37 +1,26 @@
 <?php
-$this->Set("pageTitle", $this->Get("ADMIN_OPLEIDINGBEHEER"));
+$this->Set("pageTitle", $this->Get("ADMIN_VAKKENBEHEER"));
 
 if(isset($_POST['submitInvoegen'])) {
-    if(!empty($_POST['opleidingNaam'])) {
-        if(!empty($_POST['opleidingJaar'])) {
-            if(!empty($_POST['opleidingPeriode'])) {
-                $opleidingNaam = $filter->sanatizeInput($_POST['opleidingNaam'], "string");
-                $opleidingJaar = $filter->sanatizeInput($_POST['opleidingJaar'], "int");
-                $opleidingPeriode = $filter->sanatizeInput($_POST['opleidingPeriode'], "int");
-
-                $DB->Insert("INSERT INTO opleiding (jaar, periode, naam) VALUES (?, ?, ?)", [$opleidingJaar, $opleidingPeriode, $opleidingNaam]);
-                header("Location: /admin/opleidingbeheer");
-            }
-        }
+    if(!empty($_POST['opleidingNaam'])) 
+    {
+        $opleidingNaam = $filter->sanatizeInput($_POST['opleidingNaam'], "string");
+        $DB->Insert("INSERT INTO opleiding (jaar, periode, naam) VALUES (?, ?, ?)", [$opleidingJaar, $opleidingPeriode, $opleidingNaam]);
+        header("Location: /admin/vakkenbeheer");
     }
 }
 
 
 if(isset($_POST['submitAanpassen'])) {
-    if(!empty($_POST['opleidingNaam'])) {
-        if(!empty($_POST['opleidingJaar'])) {
-            if(!empty($_POST['opleidingPeriode'])) {
-                $opleidingNaam = $filter->sanatizeInput($_POST['opleidingNaam'], "string");
-                $opleidingJaar = $filter->sanatizeInput($_POST['opleidingJaar'], "int");
-                $opleidingPeriode = $filter->sanatizeInput($_POST['opleidingPeriode'], "int");
+    if(!empty($_POST['opleidingNaam'])) 
+    {
+        $opleidingNaam = $filter->sanatizeInput($_POST['opleidingNaam'], "string");
 
-                $DB->Update("UPDATE opleiding SET jaar = ?, periode = ?, naam = ?", [$opleidingJaar, $opleidingPeriode, $opleidingNaam]);
-                header("Refresh: 0");
-            }
-        }
+        $DB->Update("UPDATE opleiding SET jaar = ?, periode = ?, naam = ?", [$opleidingJaar, $opleidingPeriode, $opleidingNaam]);
+        header("Refresh: 0");
     }
 }
-
+    
 ?>
 
 <div class="spotlightVideo">
@@ -39,7 +28,7 @@ if(isset($_POST['submitAanpassen'])) {
             <div class="adminViewRand"></div>
             <div class="adminContent"></div>
             <div class="adminOptions">
-            <div class="sectionTitle">{ADMIN_OPLEIDINGBEHEER}</div>
+            <div class="sectionTitle">{ADMIN_VAKKENBEHEER}</div>
                 <div class="sectionTitle link" data-link="/admin/opleidingbeheer/invoegen">> {BEHEER_NAV_INVOEGEN}</div>
                 <div class="sectionTitle link" data-link="/admin/opleidingbeheer">> {BEHEER_NAV_TERUG_OVERZICHT}</div>
                 <div class="sectionTitle link" data-link="/admin/start">> {BEHEER_NAV_TERUG_HOOFDMENU}</div>
@@ -50,13 +39,12 @@ if(isset($_POST['submitAanpassen'])) {
         //Laat de weergave pagina zien
         if(!isset($_GET['Path_2']) && !isset($_GET['Path_3']))
         {
-            $opleidingResult = $DB->Select("SELECT * FROM opleiding");
+            $vakResult = $DB->Select("SELECT * FROM vak");
 
             echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div><table>
                     <thead>
                         <tr>
-                            <th>{OPLDEIDINGBEHEER_JAAR}</th>
-                            <th>{OPLDEIDINGBEHEER_PERIODE}</th>
+                            <th>{VAKKENBEHEER_VAK}</th>
                             <th>{GEBRUIKERBEHEER_NAAM}</th>
                             <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
                             <th><i class="fa fa-times" aria-hidden="true"></i></th>
@@ -64,18 +52,18 @@ if(isset($_POST['submitAanpassen'])) {
                     </thead>
                     <tbody>';
 
-            foreach($opleidingResult as $key => $value) 
+            foreach($vakResult as $key => $value) 
             {
                 echo "<tr>";
                     echo "<td>".$value['jaar']."</td>";
                     echo "<td>".$value['periode']."</td>";
                     echo "<td>".$value['naam']."</td>";
-                    echo "<td class='link' data-link='/admin/opleidingbeheer/edit/".$value['opleiding_id']."'>
-                    <i class='fa fa-pencil-square-o' aria-hidden='true'></i>
-                    </td>";
-                    echo "<td class='link' data-link='/admin/opleidingbeheer/verwijder/".$value['opleiding_id']."'>
+                    echo "<td class='link' data-link='/admin/vakkenbeheer/edit/".$value['opleiding_id']."'>
+                            <i class='fa fa-pencil-square-o' aria-hidden='true'></i>
+                          </td>";
+                    echo "<td class='link' data-link='/admin/vakkenbeheer/verwijder/".$value['opleiding_id']."'>
                             <i class='fa fa-times' aria-hidden='true'></i>
-                        </td>";
+                          </td>";
                 echo "</tr>";
             }
 

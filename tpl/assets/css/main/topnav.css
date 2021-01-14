@@ -68,8 +68,22 @@ nav > ul.navigationLink ul.dropdown:hover li {
 nav > ul.navigationLink ul.dropdown:hover li.user {
     transform: skew(15deg);
 }
-/* END TOP NAV */
 
+nav > ul.navigationLink > li.langSwitch > form  {
+    height: 100%;
+    width: 100%;
+
+}
+
+nav > ul.navigationLink > li.langSwitch > form > button {
+    transform: skew(0deg);
+
+}
+nav > ul.navigationLink > li.langSwitch {
+    padding: 0;
+}
+
+/* END TOP NAV */
 
 .dropdown {
     width: max-content;
@@ -104,11 +118,6 @@ nav > ul.navigationLink ul.dropdown:hover li.user {
     background: rgba(62, 67, 70, 0.253);
 }
 
-
-
-
-
-
 /* TOP NAV MOBILEBURGER */
 .mobileBurger {
     cursor: pointer;
@@ -135,8 +144,6 @@ nav > ul.navigationLink ul.dropdown:hover li.user {
 }
 
 
-
-
 /* TOP NAV MOBILEBURGER */
 
 @media (max-width: 950px) {
@@ -157,6 +164,7 @@ nav > ul.navigationLink ul.dropdown:hover li.user {
         grid-row: 1;
         padding-right: 5vh;
     }
+
     nav ul.navigationLink {
         border-top: 1px solid white;
         position: absolute;
@@ -197,14 +205,13 @@ nav > ul.navigationLink ul.dropdown:hover li.user {
 
     .dropdown-content {
         opacity: 0;
-
     }
 
     nav ul.navigationLink li.active,
     nav ul.navigationLink li:hover, 
     nav ul.navigationLink button, 
     nav ul.navigationLink button:hover,
-    nav ul.navigationLink ul:hover{
+    nav ul.navigationLink ul:hover {
         background: unset;
         box-shadow: unset;
         transform: skew(0deg);
@@ -280,6 +287,7 @@ nav > ul.navigationLink ul.dropdown:hover li.user {
     }
 
 }
+
 @media (min-width: 950px) {
     .mobileBurger {
         display: none;

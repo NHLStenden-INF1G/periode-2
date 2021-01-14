@@ -5,15 +5,16 @@ const burgerMenu = () => {
     const nav = document.querySelector('nav > ul');
     const navSearch = document.querySelector('nav > .inputSearch');
 
-    const navLinks = document.querySelectorAll('nav > ul > li > span, nav > ul > form > button > span, li.dropdown-content');
+    const navLinks = document.querySelectorAll('nav > ul > li.link > span, nav > ul > li > form > button > span, li.dropdown-content');
     const body = document.querySelector('body');
 
     burger.addEventListener('click', ()=> {
+
         nav.classList.toggle('active');
         navbar.classList.toggle('active');
         body.classList.toggle('active');
         navSearch.classList.toggle('active');
-        console.log(navLinks);
+        
         navLinks.forEach((link, index) =>{
             if(link.style.animation) {
                 link.style.animation = '';
@@ -23,7 +24,8 @@ const burgerMenu = () => {
             }
         });
 
-        burger.classList.toggle('active');
+            burger.classList.toggle('active');
+
     });
 
 }

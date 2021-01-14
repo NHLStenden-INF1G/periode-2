@@ -17,7 +17,7 @@
         <li class="link" data-link="/populair">
             <span>{NAV_POPULAIR}</span>
         </li>
-        {taalKnop}
+        <li class="langSwitch">{taalKnop}</li>
 
     </ul>
     <div class="mobileBurger">
