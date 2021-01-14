@@ -54,10 +54,9 @@ body.active {
 .pageCanvas {
     grid-row: 1;
     grid-column: 1;
-    height: 650px;
+    height: 75vh;
     width: 100%;
     position: absolute;
-
 }
 
 .pageTitle {

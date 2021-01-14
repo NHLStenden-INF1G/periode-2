@@ -25,11 +25,11 @@
 												ON video.gebruiker_id = gebruiker.gebruiker_id
 											LEFT JOIN beoordeling
 												ON beoordeling.video_id = video.video_id
-											INNER JOIN video_vak 
+											LEFT JOIN video_vak 
 												ON video_vak.video_id = video.video_id
-											INNER JOIN vak 
+											LEFT JOIN vak 
 												ON vak.vak_id = video_vak.vak_id
-											INNER JOIN opleiding
+                                            LEFT JOIN opleiding
 												ON opleiding.opleiding_id = vak.opleiding_id
 											WHERE video.views = (SELECT MAX(views) FROM video)
                                             LIMIT 1")[0];

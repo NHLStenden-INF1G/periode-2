@@ -48,8 +48,8 @@ body {
 }
 
 .adminRow {
-    display: flex; 
-    justify-content: space-between;
+    display: flex;
+    justify-content: center;
     flex-wrap: wrap;
 }
 

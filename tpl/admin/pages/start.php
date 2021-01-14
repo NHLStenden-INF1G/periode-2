@@ -17,15 +17,15 @@
         <div class="adminBlock link" style="background-color: #5c4592;" data-link="/admin/gebruikerbeheer">
             <span><i class="fa fa-users"></i> {ADMIN_GEBRUIKERBEHEER}</span>
         </div>
-        <?php 
-            }
-        ?>
         <div class="adminBlock link" style="background-color: #1e6b2b;" data-link="/admin/vakkenbeheer">
             <span><i class="fa fa-book"></i> {ADMIN_VAKKENBEHEER}</span>
         </div>
         <div class="adminBlock link" style="background-color: #6b1e5a;" data-link="/admin/opleidingbeheer">
             <span><i class="fa fa-building"></i> {ADMIN_OPLEIDINGBEHEER}</span>
         </div>
+        <?php 
+            }
+        ?>
         <div class="adminBlock link" style="background-color: #859435;" data-link="/admin/tagbeheer">
             <span><i class="fa fa-tags"></i> {ADMIN_TAGBEHEER}</span>
         </div>

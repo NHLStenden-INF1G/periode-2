@@ -141,8 +141,8 @@ if(isset($_POST["editSubmit"]))
         //Laat de weergave pagina zien
         if(!isset($_GET['Path_2']) && !isset($_GET['Path_3']))
         {
-            $videoResult = $DB->Select("SELECT * FROM video 
-                                        INNER JOIN video_vak 
+            $videoResult = $DB->Select("SELECT video.*, gebruiker.* FROM video 
+                                        LEFT JOIN video_vak 
                                         ON video_vak.video_id = video.video_id
                                         INNER JOIN gebruiker
                                         ON gebruiker.gebruiker_id = video.gebruiker_id");
@@ -158,7 +158,6 @@ if(isset($_POST["editSubmit"]))
                         </tr>
                     </thead>
                     <tbody>';
-
             foreach($videoResult as $key => $value) 
             {
                 echo "<tr>";
@@ -248,7 +247,7 @@ if(isset($_POST["editSubmit"]))
             $videoID = $filter->sanatizeInput($_GET['Path_3'], 'int');
 
             $videoResult = @$DB->Select("SELECT * FROM video 
-                                        INNER JOIN video_vak 
+                                        LEFT JOIN video_vak 
                                             ON video_vak.video_id = video.video_id
                                         INNER JOIN gebruiker
                                             ON gebruiker.gebruiker_id = video.gebruiker_id
@@ -300,16 +299,15 @@ if(isset($_POST["editSubmit"]))
             echo '</select></label><br>';
         }
       
-        echo '<label for="titel">{VIDEOBEHEER_UPLOADEN_VIDEOTITEL}:
-        <input type="text" placeholder="Titel" name="titel" value="'.$videoResult['titel'].'"><br></label><br>
-        
-        <label for="file">{VIDEOBEHEER_UPLOADEN_BESTAND}
-        <input type="file" placeholder="file" name="file"></label>
-        <input type="hidden" name="videoID" value="'.$videoResult['video_id'].'">
-        <button name="editSubmit" type="submit">{VIDEOBEHEER_AANPASSEN_TITEL}</button>
-    </form>';
-            }
-               
+            echo '<label for="titel">{VIDEOBEHEER_UPLOADEN_VIDEOTITEL}:
+            <input type="text" placeholder="Titel" name="titel" value="'.$videoResult['titel'].'"><br></label><br>
+                <label for="file">{VIDEOBEHEER_UPLOADEN_BESTAND}
+                <input type="file" placeholder="file" name="file"></label>
+                <input type="hidden" name="videoID" value="'.$videoResult['video_id'].'">
+                <button name="editSubmit" type="submit">{VIDEOBEHEER_AANPASSEN_TITEL}</button>
+            </form>';
+
+            }     
         }
     ?>
              
