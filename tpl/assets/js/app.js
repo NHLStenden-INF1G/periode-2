@@ -3,8 +3,8 @@ const burgerMenu = () => {
     const burger = document.querySelector('.mobileBurger');
     const navbar = document.querySelector('nav');
     const nav = document.querySelector('nav > ul');
-    const navSearch = document.querySelector('nav > .inputSearch');
-
+    const navSearch =  document.getElementById("liveInput");
+   
     const navLinks = document.querySelectorAll('nav > ul > li.link > span, nav > ul > li > form > button > span, li.dropdown-content');
     const body = document.querySelector('body');
 
@@ -13,7 +13,13 @@ const burgerMenu = () => {
         nav.classList.toggle('active');
         navbar.classList.toggle('active');
         body.classList.toggle('active');
-        navSearch.classList.toggle('active');
+        navSearch.value = "";
+        document.getElementById("livesearch").innerHTML="";
+
+        document.getElementById("livesearch").style.border="0px";
+
+        document.getElementById("liveInput").style.borderBottomLeftRadius = "20px";
+        document.getElementById("liveInput").style.borderBottomRightRadius = "20px";
         
         navLinks.forEach((link, index) =>{
             if(link.style.animation) {
@@ -51,6 +57,11 @@ const thumbNails = () => {
             thumbImage.src = "/uploads/thumbnails/" + link.id + ".png";
         });
     });
+}
+
+const getCookieValue = (a) => {
+    var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b ? b.pop() : '';
 }
 
 document.addEventListener("DOMContentLoaded", function(){

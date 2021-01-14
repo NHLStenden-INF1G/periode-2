@@ -12,7 +12,7 @@ if ($user->logged_in)
 	{
 		$dropdownMenu .= "<div class='link' data-link='{$value[1]}'>
 								<p>
-									<i class='{$value[0]}' aria-hidden='true'></i>
+									<i class='{$value[0]}' style='color: #1c8490;' aria-hidden='true'></i>
 									{$this->Get($key)}
 								</p>
 							</div>";

@@ -222,4 +222,3 @@
                 </div>
 	</main>
 </div>
-<script src="/tpl/assets/js/video.js"></script>

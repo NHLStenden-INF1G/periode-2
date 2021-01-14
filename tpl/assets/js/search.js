@@ -2,19 +2,45 @@
    const parseResults = (obj, liveSearch) => {
 
 
-    var opleidingResult, docentVideoResult, tagsResult, vakResult, videoResult;
+    var opleidingResult, docentVideoResult, tagsResult, vakResult, videoResult,
+     opleidingLang, docentenLang, tagsLang, vakkenLang, videoLang, jaarLang, periodeLang;
+
+
     docentVideoResult = obj.docentVideoResult, tagsResult = obj.tagsResult, vakResult = obj.vakResult, videoResult = obj.videoResult;
+
     if ('opleidingResult' in obj) {
             opleidingResult = obj.opleidingResult;
     } else {
             opleidingResult = 0;
     }
+
     liveSearch.innerHTML = '';
-    var opleidingResultHTMLContainer = "<div id='opleidingResultHTMLContainer'><div class='searchTitle'>Opleidingen</div></div>", 
-        docentVideoResultHTMLContainer = "<div id='docentVideoResultHTMLContainer'><div class='searchTitle'>Docenten</div></div>", 
-        tagsResultHTMLContainer = "<div id='tagsResultHTMLContainer'><div class='searchTitle'>Tags</div></div>", 
-        vakResultHTMLContainer = "<div id='vakResultHTMLContainer'><div class='searchTitle'>Vakken</div></div>", 
-        videoResultHTMLContainer = "<div id='videoResultHTMLContainer'><div class='searchTitle'>Video's</div></div>";
+    
+    switch (getCookieValue("lang")) {
+        case 'nl':
+        default:
+            opleidingLang = "Opleidingen";
+            docentenLang = "Docenten";
+            tagsLang = "Tags";
+            vakkenLang = "Vakken";
+            videoLang = "Video's";
+            jaarLang = "Jaar";
+            periodeLang = "Periode";
+            break;
+        case 'en':
+            opleidingLang = "Education";
+            docentenLang = "Teachers";
+            tagsLang = "Tags";
+            vakkenLang = "Courses";
+            jaarLang = "Year";
+            periodeLang = "Period";
+            break;
+    }
+    var opleidingResultHTMLContainer = "<div id='opleidingResultHTMLContainer'><div class='searchTitle'>"+ opleidingLang + "</div></div>", 
+        docentVideoResultHTMLContainer = "<div id='docentVideoResultHTMLContainer'><div class='searchTitle'>"+ docentenLang + "</div></div>", 
+        tagsResultHTMLContainer = "<div id='tagsResultHTMLContainer'><div class='searchTitle'>"+ tagsLang + "</div></div>", 
+        vakResultHTMLContainer = "<div id='vakResultHTMLContainer'><div class='searchTitle'>"+ vakkenLang + "</div></div>", 
+        videoResultHTMLContainer = "<div id='videoResultHTMLContainer'><div class='searchTitle'>"+ videoLang + "</div></div>";
         
         var opleidingResultHTML = [], docentVideoResultHTML = [], tagsResultHTML = [], vakResultHTML = [], videoResultHTML = [];
 
@@ -23,7 +49,7 @@
             opleidingResultHTMLContainer = document.getElementById('opleidingResultHTMLContainer');
 
             for (const property in opleidingResult) {
-                item = '<div class="searchResult"><i class="fa fa-dot-circle-o"></i><a href="/watch/'+ opleidingResult[property].video_id+'"> '+ opleidingResult[property].titel+' | Geupload door ('+ opleidingResult[property].voornaam+' '+ opleidingResult[property].achternaam+') | Vak: '+ opleidingResult[property].vak_naam+'  </a></div>';
+                item = '<div class="searchResult"><i class="fa fa fa-university" style="color: #1c8490;"></i><a href="/zoeken/opleiding/'+ opleidingResult[property].opleiding_id+'">'+ opleidingResult[property].naam +' ('+ jaarLang +': '+ opleidingResult[property].jaar +', '+ periodeLang +': '+ opleidingResult[property].periode +')</a></div>';
                 opleidingResultHTML.push(item);
             }
 
@@ -35,7 +61,7 @@
             docentVideoResultHTMLContainer = document.getElementById('docentVideoResultHTMLContainer');
 
             for (const property in docentVideoResult) {
-                item = '<div class="searchResult"><i class="fa fa-dot-circle-o"></i><a href="/watch/'+ docentVideoResult[property].video_id+'"> '+ docentVideoResult[property].titel+' | Geupload door ('+ docentVideoResult[property].voornaam+' '+ docentVideoResult[property].achternaam+') | Vak: '+ docentVideoResult[property].vak_naam+'  </a></div>';
+                item = '<div class="searchResult"><i class="fa fa-id-card" style="color: #1c8490;"></i><a href="/profiel/'+ docentVideoResult[property].gebruiker_id+'">'+ docentVideoResult[property].voornaam+' '+ docentVideoResult[property].achternaam+'</a></div>';
                 docentVideoResultHTML.push(item);
             }
 
@@ -59,7 +85,7 @@
             vakResultHTMLContainer = document.getElementById('vakResultHTMLContainer');
 
             for (const property in vakResult) {
-                item = '<div class="searchResult"><i class="fa fa-dot-circle-o"></i><a href="/watch/'+ vakResult[property].video_id+'"> '+ vakResult[property].titel+' | Geupload door ('+ vakResult[property].voornaam+' '+ vakResult[property].achternaam+') | Vak: '+ vakResult[property].vak_naam+'  </a></div>';
+                item = '<div class="searchResult"><i class="fa fa-book" style="color: #1c8490;"></i><a href="/zoeken/vak/'+ vakResult[property].vak_id+'"> '+ vakResult[property].vak_naam+'</a></div>';
                 vakResultHTML.push(item);
             }
 
@@ -71,7 +97,7 @@
             videoResultHTMLContainer = document.getElementById('videoResultHTMLContainer');
 
             for (const property in videoResult) {
-                item = '<div class="searchResult"><i class="fa fa-dot-circle-o"></i><a href="/watch/'+ videoResult[property].video_id+'"> '+ videoResult[property].titel+' | Geupload door ('+ videoResult[property].voornaam+' '+ videoResult[property].achternaam+') | Vak: '+ videoResult[property].vak_naam+'  </a></div>';
+                item = '<div class="searchResult"><i class="fa fa-dot-circle-o"></i><a href="/watch/'+ videoResult[property].video_id+'"> '+ videoResult[property].titel+' | ('+ videoResult[property].vak_naam+')  </a></div>';
                 videoResultHTML.push(item);
             }
 
@@ -90,6 +116,7 @@
 
         liveSearch.style.borderBottomLeftRadius  = "20px";
         liveSearch.style.borderBottomRightRadius  = "20px";
+        liveSearch.style.zIndex  = 5;
 
         liveInput.style.borderBottomLeftRadius = "0px";
         liveInput.style.borderBottomRightRadius = "0px";

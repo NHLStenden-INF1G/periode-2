@@ -63,8 +63,8 @@
                     <div class="sectionTitle">{START_SPOTLIGHT}</div>
 
                     <div class="videoBlock">
-                        <video playsinline controls id="<?= $videoResult['video_id']; ?>">
-                            <source src="<?= $videoResult['videoPath'] ?>" type="video/mp4" preload>
+                        <video playsinline controls preload id="<?= $videoResult['video_id']; ?>">
+                            <source src="<?= $videoResult['videoPath'] ?>" type="video/mp4" >
                         </video>
                         <div class="videoBlockRand"></div>
                         <div class="videoComments">
@@ -223,4 +223,3 @@
                 </div>
             </main>
         </div>
-            <script src="/tpl/assets/js/video.js"></script>
