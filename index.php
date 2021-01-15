@@ -4,17 +4,17 @@ define('Start', microtime(true));
 define('styleFolder', 'tpl/');
 define('Handlers', styleFolder.'handlers/');
 
-require 'config/classes/mysql.php';
-require 'config/classes/core.php';
-require 'config/classes/template.php';
-require 'config/classes/user.php';
-require 'config/classes/filter.php';
-require 'config/classes/language.php';
-require 'config/classes/video.php';
+require_once 'config/classes/mysql.php';
+require_once 'config/classes/core.php';
+require_once 'config/classes/template.php';
+require_once 'config/classes/user.php';
+require_once 'config/classes/filter.php';
+require_once 'config/classes/language.php';
+require_once 'config/classes/video.php';
 
-require 'config/_lib/getid3/getid3.php';
+require_once 'config/_lib/getid3/getid3.php';
 
-require 'config/Configuration.php';
+require_once 'config/Configuration.php';
 
 $DB             = new Database;
 $core           = new Core;

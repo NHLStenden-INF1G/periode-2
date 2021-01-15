@@ -156,6 +156,17 @@ a.videoTag {
     width: 100%;
 }
 
+.listContainer {
+    grid-row: 3; 
+    display: flex; 
+    justify-content: space-between;
+}
+
+.listTab {
+    display: flex;
+    flex-direction: column;
+}
+
 @media (max-width: 950px) {
     html {
         font-size: calc(12px + 6 * ((100vw - 320px) / 680));
@@ -188,8 +199,12 @@ a.videoTag {
         grid-row: 2;
     }
 
-    .inputSearch.active {
-        /* display: none; */
+    .listContainer {
+        justify-content: center;
+        flex-direction: column;
     }
 
+    .listTab > .videoTag {
+        margin: 1vw;    
+    }
 }

@@ -1,15 +1,9 @@
-
-<div class="mainWrapper">
-            <main>
 <?php 
 
     if(isset($_POST['deleteCommentSubmit'])) {
         $commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
         $DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
     }
-
-
-
                 $videoResult = $DB->Select("SELECT  vak.vak_naam, 
                                                 AVG(beoordeling.rating) AS rating, 
                                                 video.videoPath, 
@@ -58,7 +52,8 @@
                     }
             }
 ?>
-
+<div class="mainWrapper">
+            <main>
                 <div class="spotlightVideo">
                     <div class="sectionTitle">{START_SPOTLIGHT}</div>
 
@@ -139,7 +134,6 @@
                             </div>
                             <div class="videoTagsContainer">
 							<?php 
-
 									foreach ($videoResult['videoTags'] as $key => $value) {
 										foreach ($value as $key1 => $value1) {
 											$tagNaam = $value['naam'];
@@ -147,7 +141,6 @@
 										echo '<span class="videoTag">#'.$tagNaam.'</span>';
 									}
 							?>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,7 +180,7 @@
                         }
 
 
-                        $value['rating'] = $DB->Select("SELECT AVG(rating) AS rating FROM beoordeling WHERE video_id = ?",[$value['video_id']])[0]['rating'];
+                    $value['rating'] = $DB->Select("SELECT AVG(rating) AS rating FROM beoordeling WHERE video_id = ?",[$value['video_id']])[0]['rating'];
 
                     echo "<div class='videoThumbBlock'>
                             <div class='videoThumbBlockRand'></div>
@@ -220,6 +213,42 @@
                                 </div>';     
                         ?>                 
                     </div>
+                    <div class="listContainer">
+                        <div class="listTab">
+                            <div class="sectionTitle">TAGS</div>
+                            <?php 
+                                $tagData = $DB->Select("SELECT * FROM tag ORDER BY RAND() LIMIT 10");
+                                if(!empty($tagData)){
+                                    foreach ($tagData as $key => $value) {
+                                        echo '<span class="videoTag" style="width: max-content;">'.$value['naam'].'</span>';
+                                    }
+                                }
+                            ?>
+                        </div>
+                        <div class="listTab">
+                            <div class="sectionTitle">{VIDEOBEHEER_DOCENT}</div>
+                            <?php 
+                                $tagData = $DB->Select("SELECT * FROM gebruiker WHERE level > 2  ORDER BY RAND() LIMIT 10");
+                                if(!empty($tagData)){
+                                    foreach ($tagData as $key => $value) {
+                                        echo '<span class="videoTag" style="width: max-content;">'.$value['voornaam'].' '.$value['achternaam'].'</span>';
+                                    }
+                                }
+                            ?>
+                        </div>
+                        <div class="listTab">
+                            <div class="sectionTitle">{VIDEOBEHEER_UPLOADEN_VAK}</div>
+                            <?php 
+                                $tagData = $DB->Select("SELECT * FROM vak  ORDER BY RAND() LIMIT 10");
+                                if(!empty($tagData)){
+                                    foreach ($tagData as $key => $value) {
+                                        echo '<span class="videoTag" style="width: max-content;">'.$value['vak_naam'].'</span>';
+                                    }
+                                }
+                            ?>
+                        </div>
+                    </div>
                 </div>
+            </div>
             </main>
         </div>

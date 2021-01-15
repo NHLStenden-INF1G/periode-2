@@ -90,5 +90,10 @@ $this->langInput['LOGIN_SIGN'] = 'Sign in';
 $this->langInput['SUGGESTIE_TEKST'] = 'Place your suggestion for a video here. The suggestion has to be a link to, for example a youtube video, with an explanation of why you want this video.';
 $this->langInput['SUGGESTIE_ERROR'] = 'Not a valid URL';
 
+
+$this->langInput['POPULAR_MONTH'] = 'popular this month';
+$this->langInput['POPULAR_WEEK'] = 'popular this week';
+$this->langInput['POPULAR_DAY'] = 'popular today';
+
 ?>
 

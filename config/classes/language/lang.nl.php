@@ -90,5 +90,9 @@ $this->langInput['LOGIN_SIGN'] = 'Inloggen';
 $this->langInput['SUGGESTIE_TEKST'] = 'Doe hier je suggestie voor een video. De suggestie moet een link zijn van bijvoorbeeld een youtube video, met een tekst waarom je deze video wil.';
 $this->langInput['SUGGESTIE_ERROR'] = 'Geen geldige URL';
 
+$this->langInput['POPULAR_MONTH'] = 'populair deze maand';
+$this->langInput['POPULAR_WEEK'] = 'populair deze week';
+$this->langInput['POPULAR_DAY'] = 'populair vandaag';
+
 ?>
 

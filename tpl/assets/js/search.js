@@ -32,6 +32,7 @@
             docentenLang = "Teachers";
             tagsLang = "Tags";
             vakkenLang = "Courses";
+            videoLang = "Video's";
             jaarLang = "Year";
             periodeLang = "Period";
             break;
