@@ -19,7 +19,7 @@ if ($user->logged_in)
 	}
 
 		$this->Set('loginKnop', '<ul class="dropdown">
-									<li class="user"><span><i class="fa fa-user" aria-hidden="true"></i> '.$user->naam.'</li></span>
+									<li class="user"><span><i class="fa fa-user" aria-hidden="true"></i> '.$user->naam.'</span></li>
 								<li class="dropdown-content">
 									'.$dropdownMenu.'
 								</li>

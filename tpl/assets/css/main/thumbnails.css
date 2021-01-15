@@ -70,7 +70,9 @@
     padding: 0 10%;
     transition: 0.3s;
 }
-
+.videoDetailsTitle {
+        font-size: clamp(27px, 0.3vw, 30px); 
+}
 .videoThumb:hover .videoDetailsTitle, 
 .videoThumb:hover .videoThumbDocent, 
 .videoThumb:hover .videoThumbDetails {
@@ -96,6 +98,11 @@
     align-items: center;
     flex-direction: row;
      justify-content: space-between; 
+}
+
+.videoThumbRating {
+    margin-left: -0.4vw; 
+    margin-bottom: 0.5vw;
 }
 
 @media (max-width: 950px) {

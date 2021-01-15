@@ -48,13 +48,13 @@ const menuLinks = () => {
 const thumbNails = () => {
     const elements = document.querySelectorAll(".videoThumb");
     elements.forEach((link, index) => {
-        const thumbImage = document.getElementById('thumb-' + link.id);
 
+        const thumbImage = document.querySelector("[data-video-thumb='"+link.dataset.video+"']");
         link.addEventListener('mouseenter', ()=> {
-            thumbImage.src = "/uploads/previews/" + link.id + ".gif";
+            thumbImage.src = "/uploads/previews/" + link.dataset.video + ".gif";
         });
         link.addEventListener('mouseleave', ()=>{
-            thumbImage.src = "/uploads/thumbnails/" + link.id + ".png";
+            thumbImage.src = "/uploads/thumbnails/" + link.dataset.video + ".png";
         });
     });
 }

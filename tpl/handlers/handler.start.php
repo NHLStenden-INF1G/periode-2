@@ -51,4 +51,10 @@
     }
 
 
+    if(isset($_POST['deleteCommentSubmit'])) {
+        $commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
+        $DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
+    }
+               
+
 ?>

@@ -1,19 +1,7 @@
 <?php 
-
-    if(isset($_POST['deleteCommentSubmit'])) {
-        $commentID = $filter->sanatizeInput($_POST['deleteCommentID'], "int");
-        $DB->Delete("DELETE FROM opmerking WHERE opmerking_id = ?", [$commentID]);
-    }
-                $videoResult = $DB->Select("SELECT  vak.vak_naam, 
-                                                AVG(beoordeling.rating) AS rating, 
-                                                video.videoPath, 
-                                                video.uploadDatum, 
-                                                video.video_id, 
-                                                video.titel, 
-                                                video.videolengte, 
-                                                video.views,
-                                                gebruiker.voornaam, 
-                                                gebruiker.achternaam 
+                $videoResult = $DB->Select("SELECT  vak.vak_naam, AVG(beoordeling.rating) AS rating, video.videoPath, 
+                                                video.uploadDatum, video.video_id, video.titel, video.videolengte, 
+                                                video.views,gebruiker.voornaam, gebruiker.achternaam 
 											FROM video 
 											INNER JOIN gebruiker 
 												ON video.gebruiker_id = gebruiker.gebruiker_id
@@ -27,8 +15,7 @@
 												ON opleiding.opleiding_id = vak.opleiding_id
 											WHERE video.views = (SELECT MAX(views) FROM video)
                                             LIMIT 1")[0];
-                if(!empty($videoResult)){
-
+                if(!empty($videoResult)) {
                     foreach (array_keys($videoResult) as $key => $value) {
                         if(empty($videoResult[$value])) {
                             $error = true;
@@ -38,7 +25,8 @@
                         }
                     }
 				
-                    if(!$error) {
+                    if(!$error) 
+                    {
                         $videoResult['videoComments'] = $DB->Select("SELECT opmerking.*, gebruiker.voornaam, gebruiker.achternaam, gebruiker.level FROM opmerking 
                                             INNER JOIN gebruiker 
                                                 ON gebruiker.gebruiker_id = opmerking.gebruiker_id
@@ -47,10 +35,9 @@
                         $videoResult['videoTags'] = $DB->Select("SELECT tag.naam FROM tag_video 
                                             INNER JOIN tag 
                                                 ON tag_video.tag_id = tag.tag_id
-                                            WHERE tag_video.video_id = ?", [$videoResult['video_id']]);
-                                            
+                                            WHERE tag_video.video_id = ?", [$videoResult['video_id']]);    
                     }
-            }
+                }
 ?>
 <div class="mainWrapper">
             <main>
@@ -65,10 +52,10 @@
                         <div class="videoComments">
                             <span>{VIDEO_REACTIES}</span>
                             <ul> 
-								<?php 
+                                <?php 
+                                //Videocomments
 								if(!empty($videoResult['videoComments'])) {
 									foreach ($videoResult['videoComments'] as $key => $value) {
-                                        
 										foreach ($value as $key1 => $value1) {
 											$commentUser = $value['voornaam']. ' '. $value['achternaam'];
 											$commentTekst = $value['tekst'];
@@ -76,47 +63,49 @@
                                             $commentID = $value['opmerking_id'];
                                         }
 
-                                        if($user->rank >= 2) {
-                                    echo '<li> 
-                                            <form method="post" style="display: flex;">
-                                                <span class="videoComments">'.$commentUser.'</span>
-                                                <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                                <input type="hidden" value="'.$commentID.'" name="deleteCommentID">
-                                            </form>
-                                            
-											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
-										</li>';
-                                        }
-                                        else {
+                                        if($user->rank >= 2) 
+                                        {
                                             echo '<li> 
-											<span class="videoComments">'.$commentUser.'</span> 
-											<span class="videoCommentsText">'.$commentTekst.'</span> 
-											<span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
-										</li>';
+                                                    <form method="post" style="display: flex;">
+                                                        <span class="videoComments">'.$commentUser.'</span>
+                                                        <button type="submit" class="star" style="font-size: 13px" name="deleteCommentSubmit">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                        <input type="hidden" value="'.$commentID.'" name="deleteCommentID">
+                                                    </form>
+                                                    
+                                                    <span class="videoCommentsText">'.$commentTekst.'</span> 
+                                                    <span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
+                                                </li>';
                                         }
-
+                                        else 
+                                        {
+                                            echo '<li> 
+                                                    <span class="videoComments">'.$commentUser.'</span> 
+                                                    <span class="videoCommentsText">'.$commentTekst.'</span> 
+                                                    <span class="videoCommentsDate">'.$this->Get("REACTIE_DATUM").': '.$commentDate.'</span> 
+                                                </li>';
+                                        }
 									}
 								}
 								else {
 									echo "{REACTIE_EERSTE}";
 								}
-
 								?>
                             </ul>
-                            <div class='postComment' style="grid-row: 3; grid-column: 2;">
+                            <div class='postComment'>
                                 <?php 
 
-                                if($user->logged_in){
+                                if($user->logged_in)
+                                {
                                     echo '<form method="POST">
                                             <input type="text" name="commentText" style="width: 80%;" placeholder="{REACTIE_PLAATS}...">
                                             <button type="submit" name="commentSubmit"><i class="fa fa-paper-plane"></i></button>
                                             <input type="hidden" name="commentVideoID" value="'.$videoResult['video_id'].'">
                                         </form>';
                                 }
-                                else {
+                                else 
+                                {
                                     echo '<input type="text" placeholder="{REACTIE_LOGIN}" disabled>';
                                 }
                                 ?>
@@ -144,7 +133,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="Aanbevolen">
                     <div class="sectionTitle">{VIDEO_AANBEVOLEN}</div>
                     <div class="thumbnailContainer">
@@ -184,20 +172,21 @@
 
                     echo "<div class='videoThumbBlock'>
                             <div class='videoThumbBlockRand'></div>
-                            <div class='videoThumb link' data-link='/watch/{$value['video_id']}' id='{$videoTools->getVideoName($value['videoPath'])}'>
-                            <img class='videoThumbImg' src='{uploadsFolder}/{$videoTools->getThumbnail($value['videoPath'])}' id='thumb-{$videoTools->getVideoName($value['videoPath'])}'>
+                            <div class='videoThumb link' data-link='/watch/{$value['video_id']}' data-video='{$videoTools->getVideoName($value['videoPath'])}'>
+                            <img alt='Thumbnail' data-video-thumb='{$videoTools->getVideoName($value['videoPath'])}' class='videoThumbImg' src='{uploadsFolder}/".$videoTools->getThumbnail($value['videoPath'])."'>
                             <div class='videoThumbTags'> ";
 
-                            foreach ($value['videoTags'] as $key1 => $value1) {
-                                echo "<li class='videoTag link' data-link=''>#{$value1['naam']}</li>";
+                            foreach ($value['videoTags'] as $key1 => $value1) 
+                            {
+                                echo "<span class='videoTag link' data-link=''>#{$value1['naam']}</span>";
                             }
 
                             echo "</div>
                                     <div class='videoDetailContainer'>
-                                    <div class='videoDetailsTitle'><strong style='font-size: clamp(27px, 0.3vw, 30px);'>{$value['titel']}</strong></div>
+                                    <div><strong class='videoDetailsTitle'>{$value['titel']}</strong></div>
                                     <div class='videoThumbDocent'>{$value['voornaam']} {$value['achternaam']}</div>
                                     <div class='videoThumbDetails'>{$value['uploadDatum']}
-                                    <div style='margin-left: -0.4vw; margin-bottom: 0.5vw;'>
+                                    <div class='videoThumbRating'>
                                     ".$videoTools->getRating($value['rating'], $value['video_id'])."</div>
                                     <p>(".gmdate("H:i:s", $value['videoLengte']).")</p>
                                 </div>
@@ -246,9 +235,7 @@
                                     }
                                 }
                             ?>
-                        </div>
-                    </div>
-                </div>
             </div>
-            </main>
         </div>
+    </main>
+</div>

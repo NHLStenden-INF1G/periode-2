@@ -186,12 +186,11 @@
 
 
                         $value['rating'] = $DB->Select("SELECT AVG(rating) AS rating FROM beoordeling WHERE video_id = ?",[$value['video_id']])[0]['rating'];
-
-                            echo "<div class='videoThumbBlock'>
-                            <div class='videoThumbBlockRand'></div>
-                            <div class='videoThumb link' data-link='/watch/{$value['video_id']}' id='{$videoTools->getVideoName($value['videoPath'])}'>
-                            <img class='videoThumbImg' src='{uploadsFolder}/{$videoTools->getThumbnail($value['videoPath'])}' id='thumb-{$videoTools->getVideoName($value['videoPath'])}'>
-                            <div class='videoThumbTags'> ";
+                        echo "<div class='videoThumbBlock'>
+                                <div class='videoThumbBlockRand'></div>
+                                <div class='videoThumb link' data-link='/watch/{$value['video_id']}' data-video='{$videoTools->getVideoName($value['videoPath'])}'>
+                                <img alt='Thumbnail' data-video-thumb='{$videoTools->getVideoName($value['videoPath'])}' class='videoThumbImg' src='{uploadsFolder}/".$videoTools->getThumbnail($value['videoPath'])."'>
+                                <div class='videoThumbTags'> ";
 
                             foreach ($value['videoTags'] as $key1 => $value1) {
                                 echo "<li class='videoTag link' data-link=''>#{$value1['naam']}</li>";

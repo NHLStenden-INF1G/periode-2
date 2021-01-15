@@ -7,35 +7,25 @@
     text-decoration: none;
     font-family: "Roboto", sans-serif;
     font-size: clamp(16px, 0.8vw, 22px);
-    --lighterPrimaryColor: #54a7ab;
-    --lightPrimaryColor: #318c91;
-    --primaryColor: #188287;
-    --darkPrimaryColor: #0b696d;
-    --darkerPrimaryColor: #015256;
-    --dark: #151515;
-    --tekstColor: #ffffff;
-}
+    --lighterPrimaryColor: #54a7ab; --lightPrimaryColor: #318c91; --primaryColor: #188287; --darkPrimaryColor: #0b696d; --darkerPrimaryColor: #015256; --dark: #151515; --tekstColor: #ffffff; }
 
 ::-webkit-scrollbar {
-	width: 10px;
+    width: 10px;
 }
 
 /* Track */
-
 ::-webkit-scrollbar-track {
-	background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 /* Handle */
-
 ::-webkit-scrollbar-thumb {
-	background: #888;
+    background: #888;
 }
 
 /* Handle on hover */
-
 ::-webkit-scrollbar-thumb:hover {
-	background: #555;
+    background: #555;
 }
 
 body {
@@ -136,12 +126,13 @@ a.videoTag {
     font-family: "Roboto", sans-serif !important;
     color: white !important;
 }
+
 .searchResultTags, a.videoTag {
     display: inline-block;
     padding: 0.7vw 0.4vw;
 }
-/* SECTIONS */
 
+/* SECTIONS */
 .spotlightVideo {
     grid-row: 1;
 }
@@ -151,20 +142,29 @@ a.videoTag {
     grid-row: 2;
 }
 
+.Populair {
+    grid-row: 2;
+}
+
 .spotlightVideo, .Aanbevolen {
     height: min-content;
     width: 100%;
 }
 
 .listContainer {
-    grid-row: 3; 
-    display: flex; 
+    grid-row: 3;
+    display: flex;
     justify-content: space-between;
 }
 
 .listTab {
     display: flex;
     flex-direction: column;
+}
+
+.postComment {
+    grid-row: 3;
+    grid-column: 2;
 }
 
 @media (max-width: 950px) {
@@ -205,6 +205,6 @@ a.videoTag {
     }
 
     .listTab > .videoTag {
-        margin: 1vw;    
+        margin: 1vw;
     }
 }
