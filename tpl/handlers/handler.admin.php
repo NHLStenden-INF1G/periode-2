@@ -1,17 +1,20 @@
 <?php
+
+($this->path == 'admin') ? $this->Set("activePageAdmin", "active") : '';
+
+$this->Set("extraCSS", "<link rel='stylesheet' href='/tpl/admin/css/admin.css'>");
+
 $user->Redirect(false);
+
+define('AdminPages', 'tpl/admin/pages/');
+ob_start();
 
 if ($user->rank < 2)
 {
 	$core->Redirect('/'.Config::$loginStartpage);
 }
 
-
-define('AdminPages', 'tpl/admin/pages/');
-ob_start();
-echo "<link rel='stylesheet' href='/tpl/admin/css/admin.css'>";
-
-if (empty($_GET['Path_1']))
+if(empty($_GET['Path_1']))
 {
 	require(AdminPages.'start.php');
 }
@@ -20,7 +23,8 @@ else if(file_exists(AdminPages.$_GET['Path_1'].'.php'))
 	$page = $_GET['Path_1'];
 	require(AdminPages.$page.'.php');
 }
-else {
+else
+{
 	require('tpl/pages/error.php');
 }
 

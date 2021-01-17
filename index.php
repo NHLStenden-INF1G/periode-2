@@ -11,6 +11,7 @@ require_once 'config/classes/user.php';
 require_once 'config/classes/filter.php';
 require_once 'config/classes/language.php';
 require_once 'config/classes/video.php';
+require_once 'config/classes/search.php';
 
 require_once 'config/_lib/getid3/getid3.php';
 
@@ -24,6 +25,7 @@ $filter         = new Filter;
 $lang           = new Language;
 $videoParser    = new getID3;
 $videoTools     = new Video;
+$search         = new Search;
 
 $TPL->Route($_SERVER['PATH_INFO']);
 $TPL->GetHandlers();

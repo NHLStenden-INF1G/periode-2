@@ -3,6 +3,8 @@
 
 $user->Redirect(true);
 $this->Set("regError", "");
+$this->Set("pageTitle", $this->Get("LOGIN_REGISTREREN"));
+$this->Set("extraCSS", '<link rel="stylesheet" href="'.$this->Get("assetsFolder").'/css/page/canvas_special.css">');
 
 if(isset($_POST['regSubmit']))
 {

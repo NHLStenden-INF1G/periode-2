@@ -1,0 +1,11 @@
+.mainWrapper > main {
+    height: max-content;
+    grid-template-rows: unset;
+}
+
+body { 
+    grid-template-rows: 110px 6vw auto 2vw;
+}
+#canvas {
+    height: 100%;
+}

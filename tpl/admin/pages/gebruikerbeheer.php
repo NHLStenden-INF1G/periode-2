@@ -1,6 +1,5 @@
 <?php 
     $this->Set("pageTitle", $this->Get("ADMIN_GEBRUIKERBEHEER"));
-
     $this->Set("regError", "");
 
     //Handler

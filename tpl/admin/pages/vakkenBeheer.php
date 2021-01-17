@@ -8,20 +8,28 @@ if($user->rank != 3){
     
 if(isset($_POST['submitInvoegen'])) {
     if(!empty($_POST['vakNaam'])) {  
-        if(!empty($_POST['opleidingNaam'])) {
+        if(!empty($_POST['opleidingNaam']) && $_POST['opleidingNaam'] != 'ERROR') {
             $vakNaam = $filter->sanatizeInput($_POST['vakNaam'], "string");
             $opleidingID = $filter->sanatizeInput($_POST['opleidingNaam'], "int");
 
             $DB->Insert("INSERT INTO vak (opleiding_id, vak_naam) VALUES (?, ?)", [$opleidingID, $vakNaam]);
             header("Location: /admin/vakkenbeheer");
         }
+        else 
+        {
+            echo '{TAGBEHEER_GEEN_OPLEIDING}';
+        }
+    }
+    else 
+    {
+        echo '{VIDEOBEHEER_UPLOADEN_BESTAND_TITEL_GEEN}';
     }
 }
 
 
 if(isset($_POST['submitAanpassen'])) {
     if(!empty($_POST['vakNaam'])) {
-        if(!empty($_POST['opleidingNaam'])) {
+        if(!empty($_POST['opleidingNaam']) && $_POST['opleidingNaam'] != 'ERROR') {
 
             $vakID = $filter->sanatizeInput($_POST['vakID'], "int");
             $vakNaam = $filter->sanatizeInput($_POST['vakNaam'], "string");
@@ -30,6 +38,14 @@ if(isset($_POST['submitAanpassen'])) {
             $DB->Update("UPDATE vak SET vak_naam = ?, opleiding_id = ? WHERE vak_id = ?", [$vakNaam, $opleidingID, $vakID]);
             header("Refresh: 0");
         }
+        else 
+        {
+            echo '{TAGBEHEER_GEEN_OPLEIDING}';
+        }
+    }
+    else 
+    {
+        echo '{VIDEOBEHEER_UPLOADEN_BESTAND_TITEL_GEEN}';
     }
 }
 
@@ -91,10 +107,16 @@ if(isset($_POST['submitAanpassen'])) {
            
            <label>{OPLDEIDINGBEHEER_OPLEIDINGNAAM}:  
                 <select name="opleidingNaam">';
-
+            if(!empty($opleidingData))
+            {
                 foreach ($opleidingData as $key => $value) {
                     echo '<option value="'.$value['opleiding_id'].'">'.$value['naam'].' ({OPLDEIDINGBEHEER_JAAR}: '.$value['jaar'].', {OPLDEIDINGBEHEER_PERIODE}: '.$value['periode'].')</option>';
                 }
+            }
+            else {
+                echo '<option value="ERROR">{TAGBEHEER_GEEN_OPLEIDING}</option>';
+            }
+
 
             echo '</select>
                 </label>
@@ -121,11 +143,16 @@ if(isset($_POST['submitAanpassen'])) {
             
             <label>{OPLDEIDINGBEHEER_OPLEIDINGNAAM}:  
                  <select name="opleidingNaam">';
- 
+            if(!empty($opleidingData))
+            {
                  foreach ($opleidingData as $key => $value) {
                      echo '<option value="'.$value['opleiding_id'].'">'.$value['naam'].' ({OPLDEIDINGBEHEER_JAAR}: '.$value['jaar'].', {OPLDEIDINGBEHEER_PERIODE}: '.$value['periode'].')</option>';
                  }
- 
+            }
+            else 
+            {
+                echo '<option value="ERROR">{TAGBEHEER_GEEN_OPLEIDING}</option>';
+            }
              echo '</select>
                  </label>
                  <input type="hidden" name="vakID" value="'.$vakData['vak_id'].'">

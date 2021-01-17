@@ -158,7 +158,24 @@
                 gradient.circles.push(new gradient.addCircles(canvas.width, canvas.height));
             }
         }
-        
+        canvas.addEventListener('click', (e) => {
+            let circleClicked = false;
+            for(let i = 0; i < this.circles.length; i++) {
+                c = this.circles[i];
+                if(Math.sqrt(Math.pow(c.x-e.clientX, 2) + Math.pow(c.y-e.clientY, 2)) < c.r) {
+                    console.log('Circle clicked');
+                    if(Anim.duration === 10000) {
+                        Anim.duration = 100;
+                    } else {
+                        Anim.duration = 10000;
+                    }
+                    break;
+                }
+            }
+            if(!circleClicked) {
+                console.log('Canvas clicked');
+            }
+        });
     }   
 
     //interpolation

@@ -9,6 +9,14 @@ if(media){
     var loadedVideoTime = false;
     
     media.onloadeddata = function() {
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title:  media.dataset.titel,
+            artist: media.dataset.docent,
+            album: '(' + media.dataset.vak + ') [' + media.dataset.opleiding + ', ' + media.dataset.jaar + ' | ' + media.dataset.periode + ']',
+            artwork:  [{ src: '/uploads/thumbnails/' + media.dataset.video + '.png',  sizes: '512x512', type: 'image/png' }]
+          });
+          console.log(navigator.mediaSession.metadata);
           if(!getCurrentTime) {
                 var location = null;
                 var getCurrentTimexhttp = new XMLHttpRequest();
@@ -43,8 +51,7 @@ if(media){
             const ratio = currentTime / videoDuration;
             const percentage = Math.floor(100 * ratio);
     
-    
-    
+
             if(percentage > 75) {
                 if(!viewUpload) {
                     var viewUpdatexhttp = new XMLHttpRequest();
@@ -84,7 +91,6 @@ if(media){
             progressUpdatexhttp.open("POST", location + "/watchupdate", true);
             progressUpdatexhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             progressUpdatexhttp.send("videoID="+videoID +"&timestamp="+currentTime);
-    
         } 
     }, 1000);    
 }

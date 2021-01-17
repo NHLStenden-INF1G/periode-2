@@ -1,5 +1,4 @@
 <?php 
-
 class Language {
     
     public $langInput = [];
@@ -59,7 +58,5 @@ class Language {
         }
     }
 
-
-    
 }
 ?>

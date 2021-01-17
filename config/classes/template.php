@@ -40,7 +40,7 @@ class Template
 
 	function GetHandlers()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools, $search;
 
 		$this->Set('sitename', Config::$siteName);
 		$this->Set('url', URL);
@@ -57,7 +57,6 @@ class Template
 		if (is_file(Handlers.'handler.'.Page))
 		{
 			require(Handlers.'handler.'.Page);
-		
 		}
 	}
 
@@ -68,7 +67,7 @@ class Template
 
 	function GetContent()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools, $search;
 
 		ob_start();
 		require('tpl/pages/'.Page);
@@ -77,7 +76,7 @@ class Template
 
 	function GetHeader()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools, $search;
 
 		ob_start();
 		require('tpl/includes/header.php');
@@ -86,7 +85,7 @@ class Template
 
 	function GetNavigation()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools, $search;
 		ob_start();
 		require('tpl/includes/nav.php');
 		$this->AddLine(ob_get_clean());
@@ -94,12 +93,28 @@ class Template
 
 	function GetFooter()
 	{
-		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools;
+		global $DB, $site, $user, $filter, $lang, $core, $videoParser, $videoTools, $search;
 		ob_start();
 		require('tpl/includes/footer.php');
 		$this->AddLine(ob_get_clean()); 
 	}
 	
+	function dropdownMenu($html = null)
+	{
+		global $user;
+
+		foreach ($user->userPermissions($user->rank) as $key => $value) 
+		{
+			$html .= "
+					<div class='link' data-link='{$value[1]}'>
+						<p><i class='{$value[0]}' style='color: #1c8490;' aria-hidden='true'></i> {$this->Get($key)}</p>
+					</div>
+					";
+		}
+
+		$this->Set("dropdownMenu", $html);
+	}
+
 	function Set($var, $value)
 	{
 		$this->vars['{'.strtolower($var).'}'] = $value;
@@ -126,6 +141,7 @@ class Template
 		{
 			$v[] = str_ireplace($k, '', $value);
 		}
+		
 		//echo str_ireplace($k, $v, $this->content);
 
 		echo str_ireplace($k, $v, $this->content. '<!-- Site geladen in '.(microtime(true) - Start).' seconden :O -->');

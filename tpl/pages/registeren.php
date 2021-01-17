@@ -1,19 +1,3 @@
-<style>
-.mainWrapper > main {
-    height: max-content;
-    grid-template-rows: unset;
-}
-
-body { 
-    grid-template-rows: 110px 6vw auto 2vw;
-}
-#canvas {
-    height: 100%;
-}
-</style>
-<?php 
-    $this->Set("pageTitle", $this->Get("LOGIN_REGISTREREN"));
-?>
 <div class="mainWrapper"> 
     <main> 
         <div class="Spotlight">

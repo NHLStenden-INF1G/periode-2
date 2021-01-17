@@ -11,13 +11,15 @@ $this->langInput['NAV_MIJNPROFIEL'] = 'Mijn profiel';
 $this->langInput['NAV_ADMIN'] = 'Docentenpaneel';
 $this->langInput['NAV_ZOEKEN'] = 'Zoeken';
 $this->langInput['NAV_SUGGESTIE'] = 'Suggestie';
-$this->langInput['NAV_POPULAIR'] = 'Populair';
+$this->langInput['NAV_POPULAIR'] = 'Trending';
 $this->langInput['NAV_AANMELDEN'] = 'Aanmelden';
 $this->langInput['START_SPOTLIGHT'] = 'IN DE SPOTLIGHT';
 $this->langInput['VIDEO_REACTIES'] = 'LAATSTE REACTIES';
-$this->langInput['VIDEO_WEERGAVEN'] = 'Weergaven';
+$this->langInput['VIDEO_WEERGAVEN'] = 'weergaven';
 $this->langInput['VIDEO_AANBEVOLEN'] = 'AANBEVOLEN';
 $this->langInput['VIDEO_GEEN'] = 'Nog geen video\'s';
+$this->langInput['VAK_GEEN'] = 'Geen vak geselecteerd!';
+
 $this->langInput['REACTIE_DATUM'] = 'Geplaatst op';
 $this->langInput['REACTIE_LOGIN'] = 'Log in om een reactie te plaatsen';
 $this->langInput['REACTIE_EERSTE'] = 'Nog geen reacties, wees de eerste! #first';
@@ -94,5 +96,8 @@ $this->langInput['POPULAR_MONTH'] = 'populair deze maand';
 $this->langInput['POPULAR_WEEK'] = 'populair deze week';
 $this->langInput['POPULAR_DAY'] = 'populair vandaag';
 
+$this->langInput['EDUCATION'] = 'opleiding zoekresultaten';
+$this->langInput['TAGS'] = 'tag zoekresultaten';
+$this->langInput['SEARCH_VAK'] = 'vak zoekresultaten';
 ?>
 

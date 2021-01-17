@@ -11,13 +11,16 @@ $this->langInput['NAV_MIJNPROFIEL'] = 'My profile';
 $this->langInput['NAV_ADMIN'] = 'Teacherpanel';
 $this->langInput['NAV_ZOEKEN'] = 'Search';
 $this->langInput['NAV_SUGGESTIE'] = 'Suggestion';
-$this->langInput['NAV_POPULAIR'] = 'Popular';
+$this->langInput['NAV_POPULAIR'] = 'Trending';
 $this->langInput['NAV_AANMELDEN'] = 'Sign up';
 $this->langInput['START_SPOTLIGHT'] = 'IN THE SPOTLIGHT';
 $this->langInput['VIDEO_REACTIES'] = 'LATEST COMMENTS';
 $this->langInput['VIDEO_WEERGAVEN'] = 'views';
 $this->langInput['VIDEO_AANBEVOLEN'] = 'RECOMMENDED';
 $this->langInput['VIDEO_GEEN'] = 'There are no videos';
+$this->langInput['VAK_GEEN'] = 'No course selected';
+
+
 $this->langInput['REACTIE_DATUM'] = 'Posted';
 $this->langInput['REACTIE_LOGIN'] = 'Log in to post a comment';
 $this->langInput['REACTIE_EERSTE'] = 'There are no comments, be the first! #first';
@@ -94,6 +97,10 @@ $this->langInput['SUGGESTIE_ERROR'] = 'Not a valid URL';
 $this->langInput['POPULAR_MONTH'] = 'popular this month';
 $this->langInput['POPULAR_WEEK'] = 'popular this week';
 $this->langInput['POPULAR_DAY'] = 'popular today';
+
+$this->langInput['EDUCATION'] = 'education search results';
+$this->langInput['TAGS'] = 'tag search results';
+$this->langInput['SEARCH_VAK'] = 'course search results';
 
 ?>
 

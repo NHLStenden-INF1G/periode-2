@@ -5,47 +5,54 @@ if(isset($_POST["submitButton"]))
 {
     if(!empty($_POST['titel'])) 
     {
-        if(!empty($_POST['titel'] && !empty($_FILES["file"]["name"])))
+        if(!empty($_POST['vakKeuze']) && $_POST['vakKeuze'] != 'ERROR')
         {
-
-            $vakKeuze = $filter->sanatizeInput($_POST["vakKeuze"], 'int');
-            $postTitel =  $filter->sanatizeInput($_POST["titel"], 'string');
-            //Als het een bestand is
-            if(isset($_FILES['file']['name'])) 
+            if(!empty($_POST['titel'] && !empty($_FILES["file"]["name"])))
             {
-                $videoAllowedTypes = array('video/mp4'); 
-                //Is een toegestaan bestandstype
-                if(in_array($_FILES["file"]["type"], $videoAllowedTypes) && $_FILES["file"]["size"] < 5000000000) 
+
+                $vakKeuze = $filter->sanatizeInput($_POST["vakKeuze"], 'int');
+                $postTitel =  $filter->sanatizeInput($_POST["titel"], 'string');
+                //Als het een bestand is
+                if(isset($_FILES['file']['name'])) 
                 {
-                    $uploadFolder = $_SERVER['DOCUMENT_ROOT'].'/uploads/video/';
-                    $bestandsNaam = basename(sha1(time().$_FILES["file"]["tmp_name"]));
-                    $uploadExtensie = '.mp4';
-                    $videoPath = $uploadFolder.$bestandsNaam.$uploadExtensie; 
-                    
-                    move_uploaded_file($_FILES["file"]["tmp_name"], $videoPath);
+                    $videoAllowedTypes = array('video/mp4'); 
+                    //Is een toegestaan bestandstype
+                    if(in_array($_FILES["file"]["type"], $videoAllowedTypes) && $_FILES["file"]["size"] < 5000000000) 
+                    {
+                        $uploadFolder = $_SERVER['DOCUMENT_ROOT'].'/uploads/video/';
+                        $bestandsNaam = basename(sha1(time().$_FILES["file"]["tmp_name"]));
+                        $uploadExtensie = '.mp4';
+                        $videoPath = $uploadFolder.$bestandsNaam.$uploadExtensie; 
+                        
+                        move_uploaded_file($_FILES["file"]["tmp_name"], $videoPath);
 
-                    $videoPathDB = "/uploads/video/".$bestandsNaam.$uploadExtensie;
-                    $videolengte = floor($videoParser->analyze($videoPath)['playtime_seconds']);
+                        $videoPathDB = "/uploads/video/".$bestandsNaam.$uploadExtensie;
+                        $videolengte = floor($videoParser->analyze($videoPath)['playtime_seconds']);
 
-                    $DB->Insert("INSERT INTO video (gebruiker_id, titel, videopath, videolengte)
-                      VALUES (?, ?, ?, ?);",[$user->id, $postTitel, $videoPathDB, $videolengte]);
+                        $DB->Insert("INSERT INTO video (gebruiker_id, titel, videopath, videolengte)
+                        VALUES (?, ?, ?, ?);",[$user->id, $postTitel, $videoPathDB, $videolengte]);
 
-                    $videoTools->createThumbnail($videoPathDB, $videolengte);
+                        $videoTools->createThumbnail($videoPathDB, $videolengte);
 
-                    header('Location: /admin/videobeheer');
-                    
+                        header('Location: /admin/videobeheer');
+                        
+                    }
+                }
+
+                $videoID = $DB->InsertId();
+                $DB->Insert("INSERT INTO video_vak (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
+
+                foreach ($_POST['tagKeuze'] as $key => $value) {
+                    $DB->Insert("INSERT INTO tag_video (tag_id, video_id) VALUES (?, ?)", [$value, $videoID]);
                 }
             }
-
-            $videoID = $DB->InsertId();
-            $DB->Insert("INSERT INTO video_vak (video_id, vak_id) VALUES (?, ?)", [$videoID, $vakKeuze]);
-
-            foreach ($_POST['tagKeuze'] as $key => $value) {
-                $DB->Insert("INSERT INTO tag_video (tag_id, video_id) VALUES (?, ?)", [$value, $videoID]);
-            }
+            else {
+                echo "Error: {VIDEOBEHEER_UPLOADEN_BESTAND_KIEZEN_GEEN}";
+            }               
         }
-        else {
-            echo "Error: {VIDEOBEHEER_UPLOADEN_BESTAND_KIEZEN_GEEN}";
+        else 
+        {
+            echo "Error: {VAK_GEEN}";
         }
     }
     else {
@@ -60,7 +67,8 @@ if(isset($_POST["editSubmit"]))
 {
     if(!empty($_POST['titel'])) 
     {
-
+        if(!empty($_POST['vakKeuze']) && $_POST['vakKeuze'] != 'ERROR')
+        {
             $vakKeuze = $filter->sanatizeInput($_POST["vakKeuze"], 'int');
             $postTitel =  $filter->sanatizeInput($_POST["titel"], 'string');
             $videoID =  $filter->sanatizeInput($_POST["videoID"], 'int');
@@ -118,6 +126,11 @@ if(isset($_POST["editSubmit"]))
             foreach ($_POST['tagKeuze'] as $key => $value) {
                 $DB->Insert("INSERT INTO tag_video (tag_id, video_id) VALUES (?, ?)", [$value, $videoID]);
             }
+        }
+        else 
+        {
+            echo "Error: {VAK_GEEN}";
+        }
     }
     else {
         echo "Error:  {VIDEOBEHEER_UPLOADEN_BESTAND_TITEL_GEEN}";
@@ -185,20 +198,24 @@ if(isset($_POST["editSubmit"]))
             $tagData = $DB->Select("SELECT * FROM tag");
             echo '<div class="sectionTitle">upload</div>
                     <form enctype="multipart/form-data" method="POST">';
+            echo '<label>{VIDEOBEHEER_UPLOADEN_VAK}:<select name="vakKeuze">';
 
             if(!empty($videoData))  {
-                echo '<label for="vak">{VIDEOBEHEER_UPLOADEN_VAK}:<select name="vakKeuze">';
 
                 foreach($videoData as $key => $vakLijst) 
                 { 
                     echo "<option value='{$vakLijst["vak_id"]}'>{$vakLijst["vak_naam"]}</option>";
                 }
                
-                echo '</select></label><br>';
             }
+            else 
+            {
+                echo "<option value='ERROR'>{VAK_GEEN}</option>";
+            }
+            echo '</select></label><br>';
 
             if(!empty($tagData))  {
-                echo '<label for="vak">Tags:<select name="tagKeuze[]" multiple>';
+                echo '<label>Tags:<select name="tagKeuze[]" multiple>';
 
                 foreach($tagData as $key => $tagLijst) 
                 { 
@@ -261,8 +278,9 @@ if(isset($_POST["editSubmit"]))
                 echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div>
                 <form enctype="multipart/form-data" method="POST">';
 
+        echo '<label for="vak">{VIDEOBEHEER_UPLOADEN_VAK}:<select name="vakKeuze">';
+
         if(!empty($videoData))  {
-            echo '<label for="vak">{VIDEOBEHEER_UPLOADEN_VAK}:<select name="vakKeuze">';
 
             foreach($videoData as $key => $vakLijst) 
             { 
@@ -275,8 +293,13 @@ if(isset($_POST["editSubmit"]))
              }
             }
            
-            echo '</select></label><br>';
         }
+        else 
+        {
+            echo "<option value='ERROR'>{VAK_GEEN}</option>";
+        }
+
+        echo '</select></label><br>';
 
         if(!empty($tagResult))  {
             echo '<label for="vak">Tags:<select name="tagKeuze[]" multiple>';
