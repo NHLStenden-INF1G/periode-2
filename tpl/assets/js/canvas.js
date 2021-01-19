@@ -132,10 +132,6 @@
                 if(c.y > this.height+50) c.y = -50;
             }  
         }
-        else {
-            document.getElementById("canvas").style.filter = "saturate(3)"; // verwijdert ge deze nie wanneer die stopt?
-        }
-
     }
 
     var $width, $height, gradient,
@@ -216,35 +212,36 @@
         med.onplay = function() {
             Anim.currUnit = 1.0;
             startedPlay = true;
+            document.getElementById("canvas").style.filter = "saturate(3) brightness(0.7)"; 
         }
         med.onended = function() {
-        stopAColor = [
-            { 'r':'0', 'g':'90', 'b':'167' },
-            { 'r':'131', 'g':'58', 'b':'180' },
-            { 'r':'255', 'g':'0', 'b':'204' },
-            { 'r':'0', 'g':'132', 'b':'135' }
-        ];
-        stopBColor = [
-            { 'r':'0', 'g':'90', 'b':'167' },
+            stopAColor = [
+                { 'r':'0', 'g':'90', 'b':'167' },
+                { 'r':'131', 'g':'58', 'b':'180' },
+                { 'r':'255', 'g':'0', 'b':'204' },
+                { 'r':'0', 'g':'132', 'b':'135' }
+            ];
+            stopBColor = [
+                { 'r':'0', 'g':'90', 'b':'167' },
+                { 'r':'253', 'g':'29', 'b':'29' },
+                { 'r':'255', 'g':'0', 'b':'204' },
+            { 'r':'51', 'g':'51', 'b':'153' }
+            ];
+            stopCColor = [
+                { 'r':'0', 'g':'132', 'b':'135' },
             { 'r':'253', 'g':'29', 'b':'29' },
-            { 'r':'255', 'g':'0', 'b':'204' },
-           { 'r':'51', 'g':'51', 'b':'153' }
-        ];
-        stopCColor = [
-            { 'r':'0', 'g':'132', 'b':'135' },
-           { 'r':'253', 'g':'29', 'b':'29' },
-           { 'r':'81', 'g':'81', 'b':'153' },
-           { 'r':'1', 'g':'33', 'b':'135' }
-        ];
-        var curA = 'rgb('+ stopAColor[0].r + ',' + stopAColor[0].g + ',' + stopAColor[0].b + ')';
-        var curB = 'rgb('+ stopBColor[0].r + ',' + stopBColor[0].g + ',' + stopBColor[0].b + ')';
-        var curC = 'rgb('+ stopCColor[0].r + ',' + stopCColor[0].g + ',' + stopCColor[0].b + ')';
-        gradient.colorStops = [];
-        gradient.addStop(0, stopAColor, curA);
-        gradient.addStop(0.5, stopBColor, curB);
-        gradient.addStop(1, stopCColor, curC);
-        Anim.duration = 10000;
-        document.getElementById("canvas").style.filter = "";
+            { 'r':'81', 'g':'81', 'b':'153' },
+            { 'r':'1', 'g':'33', 'b':'135' }
+            ];
+            var curA = 'rgb('+ stopAColor[0].r + ',' + stopAColor[0].g + ',' + stopAColor[0].b + ')';
+            var curB = 'rgb('+ stopBColor[0].r + ',' + stopBColor[0].g + ',' + stopBColor[0].b + ')';
+            var curC = 'rgb('+ stopCColor[0].r + ',' + stopCColor[0].g + ',' + stopCColor[0].b + ')';
+            gradient.colorStops = [];
+            gradient.addStop(0, stopAColor, curA);
+            gradient.addStop(0.5, stopBColor, curB);
+            gradient.addStop(1, stopCColor, curC);
+            Anim.duration = 10000;
+            document.getElementById("canvas").style.filter = "";
 
         }
     }
