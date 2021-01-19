@@ -223,7 +223,9 @@ class Video {
 		$videoData = $this->videoData($videoData);
 		if(!empty($videoData)) 
 		{
-			$html .= '<div class="videoBlock">
+			$html .= '<div class="videoBlock">';
+
+				$html .= '
 				<video playsinline controls id="'.$videoData['video_id'].'" 
 					data-video="'.$this->getVideoName($videoData['videoPath']).'" 
 					data-docent="'.$videoData['voornaam'].' '.$videoData['achternaam'].'"

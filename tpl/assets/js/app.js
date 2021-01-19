@@ -68,19 +68,20 @@ document.addEventListener("DOMContentLoaded", function(){
 
     /* Canvas Controller */
     updateUI();
+    updateVideoGradient();
 
     window.onresize = function(event) {
-        updateUI();
+        resizeCanvas();
     };
 
     (function animloop(){
             requestAnimFrame(animloop);
             gradient.updateStops();
             gradient.draw();
-    })(); 
+    })();
 
     menuLinks();
     burgerMenu();
     thumbNails();
- 
+    
 });

@@ -15,6 +15,7 @@
     height: auto;
     z-index: 1;
     max-height: 27vw;
+    min-height: 25vw;
 }
 
 .videoBlock > .videoComments {

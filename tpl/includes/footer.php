@@ -11,9 +11,9 @@
             </div>
           </footer>
           {extraJS}
-          <script src="{assetsFolder}/js/app.js"></script>
           <script src="{assetsFolder}/js/canvas.js"></script>
           <script src="{assetsFolder}/js/search.js"></script>
-          <script src="/tpl/assets/js/video.js"></script>
+          <script src="{assetsFolder}/js/video.js"></script>
+          <script src="{assetsFolder}/js/app.js"></script>
 </body>
 </html>

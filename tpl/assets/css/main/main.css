@@ -44,6 +44,7 @@ body.active {
     grid-row: 1;
     grid-column: 1;
     height: 75vh;
+    z-index: 1;
     width: 100%;
     position: absolute;
 }
@@ -205,7 +206,11 @@ a.videoTag {
     visibility: visible;
   }
 
-
+.videoCanvas {
+    width: 100%;
+    display: none;
+    z-index: 1;
+}
 @media (max-width: 950px) {
     html {
         font-size: calc(12px + 6 * ((100vw - 320px) / 680));

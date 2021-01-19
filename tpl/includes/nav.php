@@ -1,4 +1,5 @@
     <canvas id="canvas" class="pageCanvas"></canvas>
+    <canvas class="videoCanvas"></canvas>
 
     <nav>
         <img alt="Logo" class="link" data-link="/start" src="{assetsFolder}/images/logo.png"/>
