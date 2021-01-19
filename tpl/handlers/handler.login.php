@@ -1,7 +1,10 @@
 <?php
 //Kijk of knop ingedrukt is
 $user->Redirect(true);
+
 $this->Set("loginError", "");
+$this->Set("extraCSS", '<link rel="stylesheet" href="'.$this->Get("assetsFolder").'/css/page/canvas_special.css">');
+$this->Set("pageTitle", $this->Get("LOGIN_INLOGGEN"));
 
 if(isset($_POST['loginSubmit']))
 {
@@ -34,11 +37,10 @@ if(isset($_POST['loginSubmit']))
         {
             $this->Set("loginError", $this->Get("LOGIN_VERKEERDE_WACHTWOORD"));
         }
-        else {
+        else 
+        {
             $core->Redirect(Config::$loginStartpage);
         }
-
-
     }
 }
 

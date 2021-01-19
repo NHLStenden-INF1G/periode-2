@@ -1,6 +1,5 @@
 <?php 
     $this->Set("pageTitle", $this->Get("ADMIN_GEBRUIKERBEHEER"));
-
     $this->Set("regError", "");
 
     //Handler
@@ -125,6 +124,11 @@
         }
     }
 
+    //Geen goede rank
+    if($user->rank != 3){
+        $core->Redirect("/admin");
+    }
+
 ?>
 
 <div class="spotlightVideo">
@@ -147,7 +151,7 @@
             $gebuikerResult = $DB->Select("SELECT * FROM gebruiker WHERE gebruiker_id != ? AND level < ? ORDER BY level ASC ", [
                 $user->id, $user->rank]); //Haalt alle docenten op
 
-            echo '<table>
+            echo '<div class="sectionTitle">{BEHEER_OVERZICHT}</div><table>
                     <thead>
                         <tr>
                             <th>Level</th>

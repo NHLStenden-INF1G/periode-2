@@ -11,13 +11,16 @@ $this->langInput['NAV_MIJNPROFIEL'] = 'My profile';
 $this->langInput['NAV_ADMIN'] = 'Teacherpanel';
 $this->langInput['NAV_ZOEKEN'] = 'Search';
 $this->langInput['NAV_SUGGESTIE'] = 'Suggestion';
-$this->langInput['NAV_POPULAIR'] = 'Popular';
+$this->langInput['NAV_POPULAIR'] = 'Trending';
 $this->langInput['NAV_AANMELDEN'] = 'Sign up';
 $this->langInput['START_SPOTLIGHT'] = 'IN THE SPOTLIGHT';
 $this->langInput['VIDEO_REACTIES'] = 'LATEST COMMENTS';
 $this->langInput['VIDEO_WEERGAVEN'] = 'views';
 $this->langInput['VIDEO_AANBEVOLEN'] = 'RECOMMENDED';
 $this->langInput['VIDEO_GEEN'] = 'There are no videos';
+$this->langInput['VAK_GEEN'] = 'No course selected';
+
+
 $this->langInput['REACTIE_DATUM'] = 'Posted';
 $this->langInput['REACTIE_LOGIN'] = 'Log in to post a comment';
 $this->langInput['REACTIE_EERSTE'] = 'There are no comments, be the first! #first';
@@ -89,6 +92,15 @@ $this->langInput['LOGIN_INLOGGEN'] = 'Log in';
 $this->langInput['LOGIN_SIGN'] = 'Sign in';
 $this->langInput['SUGGESTIE_TEKST'] = 'Place your suggestion for a video here. The suggestion has to be a link to, for example a youtube video, with an explanation of why you want this video.';
 $this->langInput['SUGGESTIE_ERROR'] = 'Not a valid URL';
+
+
+$this->langInput['POPULAR_MONTH'] = 'popular this month';
+$this->langInput['POPULAR_WEEK'] = 'popular this week';
+$this->langInput['POPULAR_DAY'] = 'popular today';
+
+$this->langInput['EDUCATION'] = 'education search results';
+$this->langInput['TAGS'] = 'tag search results';
+$this->langInput['SEARCH_VAK'] = 'course search results';
 
 ?>
 

@@ -28,11 +28,6 @@ class Core
 		exit;
 	}
 
-	function Hash($input)
-	{
-		return eval('return '.Config::$hash_function.';');
-	}
-
 	function listArray($input)
 	{
 		return array_map('trim', explode(',', $input));

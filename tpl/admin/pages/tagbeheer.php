@@ -4,20 +4,11 @@
 
     if(isset($_POST['submitInvoegen'])){
         if(!empty($_POST['tagNaam'])){
-            if(!empty($_POST['tagOpleiding'])) {
                 $tagNaam = $filter->sanatizeInput($_POST['tagNaam'], 'string');
 
                 $tagID = $DB->Insert("INSERT INTO tag (naam) VALUES (?)", [$tagNaam]);               
-                foreach ($_POST['tagOpleiding'] as $key => $value) {
-                    $tagOpleiding = $filter->sanatizeInput($value, 'int');
-                    $DB->Insert("INSERT INTO tag_opleiding (tag_id, opleiding_id) VALUES (?, ?)", [$tagID, $tagOpleiding]);               
-                }
 
                 header("Location: /admin/tagbeheer");
-            }
-            else {
-                echo "{TAGBEHEER_GEEN_OPLEIDING}";
-            }
         }
         else {
             echo "{TAGBEHEER_GEEN_TAG}";
@@ -26,22 +17,11 @@
 
     if(isset($_POST['sumbmitAanpassen'])){
         if(!empty($_POST['tagNaam'])){
-            if(!empty($_POST['tagOpleiding'])) {
                 $tagNaam = $filter->sanatizeInput($_POST['tagNaam'], 'string');
                 $tagID = $filter->sanatizeInput($_POST['tagID'], 'int');
 
-                    $DB->Update("UPDATE tag SET naam = ? WHERE tag_id = ?", [$tagNaam, $tagID]);
-
-                foreach ($_POST['tagOpleiding'] as $key => $value) {
-                    $tagOpleiding = $filter->sanatizeInput($value, 'int');
-                    $DB->Delete("DELETE FROM tag_opleiding WHERE tag_id = ?", [$tagID]);
-                    $DB->Insert("INSERT INTO tag_opleiding (tag_id, opleiding_id) VALUES (?, ?)", [$tagID, $tagOpleiding]);       
-                }
-                    header("Location: /admin/tagbeheer");
-            }
-            else {
-                echo "{TAGBEHEER_GEEN_OPLEIDING}";
-            }
+                $DB->Update("UPDATE tag SET naam = ? WHERE tag_id = ?", [$tagNaam, $tagID]);
+                header("Location: /admin/tagbeheer");
         }
         else {
             echo "{TAGBEHEER_GEEN_TAG}";
@@ -98,23 +78,10 @@
         //Laat de invoegen pagina zien
         else if(isset($_GET['Path_2']) && $_GET['Path_2'] == 'invoegen')
         {
-            $opleidingData = $DB->Select("SELECT * FROM opleiding");
 
             echo '<div class="sectionTitle">{BEHEER_NAV_INVOEGEN}</div>
             <form method="post">
                 <label>Tag: <input type="text" placeholder="{TAGBEHEER_TAGNAAM}" name="tagNaam"></label><br>';
-                
-            if(!empty($opleidingData))  {
-                echo '<label>{TAGBEHEER_INVOEGEN_OPLEIDING}: <select name="tagOpleiding[]" multiple>';
-
-                foreach($opleidingData as $key => $opleidingLijst) 
-                { 
-                    echo "<option value='{$opleidingLijst["opleiding_id"]}'>{$opleidingLijst["naam"]} ({OPLDEIDINGBEHEER_JAAR}: {$opleidingLijst['jaar']})</option>";
-                }
-               
-                echo '</select></label><br>';
-            } 
-                
             echo '<button type="submit" name="submitInvoegen" required>{BEHEER_NAV_INVOEGEN}</button>
             </form>';
         }
@@ -135,24 +102,10 @@
             $tagResult = $DB->Select("SELECT * FROM tag WHERE tag_id = ? LIMIT 1", [$tagID])[0]; 
 
             if(!empty($tagResult)){
-                $opleidingData = $DB->Select("SELECT * FROM opleiding");
                
                 echo '<div class="sectionTitle">{VIDEOBEHEER_AANPASSEN_TITEL}</div>
                         <form method="post">
                             <label>Tag: <input type="text" placeholder="Tagnaam" name="tagNaam" value="'.$tagResult['naam'].'"></label><br>';
-                
-            if(!empty($opleidingData))  {
-                echo '<label>{TAGBEHEER_INVOEGEN_OPLEIDING}: <select name="tagOpleiding[]" multiple>';
-
-                foreach($opleidingData as $key => $opleidingLijst) 
-                { 
-                    
-                        echo "<option value='{$opleidingLijst['opleiding_id']}'>{$opleidingLijst['naam']} ({OPLDEIDINGBEHEER_JAAR}: {$opleidingLijst['jaar']})</option>";
-                    
-                }
-
-                echo '</select></label><br>';
-            } 
                 echo '<input type="hidden" name="tagID" value="'.$tagID.'"><button type="submit" name="sumbmitAanpassen">{VIDEOBEHEER_AANPASSEN_TITEL}</button></form>';
             }
             

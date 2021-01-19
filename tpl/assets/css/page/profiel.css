@@ -1,0 +1,4 @@
+body {
+    grid-template-rows: 110px 1vw auto 2vw auto 10vh auto;
+    grid-template-columns: 1fr;
+}
