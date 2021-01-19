@@ -101,13 +101,6 @@
         x2 = x1 + Math.cos(130* Math.PI) * (length * 1.4);
         y2 = y1 + Math.sin(130* Math.PI) * (length * 1.4);
         
-      if(med)
-      {
-        var gradient = ctx.createLinearGradient(0, 0, this.width,0);
-      }
-      else {
-       var gradient = ctx.createLinearGradient(0, this.height, x2, y2);
-      }
       var gradient = ctx.createLinearGradient(0, this.height, x2, y2);
 
 
